@@ -476,9 +476,17 @@
             document.getElementById('player1Life').style.width = '100%';
             document.getElementById('player2Life').style.width = '100%';
             totalDamage = 0; hitCount = 0;
-            mk.start(options).ready(function () {
+            var started = false;
+            var safeStart = function () {
+                if (started) return;
+                started = true;
                 if (loadLbl) loadLbl.textContent = 'LOADING FIGHTERS...';
                 startGame();
+            };
+            var fallback = setTimeout(safeStart, 8000);
+            mk.start(options).ready(function () {
+                clearTimeout(fallback);
+                safeStart();
             });
             addFeed('&#9670;', meta.display + ' entered the arena!', 'now', 'feed-system');
         }, 150);

@@ -6,7 +6,11 @@ var express = require('express'),
     games = new GameCollection();
 
 app.use(function (req, res, next) {
-  res.setHeader('Cache-Control', 'no-store');
+  if (/\.js(\?|$)/.test(req.url)) {
+    res.setHeader('Cache-Control', 'no-store');
+  } else if (/\.(png|jpg|jpeg|gif|webp)(\?|$)/i.test(req.url)) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+  }
   next();
 });
 app.use(express.static(__dirname + '/../game'));
