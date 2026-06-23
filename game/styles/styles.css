@@ -433,10 +433,12 @@ canvas { display: block; background: transparent; }
     width: 180px;
     flex-shrink: 0;
     background: var(--panel);
-    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-left: none;
     overflow-y: auto;
     scrollbar-width: none;
     flex-direction: column;
+    order: -1;
 }
 
 /* ── Character Picker ── */
