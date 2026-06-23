@@ -45,7 +45,7 @@
     if (typeof game.reset === 'function')
         game.reset();
     game.fighters.forEach(function (f) {
-      f.getMove().stop();
+      if (f.getMove()) f.getMove().stop();
     });
     game.fighters = null;
     game._opponents = null;
@@ -1661,7 +1661,8 @@
   mk.fighters.list = {
     'subzero': true,
     'kano': true,
-    'pepe': true
+    'pepe': true,
+    'flokiwarrior': true
   };
 
   mk.fighters.orientations = {
