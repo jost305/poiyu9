@@ -1,0 +1,8 @@
+{
+  "name": "poiyu9",
+  "version": "1.0.0",
+  "description": "Mortal Kombat browser game",
+  "scripts": {
+    "dev": "cd server && node server.js"
+  }
+}
