@@ -14,7 +14,7 @@
     STEP_DURATION    : 80,
     PLAYER_TOP       : 200,
     BLOCK_DAMAGE     : 0.2,
-    FIGHTER_SCALE    : 0.65,
+    FIGHTER_SCALE    : 0.5,
     ARENA_LEFT_BOUND : 120,
     ARENA_RIGHT_BOUND: 120
   };
