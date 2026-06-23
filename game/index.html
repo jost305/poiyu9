@@ -461,13 +461,27 @@
         options.fighters[cpActiveSlot] = Object.assign({}, meta.cfg);
         var nameEl = document.getElementById(cpActiveSlot === 0 ? 'player1Name' : 'player2Name');
         if (nameEl) nameEl.textContent = meta.display;
-        mk.reset();
-        p1Life = 100; p2Life = 100;
-        document.getElementById('player1Life').style.width = '100%';
-        document.getElementById('player2Life').style.width = '100%';
-        totalDamage = 0; hitCount = 0;
-        mk.start(options).ready(function () { startGame(); });
-        addFeed('&#9670;', meta.display + ' entered the arena!', 'now', 'feed-system');
+
+        var loadingEl  = $('loading');
+        var loadLbl    = loadingEl ? loadingEl.querySelector('.loading-label') : null;
+        if (loadingEl) {
+            if (loadLbl) loadLbl.textContent = 'LOADING ' + meta.display.toUpperCase() + '...';
+            loadingEl.style.visibility = 'visible';
+            loadingEl.style.opacity    = '1';
+        }
+
+        setTimeout(function () {
+            mk.reset();
+            p1Life = 100; p2Life = 100;
+            document.getElementById('player1Life').style.width = '100%';
+            document.getElementById('player2Life').style.width = '100%';
+            totalDamage = 0; hitCount = 0;
+            mk.start(options).ready(function () {
+                if (loadLbl) loadLbl.textContent = 'LOADING FIGHTERS...';
+                startGame();
+            });
+            addFeed('&#9670;', meta.display + ' entered the arena!', 'now', 'feed-system');
+        }, 150);
     };
 
     var startGame = function () {

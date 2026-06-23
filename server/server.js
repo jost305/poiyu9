@@ -5,6 +5,10 @@ var express = require('express'),
     GameCollection = require('./games.js').GameCollection,
     games = new GameCollection();
 
+app.use(function (req, res, next) {
+  res.setHeader('Cache-Control', 'no-store');
+  next();
+});
 app.use(express.static(__dirname + '/../game'));
 
 server.listen(5000, '0.0.0.0');
