@@ -1687,7 +1687,7 @@
       x: mk.config.ARENA_LEFT_BOUND + 20,
       y: mk.config.PLAYER_TOP
     };
-    this.init();
+    this.moves = {};
   };
 
   mk.fighters.Fighter.prototype.init = function (callback) {
