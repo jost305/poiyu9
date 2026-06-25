@@ -1662,6 +1662,7 @@
     'subzero': true,
     'kano': true,
     'pepe': true,
+    'char04': true
   };
 
   mk.fighters.orientations = {

@@ -196,6 +196,10 @@
                         <img src="images/fighters/subzero/left/stand/0.png" alt="Sub-Zero">
                         <span>SUB-ZERO</span>
                     </button>
+                    <button class="cp-card cp-card-char04" onclick="cpPickFighter('char04')">
+                        <img src="images/fighters/char04/portrait.png" alt="Char04" style="border-radius:4px;object-fit:cover;">
+                        <span>ROBOT</span>
+                    </button>
                 </div>
             </div>
 
@@ -434,6 +438,7 @@
         pepe:    { display: 'PEPE',     img: 'images/fighters/pepe/left/stand/0.png',    cfg: { name: 'Pepe',    width: 100, height: 128 } },
         kano:    { display: 'KANO',     img: 'images/fighters/kano/left/stand/0.png',    cfg: { name: 'Kano',    width: 30,  height: 60  } },
         subzero:      { display: 'SUB-ZERO',      img: 'images/fighters/subzero/left/stand/0.png',      cfg: { name: 'subzero',      width: 30,  height: 60  } },
+        char04:       { display: 'ROBOT',          img: 'images/fighters/char04/portrait.png',           cfg: { name: 'char04',        width: 80,  height: 120 } }
     };
     var cpPicks = ['pepe', 'pepe'];
     var cpActiveSlot = 0;
@@ -508,7 +513,7 @@
         callbacks: {
             attack: function (f, o, l) {
                 hitCount++;
-                var nameMap = { 'pepe': 'Pepe', 'kano': 'Kano', 'subzero': 'Sub-Zero' };
+                var nameMap = { 'pepe': 'Pepe', 'kano': 'Kano', 'subzero': 'Sub-Zero', 'char04': 'Robot' };
                 var attackerName = (nameMap[f.getName()] || f.getName()) + ' ' + (f._index + 1);
                 var dmg = Math.max(0, Math.round(l - o.getLife()));
 
@@ -539,8 +544,8 @@
                 }
             },
             'game-end': function (loser) {
-                var nameMap = { 'pepe': 'Pepe', 'kano': 'Kano', 'subzero': 'Sub-Zero' };
-                var portraitMap = { 'pepe': 'PP', 'kano': 'KN', 'subzero': 'SZ' };
+                var nameMap = { 'pepe': 'Pepe', 'kano': 'Kano', 'subzero': 'Sub-Zero', 'char04': 'Robot' };
+                var portraitMap = { 'pepe': 'PP', 'kano': 'KN', 'subzero': 'SZ', 'char04': 'RB' };
                 var loserIdx   = loser._index;
                 var winnerIdx  = loserIdx === 0 ? 1 : 0;
                 var loserId    = loser.getName();
