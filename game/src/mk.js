@@ -1662,7 +1662,6 @@
     'subzero': true,
     'kano': true,
     'pepe': true,
-    'flokiwarrior': true
   };
 
   mk.fighters.orientations = {
