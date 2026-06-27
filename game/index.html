@@ -4,592 +4,826 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MK Arena</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="src/movement.js"></script>
-    <script src="src/mk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.86.0/dist/phaser.min.js"></script>
+    <script src="src/Fighter.js?v=31"></script>
+    <script src="src/BattleScene.js?v=31"></script>
+    <script src="src/game.js?v=31"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <link rel="stylesheet" href="styles/styles.css" />
-    <link rel="stylesheet" href="styles/mobile.css" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="styles/styles.css?v=29" />
+    <link rel="stylesheet" href="styles/mobile.css?v=29" />
 </head>
 <body>
+
+<!-- Background Music -->
+<audio id="bgm" loop preload="auto">
+    <source src="JDSherbert%20-%20Nostalgia%20Music%20Pack%20%5BFREE%5D/Nostalgia%20Music%20Pack/Stereo/JDSherbert%20-%20Nostalgia%20Music%20Pack%20-%20VCR%20Jungle.ogg" type="audio/ogg">
+</audio>
+<script>
+(function() {
+    var bgm = document.getElementById('bgm');
+    bgm.volume = 0.26;
+    function tryPlay() {
+        bgm.play().catch(function(){});
+    }
+    document.addEventListener('click', function handler() {
+        tryPlay();
+        document.removeEventListener('click', handler);
+    });
+    document.addEventListener('keydown', function handler() {
+        tryPlay();
+        document.removeEventListener('keydown', handler);
+    });
+    tryPlay();
+})();
+</script>
+
 <div id="hud-root">
 
-    <!-- TOP BAR -->
-    <div id="top-bar">
-        <div class="tb-left">
-            <div class="tb-logo">
-                <svg class="logo-icon" viewBox="0 0 32 32" fill="none"><polygon points="16,2 30,26 2,26" fill="none" stroke="#8855ee" stroke-width="2.5"/><polygon points="16,8 24,22 8,22" fill="#8855ee" opacity="0.3"/></svg>
-                <div class="logo-text"><span class="logo-main">MK</span><span class="logo-sub">ARENA</span></div>
+
+
+<!-- MAIN AREA -->
+<div id="main-area">
+
+    <!-- LEFT PANEL -->
+    <div id="left-panel">
+        <div class="panel-section">
+            <div class="panel-hdr">
+                <span class="panel-hdr-icon">&#9670;</span>
+                <div>
+                    <div class="panel-hdr-title">FIGHTER ROSTER</div>
+                    <div class="panel-hdr-sub">CURRENT MATCH</div>
+                </div>
             </div>
-            <div class="tb-divider"></div>
-            <div class="tb-title-block">
-                <div class="tb-crown">&#9812; KING OF THE HILL</div>
-                <div class="tb-subtitle">The Throne Room Awaits</div>
+            <div class="queue-list">
+                <div class="queue-item queue-active" id="q-p1">
+                    <div class="qi-num">1</div>
+                    <div class="qi-portrait qi-p1">PP</div>
+                    <div class="qi-info">
+                        <div class="qi-addr">Meme Realm</div>
+                        <div class="qi-name">Pepe</div>
+                        <div class="qi-power">2,450 Power</div>
+                    </div>
+                    <div class="qi-hp-pill" id="qi-p1-hp">100%</div>
+                </div>
+                <div class="queue-item" id="q-p2">
+                    <div class="qi-num">2</div>
+                    <div class="qi-portrait qi-p2">PP</div>
+                    <div class="qi-info">
+                        <div class="qi-addr">Meme Realm</div>
+                        <div class="qi-name">Pepe</div>
+                        <div class="qi-power">2,450 Power</div>
+                    </div>
+                    <div class="qi-hp-pill" id="qi-p2-hp">100%</div>
+                </div>
+                <div class="queue-item queue-waiting">
+                    <div class="qi-num dim">3</div>
+                    <div class="qi-portrait qi-neutral">??</div>
+                    <div class="qi-info">
+                        <div class="qi-addr">Outworld</div>
+                        <div class="qi-name">Scorpion</div>
+                        <div class="qi-power">2,180 Power</div>
+                    </div>
+                </div>
+                <div class="queue-item queue-waiting">
+                    <div class="qi-num dim">4</div>
+                    <div class="qi-portrait qi-neutral">??</div>
+                    <div class="qi-info">
+                        <div class="qi-addr">Earthrealm</div>
+                        <div class="qi-name">Liu Kang</div>
+                        <div class="qi-power">2,050 Power</div>
+                    </div>
+                </div>
+                <div class="queue-item queue-waiting">
+                    <div class="qi-num dim">5</div>
+                    <div class="qi-portrait qi-neutral">??</div>
+                    <div class="qi-info">
+                        <div class="qi-addr">Netherrealm</div>
+                        <div class="qi-name">Shang Tsung</div>
+                        <div class="qi-power">1,980 Power</div>
+                    </div>
+                </div>
             </div>
+            <button class="view-queue-btn">VIEW FULL ROSTER &rsaquo;</button>
         </div>
-        <div class="tb-center">
-            <div class="tb-stat-block">
-                <div class="tb-stat-label">TOTAL DAMAGE</div>
-                <div class="tb-stat-val gold" id="total-damage">0 <span class="tb-stat-icon">&#9876;</span></div>
+
+        <div class="panel-section">
+            <div class="panel-hdr">
+                <span class="panel-hdr-icon pred-icon">&#9651;</span>
+                <div>
+                    <div class="panel-hdr-title">LIVE PREDICTIONS</div>
+                    <div class="panel-hdr-sub">WHO WINS THE ROUND?</div>
+                </div>
+                <div class="pred-timer" id="pred-timer">—</div>
             </div>
-            <div class="tb-divider"></div>
-            <div class="tb-stat-block">
-                <div class="tb-stat-label">ROUND HITS</div>
-                <div class="tb-stat-val" id="tb-hits">0 &nbsp;<span class="live-badge">LIVE</span></div>
+            <div class="pred-list">
+                <div class="pred-row">
+                    <div class="pred-avatar pred-av-p1">SZ</div>
+                    <div class="pred-name">Sub-Zero</div>
+                    <div class="pred-bar-wrap">
+                        <div class="pred-bar pred-bar-p1" id="pred-bar-p1" style="width:52%"></div>
+                    </div>
+                    <div class="pred-pct" id="pred-pct-p1">52%</div>
+                    <div class="pred-mult">6.2x</div>
+                </div>
+                <div class="pred-row">
+                    <div class="pred-avatar pred-av-p2">KN</div>
+                    <div class="pred-name">Kano</div>
+                    <div class="pred-bar-wrap">
+                        <div class="pred-bar pred-bar-p2" id="pred-bar-p2" style="width:48%"></div>
+                    </div>
+                    <div class="pred-pct" id="pred-pct-p2">48%</div>
+                    <div class="pred-mult">3.1x</div>
+                </div>
             </div>
-        </div>
-        <div class="tb-right">
-            <button class="tb-icon-btn" title="Restart" onclick="location.reload()">&#8635;</button>
-            <button class="tb-icon-btn" title="Settings">&#9881;</button>
+            <div class="total-pool">TOTAL POOL: <span class="gold">128,450 BC</span></div>
+            <button class="place-bet-btn">PLACE BET</button>
         </div>
     </div>
 
-    <!-- MAIN AREA -->
-    <div id="main-area">
+    <!-- ARENA -->
+    <div id="arena-wrapper">
+        <div id="parent">
+            <div id="arena-bg"></div>
+            <div id="arena"></div>
+            <div id="fx-layer"></div>
+            <div id="loading">
+                <div class="loading-inner">
+                    <div class="loading-logo">MK<span>.JS</span></div>
+                    <div class="loading-bar-wrap">
+                        <div class="loading-bar-fill"></div>
+                    </div>
+                    <div class="loading-label">LOADING FIGHTERS...</div>
+                </div>
+            </div>
+            <!-- VS overlay -->
 
-        <!-- LEFT PANEL -->
-        <div id="left-panel">
-            <div class="panel-section">
-                <div class="panel-hdr">
-                    <span class="panel-hdr-icon">&#9670;</span>
-                    <div>
-                        <div class="panel-hdr-title">FIGHTER ROSTER</div>
-                        <div class="panel-hdr-sub">CURRENT MATCH</div>
-                    </div>
+            <!-- Win overlay -->
+            <div id="win-modal" class="win-modal">
+                <div class="win-banner" role="dialog" aria-live="polite" aria-label="Round winner">
+                    <h2 id="win-title" class="win-title">ROBOT WINS!</h2>
+                    <div id="win-level" class="win-level">Level 13</div>
+                    <div id="win-reward" class="win-reward">+2800</div>
                 </div>
-                <div class="queue-list">
-                    <div class="queue-item queue-active" id="q-p1">
-                        <div class="qi-num">1</div>
-                        <div class="qi-portrait qi-p1">PP</div>
-                        <div class="qi-info">
-                            <div class="qi-addr">Meme Realm</div>
-                            <div class="qi-name">Pepe</div>
-                            <div class="qi-power">2,450 Power</div>
-                        </div>
-                        <div class="qi-hp-pill" id="qi-p1-hp">100%</div>
-                    </div>
-                    <div class="queue-item" id="q-p2">
-                        <div class="qi-num">2</div>
-                        <div class="qi-portrait qi-p2">PP</div>
-                        <div class="qi-info">
-                            <div class="qi-addr">Meme Realm</div>
-                            <div class="qi-name">Pepe</div>
-                            <div class="qi-power">2,450 Power</div>
-                        </div>
-                        <div class="qi-hp-pill" id="qi-p2-hp">100%</div>
-                    </div>
-                    <div class="queue-item queue-waiting">
-                        <div class="qi-num dim">3</div>
-                        <div class="qi-portrait qi-neutral">??</div>
-                        <div class="qi-info">
-                            <div class="qi-addr">Outworld</div>
-                            <div class="qi-name">Scorpion</div>
-                            <div class="qi-power">2,180 Power</div>
-                        </div>
-                    </div>
-                    <div class="queue-item queue-waiting">
-                        <div class="qi-num dim">4</div>
-                        <div class="qi-portrait qi-neutral">??</div>
-                        <div class="qi-info">
-                            <div class="qi-addr">Earthrealm</div>
-                            <div class="qi-name">Liu Kang</div>
-                            <div class="qi-power">2,050 Power</div>
-                        </div>
-                    </div>
-                    <div class="queue-item queue-waiting">
-                        <div class="qi-num dim">5</div>
-                        <div class="qi-portrait qi-neutral">??</div>
-                        <div class="qi-info">
-                            <div class="qi-addr">Netherrealm</div>
-                            <div class="qi-name">Shang Tsung</div>
-                            <div class="qi-power">1,980 Power</div>
-                        </div>
-                    </div>
-                </div>
-                <button class="view-queue-btn">VIEW FULL ROSTER &rsaquo;</button>
             </div>
 
-            <div class="panel-section">
-                <div class="panel-hdr">
-                    <span class="panel-hdr-icon pred-icon">&#9651;</span>
-                    <div>
-                        <div class="panel-hdr-title">LIVE PREDICTIONS</div>
-                        <div class="panel-hdr-sub">WHO WINS THE ROUND?</div>
-                    </div>
-                    <div class="pred-timer" id="pred-timer">—</div>
-                </div>
-                <div class="pred-list">
-                    <div class="pred-row">
-                        <div class="pred-avatar pred-av-p1">SZ</div>
-                        <div class="pred-name">Sub-Zero</div>
-                        <div class="pred-bar-wrap"><div class="pred-bar pred-bar-p1" id="pred-bar-p1" style="width:52%"></div></div>
-                        <div class="pred-pct" id="pred-pct-p1">52%</div>
-                        <div class="pred-mult">6.2x</div>
-                    </div>
-                    <div class="pred-row">
-                        <div class="pred-avatar pred-av-p2">KN</div>
-                        <div class="pred-name">Kano</div>
-                        <div class="pred-bar-wrap"><div class="pred-bar pred-bar-p2" id="pred-bar-p2" style="width:48%"></div></div>
-                        <div class="pred-pct" id="pred-pct-p2">48%</div>
-                        <div class="pred-mult">3.1x</div>
-                    </div>
-                </div>
-                <div class="total-pool">TOTAL POOL: <span class="gold">128,450 BC</span></div>
-                <button class="place-bet-btn">PLACE BET</button>
-            </div>
+            <div id="vs-overlay">VS</div>
         </div>
-
-        <!-- ARENA -->
-        <div id="arena-wrapper">
-            <div id="parent">
-                <div id="arena-bg"></div>
-                <div id="arena"></div>
-                <div id="fx-layer"></div>
-                <div id="loading">
-                    <div class="loading-inner">
-                        <div class="loading-logo">MK<span>.JS</span></div>
-                        <div class="loading-bar-wrap"><div class="loading-bar-fill"></div></div>
-                        <div class="loading-label">LOADING FIGHTERS...</div>
-                    </div>
+        <!-- HUD lives outside the scaled parent so it's always visible -->
+        <div id="utils">
+            <!-- P1 HUD: avatar left, bar grows right -->
+            <div class="hud-block hud-p1">
+                <div class="hud-avatar" id="hud-avatar-p1">
+                    <img id="hud-img-p1" src="images/fighters/char04/left/stand/0.png" alt="P1">
                 </div>
-                <!-- VS overlay -->
-                <div id="vs-overlay">VS</div>
-            </div>
-            <!-- HUD lives outside the scaled parent so it's always visible -->
-            <div id="utils">
-                <div id="player1Name" class="playerName">Pepe</div>
-                <div id="player1LifeBar" class="lifebar"><div class="life" id="player1Life"></div></div>
-                <div id="player2Name" class="playerName">Pepe</div>
-                <div id="player2LifeBar" class="lifebar"><div class="life" id="player2Life"></div></div>
-            </div>
-        </div>
-
-        <!-- RIGHT PANEL -->
-        <div id="right-panel">
-
-            <!-- CHARACTER PICKER -->
-            <div class="panel-section cp-section">
-                <div class="rp-section-hdr">PICK FIGHTERS</div>
-                <div class="cp-slots">
-                    <button class="cp-slot cp-slot-active" id="cp-slot-0" onclick="cpSelectSlot(0)">
-                        <span class="cp-slot-lbl">P1</span>
-                        <img class="cp-slot-img" id="cp-slot-img-0" src="images/fighters/pepe/left/stand/0.png" alt="P1">
-                        <span class="cp-slot-name" id="cp-slot-name-0">PEPE</span>
-                    </button>
-                    <div class="cp-vs">VS</div>
-                    <button class="cp-slot" id="cp-slot-1" onclick="cpSelectSlot(1)">
-                        <span class="cp-slot-lbl">P2</span>
-                        <img class="cp-slot-img" id="cp-slot-img-1" src="images/fighters/pepe/left/stand/0.png" alt="P2">
-                        <span class="cp-slot-name" id="cp-slot-name-1">PEPE</span>
-                    </button>
-                </div>
-                <div class="cp-hint" id="cp-hint">Click P1 or P2, then pick below</div>
-                <div class="cp-roster">
-                    <button class="cp-card cp-card-pepe" onclick="cpPickFighter('pepe')">
-                        <img src="images/fighters/pepe/left/stand/0.png" alt="Pepe">
-                        <span>PEPE</span>
-                    </button>
-                    <button class="cp-card cp-card-kano" onclick="cpPickFighter('kano')">
-                        <img src="images/fighters/kano/left/stand/0.png" alt="Kano">
-                        <span>KANO</span>
-                    </button>
-                    <button class="cp-card cp-card-subzero" onclick="cpPickFighter('subzero')">
-                        <img src="images/fighters/subzero/left/stand/0.png" alt="Sub-Zero">
-                        <span>SUB-ZERO</span>
-                    </button>
-                    <button class="cp-card cp-card-char04" onclick="cpPickFighter('char04')">
-                        <img src="images/fighters/char04/portrait.png" alt="Char04" style="border-radius:4px;object-fit:cover;">
-                        <span>ROBOT</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="panel-section">
-                <div class="rp-section-hdr">CURRENT KING</div>
-                <div class="current-king-card" id="king-card">
-                    <div class="ck-portrait" id="ck-portrait">SZ</div>
-                    <div class="ck-info">
-                        <div class="ck-name" id="ck-name">Sub-Zero</div>
-                        <div class="ck-title">KING OF THE HILL</div>
-                    </div>
-                    <div class="ck-crown">&#9812;</div>
-                </div>
-                <div class="king-stats">
-                    <div class="ks-row">
-                        <span class="ks-label">STREAK</span>
-                        <span class="ks-val gold" id="ks-streak">0 WINS</span>
-                    </div>
-                    <div class="ks-row">
-                        <span class="ks-label">DEFENDED</span>
-                        <span class="ks-val" id="ks-defended">0 TIMES</span>
-                    </div>
-                    <div class="ks-row">
-                        <span class="ks-label">EARNED</span>
-                        <span class="ks-val green" id="ks-earned">+0 BC</span>
-                    </div>
-                </div>
-                <div class="king-hp-row">
-                    <span class="khp-label">HEALTH</span>
-                    <div class="khp-bar"><div class="khp-fill" id="king-hp-fill"></div></div>
-                    <span class="khp-pct" id="king-hp-pct">100%</span>
-                </div>
-                <div class="king-power-row">
-                    <span class="kp-label">POWER</span>
-                    <span class="kp-val">2,450</span>
-                </div>
-            </div>
-
-            <div class="panel-section rp-feed-section">
-                <div class="rp-section-hdr">BATTLE FEED <span class="live-badge">LIVE</span></div>
-                <div id="battle-feed"></div>
-            </div>
-
-            <div class="panel-section rp-bottom-section">
-                <div class="rp-two-col">
-                    <div class="rp-map-block">
-                        <div class="rp-sub-hdr">ARENA MAP</div>
-                        <div class="arena-map">
-                            <div class="am-ring am-ring-1"></div>
-                            <div class="am-ring am-ring-2"></div>
-                            <div class="am-ring am-ring-3"></div>
-                            <div class="am-dot am-p1" id="am-p1"></div>
-                            <div class="am-dot am-p2" id="am-p2"></div>
-                            <div class="am-center">&#9812;</div>
+                <div class="hud-info">
+                    <div class="hud-name" id="player1Name">ROBOT V1</div>
+                    <div class="hud-bar-wrap">
+                        <!-- Segmented image healthbar -->
+                        <img id="player1Life" class="hud-segbar" src="small-healthbar/power-bar/Progress6.png" alt="P1 HP">
+                        <!-- Rune power slots -->
+                        <div class="rune-row" id="runes-p1">
+                            <span class="rune" data-rune="⚡" title="Shock"></span>
+                            <span class="rune" data-rune="🔥" title="Fire"></span>
+                            <span class="rune" data-rune="💀" title="Death"></span>
+                            <span class="rune" data-rune="✦" title="Power"></span>
                         </div>
                     </div>
-                    <div class="shrine-block">
-                        <div class="rp-sub-hdr">SHRINE STATUS</div>
-                        <div class="shrine-list">
-                            <div class="shrine-row"><span class="shrine-gem gem-p">&#10022;</span><span class="shrine-time">00:45</span></div>
-                            <div class="shrine-row"><span class="shrine-gem gem-b">&#10022;</span><span class="shrine-time">01:12</span></div>
-                            <div class="shrine-row"><span class="shrine-gem gem-r">&#10022;</span><span class="shrine-time">00:30</span></div>
-                            <div class="shrine-row"><span class="shrine-gem gem-g">&#10022;</span><span class="shrine-time">01:05</span></div>
+                </div>
+            </div>
+
+            <!-- P2 HUD: bar grows left, avatar right -->
+            <div class="hud-block hud-p2">
+                <div class="hud-info hud-info-right">
+                    <div class="hud-name hud-name-right" id="player2Name">FLOATROBO</div>
+                    <div class="hud-bar-wrap">
+                        <!-- Segmented image healthbar (mirrored for P2) -->
+                        <img id="player2Life" class="hud-segbar hud-segbar-right" src="small-healthbar/power-bar/Progress6.png" alt="P2 HP">
+                        <!-- Rune power slots -->
+                        <div class="rune-row rune-row-right" id="runes-p2">
+                            <span class="rune" data-rune="✦" title="Power"></span>
+                            <span class="rune" data-rune="💀" title="Death"></span>
+                            <span class="rune" data-rune="🔥" title="Fire"></span>
+                            <span class="rune" data-rune="⚡" title="Shock"></span>
                         </div>
                     </div>
+                </div>
+                <div class="hud-avatar" id="hud-avatar-p2">
+                    <img id="hud-img-p2" src="images/fighters/floatrobo/left/stand/0.png" alt="P2">
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- MOBILE BOTTOM PANEL -->
-    <div id="mobile-bottom">
-        <div id="mobile-stats-bar">
-            <div class="mb-stat">
-                <span class="mb-label">DAMAGE</span>
-                <span class="mb-val gold" id="mb-damage">0</span>
+    <!-- RIGHT PANEL -->
+    <div id="right-panel">
+
+        <!-- CHARACTER PICKER -->
+        <div class="panel-section cp-section">
+            <div class="rp-section-hdr">PICK FIGHTERS</div>
+            <div class="cp-slots">
+                <button class="cp-slot cp-slot-active" id="cp-slot-0" onclick="cpSelectSlot(0)">
+                    <span class="cp-slot-lbl">P1</span>
+                    <img class="cp-slot-img" id="cp-slot-img-0" src="images/fighters/char04/left/stand/0.png" alt="P1">
+                    <span class="cp-slot-name" id="cp-slot-name-0">ROBOT V1</span>
+                </button>
+                <div class="cp-vs">VS</div>
+                <button class="cp-slot" id="cp-slot-1" onclick="cpSelectSlot(1)">
+                    <span class="cp-slot-lbl">P2</span>
+                    <img class="cp-slot-img" id="cp-slot-img-1" src="images/fighters/floatrobo/left/stand/0.png" alt="P2">
+                    <span class="cp-slot-name" id="cp-slot-name-1">FLOATROBO</span>
+                </button>
             </div>
-            <div class="mb-divider"></div>
-            <div class="mb-stat">
-                <span class="mb-label">HITS</span>
-                <span class="mb-val" id="mb-hits">0 <span class="live-badge">LIVE</span></span>
-            </div>
-            <div class="mb-divider"></div>
-            <div class="mb-stat">
-                <span class="mb-label">KING</span>
-                <span class="mb-val" id="mb-king">Sub-Zero</span>
+            <div class="cp-hint" id="cp-hint">Click P1 or P2, then pick below</div>
+            <div class="cp-roster" style="padding-bottom: 20px;">
+                <button class="cp-card cp-card-char04" onclick="cpPickFighter('char04')">
+                    <img src="images/fighters/char04/left/stand/0.png" alt="Char04">
+                    <span>ROBOT V1</span>
+                </button>
+                <button class="cp-card cp-card-robopepe" onclick="cpPickFighter('robopepe')">
+                    <img src="images/fighters/robopepe/left/stand/0.png" alt="RoboPepe">
+                    <span>ROBO PEPE</span>
+                </button>
+                <button class="cp-card cp-card-floatrobo" onclick="cpPickFighter('floatrobo')">
+                    <img src="images/fighters/floatrobo/left/stand/0.png" alt="Floatrobo">
+                    <span>FLOATROBO</span>
+                </button>
+                <button class="cp-card cp-card-crimsonbot" onclick="cpPickFighter('crimsonbot')">
+                    <img src="images/fighters/crimsonbot/left/stand/0.png" alt="Crimsonbot">
+                    <span>CRIMSONBOT</span>
+                </button>
+                <button class="cp-card cp-card-toxicbot" onclick="cpPickFighter('toxicbot')">
+                    <img src="images/fighters/toxicbot/left/stand/0.png" alt="Toxicbot">
+                    <span>TOXICBOT</span>
+                </button>
+                <button class="cp-card cp-card-voidbot" onclick="cpPickFighter('voidbot')">
+                    <img src="images/fighters/voidbot/left/stand/0.png" alt="Voidbot">
+                    <span>VOIDBOT</span>
+                </button>
             </div>
         </div>
-        <div id="mobile-feed-wrap">
+
+        <div class="panel-section">
+            <div class="rp-section-hdr">CURRENT KING</div>
+            <div class="current-king-card" id="king-card">
+                <div class="ck-portrait" id="ck-portrait">SZ</div>
+                <div class="ck-info">
+                    <div class="ck-name" id="ck-name">Sub-Zero</div>
+                    <div class="ck-title">KING OF THE HILL</div>
+                </div>
+                <div class="ck-crown">&#9812;</div>
+            </div>
+            <div class="king-stats">
+                <div class="ks-row">
+                    <span class="ks-label">STREAK</span>
+                    <span class="ks-val gold" id="ks-streak">0 WINS</span>
+                </div>
+                <div class="ks-row">
+                    <span class="ks-label">DEFENDED</span>
+                    <span class="ks-val" id="ks-defended">0 TIMES</span>
+                </div>
+                <div class="ks-row">
+                    <span class="ks-label">EARNED</span>
+                    <span class="ks-val green" id="ks-earned">+0 BC</span>
+                </div>
+            </div>
+            <div class="king-hp-row">
+                <span class="khp-label">HEALTH</span>
+                <div class="khp-bar">
+                    <div class="khp-fill" id="king-hp-fill"></div>
+                </div>
+                <span class="khp-pct" id="king-hp-pct">100%</span>
+            </div>
+            <div class="king-power-row">
+                <span class="kp-label">POWER</span>
+                <span class="kp-val">2,450</span>
+            </div>
+        </div>
+
+        <div class="panel-section rp-feed-section">
+            <div class="rp-section-hdr">BATTLE FEED <span class="live-badge">LIVE</span></div>
             <div id="battle-feed"></div>
+        </div>
+
+        <div class="panel-section rp-bottom-section">
+            <div class="rp-two-col">
+                <div class="rp-map-block">
+                    <div class="rp-sub-hdr">ARENA MAP</div>
+                    <div class="arena-map">
+                        <div class="am-ring am-ring-1"></div>
+                        <div class="am-ring am-ring-2"></div>
+                        <div class="am-ring am-ring-3"></div>
+                        <div class="am-dot am-p1" id="am-p1"></div>
+                        <div class="am-dot am-p2" id="am-p2"></div>
+                        <div class="am-center">&#9812;</div>
+                    </div>
+                </div>
+                <div class="shrine-block">
+                    <div class="rp-sub-hdr">SHRINE STATUS</div>
+                    <div class="shrine-list">
+                        <div class="shrine-row"><span class="shrine-gem gem-p">&#10022;</span><span
+                                class="shrine-time">00:45</span></div>
+                        <div class="shrine-row"><span class="shrine-gem gem-b">&#10022;</span><span
+                                class="shrine-time">01:12</span></div>
+                        <div class="shrine-row"><span class="shrine-gem gem-r">&#10022;</span><span
+                                class="shrine-time">00:30</span></div>
+                        <div class="shrine-row"><span class="shrine-gem gem-g">&#10022;</span><span
+                                class="shrine-time">01:05</span></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
 </div>
 
+<!-- MOBILE BOTTOM PANEL -->
+<div id="mobile-bottom">
+    <div id="mobile-stats-bar">
+        <div class="mb-stat">
+            <span class="mb-label">DAMAGE</span>
+            <span class="mb-val gold" id="mb-damage">0</span>
+        </div>
+        <div class="mb-divider"></div>
+        <div class="mb-stat">
+            <span class="mb-label">HITS</span>
+            <span class="mb-val" id="mb-hits">0 <span class="live-badge">LIVE</span></span>
+        </div>
+        <div class="mb-divider"></div>
+        <div class="mb-stat">
+            <span class="mb-label">KING</span>
+            <span class="mb-val" id="mb-king">Sub-Zero</span>
+        </div>
+    </div>
+    <div id="mobile-feed-wrap">
+        <div id="battle-feed"></div>
+    </div>
+</div>
+
+
+<!-- MOBILE NAV FOOTER -->
+<div id="mobile-nav-footer">
+    <div class="nav-item active">
+        <div class="nav-icon">&#9876;</div> <!-- Swords -->
+        <div class="nav-label">ARENA</div>
+    </div>
+    <div class="nav-item">
+        <div class="nav-icon">&#128377;</div> <!-- Joystick/Robot -->
+        <div class="nav-label">ROSTER</div>
+    </div>
+    <div class="nav-item">
+        <div class="nav-icon">&#127873;</div> <!-- Gift/Loot -->
+        <div class="nav-label">LOOT</div>
+    </div>
+    <div class="nav-item">
+        <div class="nav-icon">&#128722;</div> <!-- Shopping Cart -->
+        <div class="nav-label">SHOP</div>
+    </div>
+    <div class="nav-item">
+        <div class="nav-icon">&#9881;</div> <!-- Gear -->
+        <div class="nav-label">SETTINGS</div>
+    </div>
+</div>
+</div> <!-- Close hud-root -->
+
 <script>
-(function () {
-    function $(id) { return document.getElementById(id); }
 
-    var hitCount = 0;
-    var totalDamage = 0;
-    var kingStreak = 0;
-    var kingDefended = 0;
-    var currentKing = 'subzero';
-    var p1Life = 100, p2Life = 100;
+    (function () {
+        function $(id) { return document.getElementById(id); }
 
-    function scaleArena() {
-        var wrapper = $('arena-wrapper');
-        var parent  = $('parent');
-        if (!wrapper || !parent) return;
-        var availW = wrapper.clientWidth;
-        var availH = wrapper.clientHeight;
-        var scaleW = availW / 600;
-        var scaleH = availH / 400;
-        var scale  = Math.min(scaleW, scaleH);
-        var offsetX = (availW - 600 * scale) / 2;
-        var offsetY = (availH - 400 * scale) / 2;
-        parent.style.transform = 'scale(' + scale + ')';
-        parent.style.left = offsetX + 'px';
-        parent.style.top  = offsetY + 'px';
-        parent.style.marginTop = '0';
-    }
-    window.addEventListener('resize', scaleArena);
+        var hitCount = 0;
+        var totalDamage = 0;
+        var kingStreak = 0;
+        var kingDefended = 0;
+        var currentKing = 'subzero';
+        var p1Life = 100, p2Life = 100;
 
-    function addFeed(icon, text, time, cls) {
-        var feed = $('battle-feed');
-        var d = document.createElement('div');
-        d.className = 'feed-row ' + (cls || '');
-        d.innerHTML = '<span class="fr-icon">' + icon + '</span>' +
-                      '<span class="fr-text">' + text + '</span>' +
-                      '<span class="fr-time">' + (time || 'now') + '</span>';
-        feed.insertBefore(d, feed.firstChild);
-        if (feed.children.length > 8) feed.removeChild(feed.lastChild);
-    }
+        function scaleArena() {
+            var wrapper = $('arena-wrapper');
+            var parent = $('parent');
+            if (!wrapper || !parent) return;
+            var availW = wrapper.clientWidth;
+            var availH = wrapper.clientHeight;
 
-    function updatePredictions(p1hp, p2hp) {
-        var total = p1hp + p2hp;
-        if (total === 0) return;
-        var p1pct = Math.round((p1hp / total) * 100);
-        var p2pct = 100 - p1pct;
-        $('pred-pct-p1').textContent = p1pct + '%';
-        $('pred-pct-p2').textContent = p2pct + '%';
-        $('pred-bar-p1').style.width = p1pct + '%';
-        $('pred-bar-p2').style.width = p2pct + '%';
-    }
+            var isMobile = window.innerWidth <= 768;
+            var baseW = isMobile ? 800 : 1200;
+            var baseH = isMobile ? 1600 : 800;
 
-    function showClashFX(attacker, defender, dmg) {
-        var layer = $('fx-layer');
-        if (!layer) return;
+            parent.style.width = baseW + 'px';
+            parent.style.height = baseH + 'px';
 
-        var GAME_W = 600, GAME_H = 400;
-        var aW = attacker.getWidth ? attacker.getWidth() : 130;
-        var dW = defender.getWidth ? defender.getWidth() : 130;
+            var scaleW = availW / baseW;
+            var scaleH = availH / baseH;
+            var scale = isMobile ? Math.max(scaleW, scaleH) : Math.min(scaleW, scaleH);
 
-        var aX = attacker.getX() + aW / 2;
-        var dX = defender.getX() + dW / 2;
-        var midX = (aX + dX) / 2;
-        var hitY  = 200;
+            var offsetX = (availW - baseW * scale) / 2;
+            var offsetY = (availH - baseH * scale) / 2;
 
-        var tier = dmg >= 13 ? 'crit' : dmg >= 8 ? 'big' : dmg >= 5 ? 'medium' : 'small';
-        var colors = { small: '#fffde7', medium: '#ffd600', big: '#ff6d00', crit: '#ff1744' };
-        var color  = colors[tier];
+            parent.style.transform = 'scale(' + scale + ')';
+            parent.style.left = offsetX + 'px';
+            parent.style.top = offsetY + 'px';
+            parent.style.marginTop = '0';
 
-        var numRays = tier === 'crit' ? 12 : tier === 'big' ? 9 : 7;
-        var rayLen  = tier === 'crit' ? 55 : tier === 'big' ? 40 : 28;
-        var ringSize = rayLen * 2.2;
+            // Also perfectly overlay the HUD container (#utils) over the scaled arena 
+            // so HUD elements aren't floating in the black void outside the game view.
+            var utils = $('utils');
+            if (utils) {
+                utils.style.position = 'absolute';
+                utils.style.left = offsetX + 'px';
+                utils.style.top = offsetY + 'px';
+                utils.style.width = (baseW * scale) + 'px';
+                utils.style.height = (baseH * scale) + 'px';
+            }
 
-        var spark = document.createElement('div');
-        spark.className = 'fx-spark';
-        spark.style.left = midX + 'px';
-        spark.style.top  = hitY + 'px';
-        for (var i = 0; i < numRays; i++) {
-            var ray = document.createElement('div');
-            ray.className = 'fx-spark-ray';
-            var angle = (360 / numRays) * i + (Math.random() * 18 - 9);
-            var len   = rayLen * (0.6 + Math.random() * 0.8);
-            ray.style.width           = Math.round(len) + 'px';
-            ray.style.height          = (tier === 'crit' ? 5 : 3) + 'px';
-            ray.style.background      = color;
-            ray.style.boxShadow       = '0 0 6px ' + color;
-            ray.style.transform       = 'rotate(' + angle + 'deg)';
-            ray.style.animationDelay  = (Math.random() * 0.05) + 's';
-            spark.appendChild(ray);
+            if (typeof mk !== 'undefined' && mk.config) {
+                mk.config.FIGHTER_SCALE = isMobile ? 1.10 : 0.80;
+                mk.config.PLAYER_TOP = isMobile ? 700 : 400;
+            }
         }
-        layer.appendChild(spark);
+        window.addEventListener('resize', scaleArena);
 
-        var ring = document.createElement('div');
-        ring.className = 'fx-ring';
-        ring.style.left        = midX + 'px';
-        ring.style.top         = hitY + 'px';
-        ring.style.width       = ringSize + 'px';
-        ring.style.height      = ringSize + 'px';
-        ring.style.borderColor = color;
-        ring.style.boxShadow   = '0 0 10px ' + color;
-        layer.appendChild(ring);
-
-        var label = dmg >= 13 ? '&#9889; ' + dmg + ' CRITICAL!' : '&#9658; -' + dmg;
-        var dmgEl = document.createElement('div');
-        dmgEl.className = 'fx-dmg fx-' + tier;
-        dmgEl.innerHTML = label;
-        dmgEl.style.left = dX + 'px';
-        dmgEl.style.top  = (hitY - 40) + 'px';
-        layer.appendChild(dmgEl);
-
-        if (tier === 'crit') {
-            var flash = document.createElement('div');
-            flash.className = 'fx-flash';
-            flash.style.background = 'radial-gradient(ellipse at ' +
-                Math.round((midX/GAME_W)*100) + '% 55%, rgba(255,80,0,.55) 0%, transparent 70%)';
-            layer.appendChild(flash);
-            setTimeout(function () { if (flash.parentNode) flash.parentNode.removeChild(flash); }, 400);
+        function addFeed(icon, text, time, cls) {
+            var feed = $('battle-feed');
+            var d = document.createElement('div');
+            d.className = 'feed-row ' + (cls || '');
+            d.innerHTML = '<span class="fr-icon">' + icon + '</span>' +
+                '<span class="fr-text">' + text + '</span>' +
+                '<span class="fr-time">' + (time || 'now') + '</span>';
+            feed.insertBefore(d, feed.firstChild);
+            if (feed.children.length > 8) feed.removeChild(feed.lastChild);
         }
 
-        setTimeout(function () {
-            if (spark.parentNode) spark.parentNode.removeChild(spark);
-            if (ring.parentNode)  ring.parentNode.removeChild(ring);
-            if (dmgEl.parentNode) dmgEl.parentNode.removeChild(dmgEl);
-        }, 1200);
-    }
-
-    function updateKingHP(name) {
-        var hp = name === 'kano' ? p2Life : p1Life;
-        if ($('king-hp-fill')) $('king-hp-fill').style.width = hp + '%';
-        if ($('king-hp-pct')) $('king-hp-pct').textContent = Math.round(hp) + '%';
-        if ($('bb-hp')) $('bb-hp').style.width = hp + '%';
-        if ($('bb-hp-val')) $('bb-hp-val').textContent = Math.round(hp) + ' / 100';
-        if ($('bb-hp-pct')) $('bb-hp-pct').textContent = Math.round(hp) + '%';
-    }
-
-    document.onkeydown = function (e) {
-        if (e.keyCode === 32) window.location.reload();
-    };
-
-    var CP_META = {
-        pepe:    { display: 'PEPE',     img: 'images/fighters/pepe/left/stand/0.png',    cfg: { name: 'Pepe',    width: 100, height: 128 } },
-        kano:    { display: 'KANO',     img: 'images/fighters/kano/left/stand/0.png',    cfg: { name: 'Kano',    width: 30,  height: 60  } },
-        subzero:      { display: 'SUB-ZERO',      img: 'images/fighters/subzero/left/stand/0.png',      cfg: { name: 'subzero',      width: 30,  height: 60  } },
-        char04:       { display: 'ROBOT',          img: 'images/fighters/char04/portrait.png',           cfg: { name: 'char04',        width: 65,  height: 45  } }
-    };
-    var cpPicks = ['pepe', 'pepe'];
-    var cpActiveSlot = 0;
-
-    window.cpSelectSlot = function (idx) {
-        cpActiveSlot = idx;
-        document.getElementById('cp-slot-0').classList.toggle('cp-slot-active', idx === 0);
-        document.getElementById('cp-slot-1').classList.toggle('cp-slot-active', idx === 1);
-        var hint = document.getElementById('cp-hint');
-        if (hint) hint.textContent = 'Now click a character for P' + (idx + 1);
-    };
-
-    window.cpPickFighter = function (key) {
-        cpPicks[cpActiveSlot] = key;
-        var meta = CP_META[key];
-        document.getElementById('cp-slot-img-'  + cpActiveSlot).src = meta.img;
-        document.getElementById('cp-slot-name-' + cpActiveSlot).textContent = meta.display;
-        var hint = document.getElementById('cp-hint');
-        if (hint) hint.textContent = 'P' + (cpActiveSlot + 1) + ' \u2192 ' + meta.display + '  \u2714';
-        options.fighters[cpActiveSlot] = Object.assign({}, meta.cfg);
-        var nameEl = document.getElementById(cpActiveSlot === 0 ? 'player1Name' : 'player2Name');
-        if (nameEl) nameEl.textContent = meta.display;
-
-        var loadingEl  = $('loading');
-        var loadLbl    = loadingEl ? loadingEl.querySelector('.loading-label') : null;
-        if (loadingEl) {
-            if (loadLbl) loadLbl.textContent = 'LOADING ' + meta.display.toUpperCase() + '...';
-            loadingEl.style.visibility = 'visible';
-            loadingEl.style.opacity    = '1';
+        function updatePredictions(p1hp, p2hp) {
+            var total = p1hp + p2hp;
+            if (total === 0) return;
+            var p1pct = Math.round((p1hp / total) * 100);
+            var p2pct = 100 - p1pct;
+            $('pred-pct-p1').textContent = p1pct + '%';
+            $('pred-pct-p2').textContent = p2pct + '%';
+            $('pred-bar-p1').style.width = p1pct + '%';
+            $('pred-bar-p2').style.width = p2pct + '%';
         }
 
-        setTimeout(function () {
-            mk.reset();
-            p1Life = 100; p2Life = 100;
-            document.getElementById('player1Life').style.width = '100%';
-            document.getElementById('player2Life').style.width = '100%';
-            totalDamage = 0; hitCount = 0;
-            var started = false;
-            var safeStart = function () {
-                if (started) return;
-                started = true;
-                if (loadLbl) loadLbl.textContent = 'LOADING FIGHTERS...';
-                startGame();
-            };
-            var fallback = setTimeout(safeStart, 8000);
-            mk.start(options).ready(function () {
-                clearTimeout(fallback);
-                safeStart();
-            });
-            addFeed('&#9670;', meta.display + ' entered the arena!', 'now', 'feed-system');
-        }, 150);
-    };
+        function showClashFX(attacker, defender, dmg) {
+            var layer = $('fx-layer');
+            if (!layer) return;
 
-    var startGame = function () {
-        $('loading').style.visibility = 'hidden';
-        $('arena').style.visibility = 'visible';
-        $('utils').style.visibility = 'visible';
-        $('vs-overlay').style.opacity = '1';
-        setTimeout(function () {
-            $('vs-overlay').style.opacity = '0';
-        }, 1500);
-        addFeed('&#9876;', 'Round Start!', 'now', 'feed-system');
-        scaleArena();
-    };
+            var GAME_W = 600, GAME_H = 400;
+            var aW = attacker.getWidth ? attacker.getWidth() : 130;
+            var dW = defender.getWidth ? defender.getWidth() : 130;
 
-    var options = {
-        arena: {
-            container: $('arena'),
-            arena: mk.arenas.types.THRONE_ROOM
-        },
-        fighters: [{ name: 'Pepe', width: 100, height: 128 }, { name: 'Pepe', width: 100, height: 128 }],
-        callbacks: {
-            attack: function (f, o, l) {
-                hitCount++;
-                var nameMap = { 'pepe': 'Pepe', 'kano': 'Kano', 'subzero': 'Sub-Zero', 'char04': 'Robot' };
-                var attackerName = (nameMap[f.getName()] || f.getName()) + ' ' + (f._index + 1);
-                var dmg = Math.max(0, Math.round(l - o.getLife()));
+            var aX = attacker.getX() + aW / 2;
+            var dX = defender.getX() + dW / 2;
+            var midX = (aX + dX) / 2;
+            var hitY = 200;
 
-                if (o._index === 1) {
-                    p2Life = o.getLife();
-                    $('player2Life').style.width = p2Life + '%';
-                    $('qi-p2-hp').textContent = Math.round(p2Life) + '%';
-                } else {
-                    p1Life = o.getLife();
-                    $('player1Life').style.width = p1Life + '%';
-                    $('qi-p1-hp').textContent = Math.round(p1Life) + '%';
+            var tier = dmg >= 13 ? 'crit' : dmg >= 8 ? 'big' : dmg >= 5 ? 'medium' : 'small';
+            var colors = { small: '#fffde7', medium: '#ffd600', big: '#ff6d00', crit: '#ff1744' };
+            var color = colors[tier];
+
+            var numRays = tier === 'crit' ? 12 : tier === 'big' ? 9 : 7;
+            var rayLen = tier === 'crit' ? 55 : tier === 'big' ? 40 : 28;
+            var ringSize = rayLen * 2.2;
+
+            var spark = document.createElement('div');
+            spark.className = 'fx-spark';
+            spark.style.left = midX + 'px';
+            spark.style.top = hitY + 'px';
+            for (var i = 0; i < numRays; i++) {
+                var ray = document.createElement('div');
+                ray.className = 'fx-spark-ray';
+                var angle = (360 / numRays) * i + (Math.random() * 18 - 9);
+                var len = rayLen * (0.6 + Math.random() * 0.8);
+                ray.style.width = Math.round(len) + 'px';
+                ray.style.height = (tier === 'crit' ? 5 : 3) + 'px';
+                ray.style.background = color;
+                ray.style.boxShadow = '0 0 6px ' + color;
+                ray.style.transform = 'rotate(' + angle + 'deg)';
+                ray.style.animationDelay = (Math.random() * 0.05) + 's';
+                spark.appendChild(ray);
+            }
+            layer.appendChild(spark);
+
+            var ring = document.createElement('div');
+            ring.className = 'fx-ring';
+            ring.style.left = midX + 'px';
+            ring.style.top = hitY + 'px';
+            ring.style.width = ringSize + 'px';
+            ring.style.height = ringSize + 'px';
+            ring.style.borderColor = color;
+            ring.style.boxShadow = '0 0 10px ' + color;
+            layer.appendChild(ring);
+
+            var label = dmg >= 13 ? '&#9889; ' + dmg + ' CRITICAL!' : '&#9658; -' + dmg;
+            var dmgEl = document.createElement('div');
+            dmgEl.className = 'fx-dmg fx-' + tier;
+            dmgEl.innerHTML = label;
+            dmgEl.style.left = dX + 'px';
+            dmgEl.style.top = (hitY - 40) + 'px';
+            layer.appendChild(dmgEl);
+
+            if (tier === 'crit') {
+                var flash = document.createElement('div');
+                flash.className = 'fx-flash';
+                flash.style.background = 'radial-gradient(ellipse at ' +
+                    Math.round((midX / GAME_W) * 100) + '% 55%, rgba(255,80,0,.55) 0%, transparent 70%)';
+                layer.appendChild(flash);
+                setTimeout(function () { if (flash.parentNode) flash.parentNode.removeChild(flash); }, 400);
+            }
+
+            setTimeout(function () {
+                if (spark.parentNode) spark.parentNode.removeChild(spark);
+                if (ring.parentNode) ring.parentNode.removeChild(ring);
+                if (dmgEl.parentNode) dmgEl.parentNode.removeChild(dmgEl);
+            }, 1200);
+        }
+
+        function updateKingHP(name) {
+            var hp = name === 'kano' ? p2Life : p1Life;
+            if ($('king-hp-fill')) $('king-hp-fill').style.width = hp + '%';
+            if ($('king-hp-pct')) $('king-hp-pct').textContent = Math.round(hp) + '%';
+            if ($('bb-hp')) $('bb-hp').style.width = hp + '%';
+            if ($('bb-hp-val')) $('bb-hp-val').textContent = Math.round(hp) + ' / 100';
+            if ($('bb-hp-pct')) $('bb-hp-pct').textContent = Math.round(hp) + '%';
+        }
+
+        document.onkeydown = function (e) {
+            if (e.keyCode === 32) window.location.reload();
+        };
+
+        var CP_META = {
+            pepe: { display: 'PEPE', img: 'images/fighters/pepe/left/stand/0.png', cfg: { name: 'Pepe', width: 100, height: 128 } },
+            kano: { display: 'KANO', img: 'images/fighters/kano/left/stand/0.png', cfg: { name: 'Kano', width: 30, height: 60 } },
+            subzero: { display: 'SUB-ZERO', img: 'images/fighters/subzero/left/stand/0.png', cfg: { name: 'subzero', width: 30, height: 60 } },
+            char04: { display: 'ROBOT V1', img: 'images/fighters/char04/left/stand/0.png', cfg: { name: 'char04', width: 65, height: 45 } },
+            floatrobo: { display: 'FLOATROBO', img: 'images/fighters/floatrobo/left/stand/0.png', cfg: { name: 'floatrobo', width: 65, height: 45 } },
+            robopepe: { display: 'ROBO PEPE', img: 'images/fighters/robopepe/left/stand/0.png', cfg: { name: 'robopepe', width: 65, height: 45 } },
+            crimsonbot: { display: 'CRIMSONBOT', img: 'images/fighters/crimsonbot/left/stand/0.png', cfg: { name: 'crimsonbot', width: 65, height: 45 } },
+            toxicbot: { display: 'TOXICBOT', img: 'images/fighters/toxicbot/left/stand/0.png', cfg: { name: 'toxicbot', width: 65, height: 45 } },
+            voidbot: { display: 'VOIDBOT', img: 'images/fighters/voidbot/left/stand/0.png', cfg: { name: 'voidbot', width: 65, height: 45 } }
+        };
+        var cpPicks = ['robopepe', 'floatrobo'];
+        var cpActiveSlot = 0;
+
+        window.cpSelectSlot = function (idx) {
+            cpActiveSlot = idx;
+            document.getElementById('cp-slot-0').classList.toggle('cp-slot-active', idx === 0);
+            document.getElementById('cp-slot-1').classList.toggle('cp-slot-active', idx === 1);
+            var hint = document.getElementById('cp-hint');
+            if (hint) hint.textContent = 'Now click a character for P' + (idx + 1);
+        };
+
+        window.cpPickFighter = function (key) {
+            cpPicks[cpActiveSlot] = key;
+            var meta = CP_META[key];
+            document.getElementById('cp-slot-img-' + cpActiveSlot).src = meta.img;
+            document.getElementById('cp-slot-name-' + cpActiveSlot).textContent = meta.display;
+            var hint = document.getElementById('cp-hint');
+            if (hint) hint.textContent = 'P' + (cpActiveSlot + 1) + ' \u2192 ' + meta.display + '  \u2714';
+            var nameEl = document.getElementById(cpActiveSlot === 0 ? 'player1Name' : 'player2Name');
+            if (nameEl) nameEl.textContent = meta.display;
+            
+            // Update HUD avatar image
+            var hudImg = document.getElementById(cpActiveSlot === 0 ? 'hud-img-p1' : 'hud-img-p2');
+            if (hudImg) hudImg.src = meta.img;
+
+            if (cpActiveSlot === 0) {
+                // Switch to Player 2 slot
+                cpActiveSlot = 1;
+                document.getElementById('cp-slot-0').classList.remove('cp-slot-active');
+                document.getElementById('cp-slot-1').classList.add('cp-slot-active');
+                if (hint) hint.textContent = 'Now click a character for P2';
+            } else {
+                // Both players picked, start match!
+                var loadingEl = $('loading');
+                var loadLbl = loadingEl ? loadingEl.querySelector('.loading-label') : null;
+                if (loadingEl) {
+                    if (loadLbl) loadLbl.textContent = 'LOADING ' + meta.display.toUpperCase() + '...';
+                    loadingEl.style.visibility = 'visible';
+                    loadingEl.style.opacity = '1';
                 }
-
-                totalDamage += dmg;
-                $('total-damage').innerHTML = totalDamage + ' <span class="tb-stat-icon">&#9876;</span>';
-                $('tb-hits').innerHTML = hitCount + ' &nbsp;<span class="live-badge">LIVE</span>';
-                if ($('mb-damage')) $('mb-damage').textContent = totalDamage;
-                if ($('mb-hits'))   $('mb-hits').innerHTML = hitCount + ' <span class="live-badge">LIVE</span>';
-
-                updatePredictions(p1Life, p2Life);
-                updateKingHP(currentKing);
-
-                if (dmg > 0) {
-                    showClashFX(f, o, dmg);
-                    var cls = dmg >= 15 ? 'feed-crit' : '';
-                    var icon = dmg >= 15 ? '&#9889;' : '&#9658;';
-                    addFeed(icon, attackerName + ' Strike &minus;' + dmg + ' HP', 'now', cls);
-                }
-            },
-            'game-end': function (loser) {
-                var nameMap = { 'pepe': 'Pepe', 'kano': 'Kano', 'subzero': 'Sub-Zero', 'char04': 'Robot' };
-                var portraitMap = { 'pepe': 'PP', 'kano': 'KN', 'subzero': 'SZ', 'char04': 'RB' };
-                var loserIdx   = loser._index;
-                var winnerIdx  = loserIdx === 0 ? 1 : 0;
-                var loserId    = loser.getName();
-                var loserName  = (nameMap[loserId] || loserId) + ' ' + (loserIdx + 1);
-                var winnerId   = loserId;
-                var winnerName = (nameMap[winnerId] || winnerId) + ' ' + (winnerIdx + 1);
-                currentKing = winnerId + winnerIdx;
-                kingStreak++;
-                kingDefended++;
-
-                if ($('ck-name'))    $('ck-name').textContent = winnerName;
-                if ($('ck-portrait')) { $('ck-portrait').textContent = portraitMap[winnerId] || 'XX'; $('ck-portrait').className = 'ck-portrait ' + (winnerId !== 'kano' ? 'ck-p1' : 'ck-p2'); }
-                if ($('ks-streak'))  $('ks-streak').textContent  = kingStreak + ' WINS';
-                if ($('ks-defended')) $('ks-defended').textContent = kingDefended + ' TIMES';
-                if ($('ks-earned'))  $('ks-earned').textContent  = '+' + (kingStreak * 2450) + ' BC';
-                if ($('bb-name'))    $('bb-name').textContent    = winnerName;
-                if ($('bb-portrait')) { $('bb-portrait').textContent = portraitMap[winnerId] || 'XX'; $('bb-portrait').className = 'bb-portrait ' + (winnerId !== 'kano' ? 'bb-p1' : 'bb-p2'); }
-                if ($('mb-king')) $('mb-king').textContent = winnerName;
-                addFeed('&#9812;', winnerName + ' WINS! ' + loserName + ' defeated.', 'now', 'feed-win');
 
                 setTimeout(function () {
                     p1Life = 100; p2Life = 100;
-                    $('player1Life').style.width = '100%';
-                    $('player2Life').style.width = '100%';
-                    $('qi-p1-hp').textContent = '100%';
-                    $('qi-p2-hp').textContent = '100%';
+                    document.getElementById('player1Life').style.width = '100%';
+                    document.getElementById('player2Life').style.width = '100%';
                     totalDamage = 0; hitCount = 0;
-                    $('total-damage').innerHTML = '0 <span class="tb-stat-icon">&#9876;</span>';
-                    $('tb-hits').innerHTML = '0 &nbsp;<span class="live-badge">LIVE</span>';
-                    if ($('mb-damage')) $('mb-damage').textContent = '0';
-                    if ($('mb-hits'))   $('mb-hits').innerHTML = '0 <span class="live-badge">LIVE</span>';
+                    if (loadLbl) loadLbl.textContent = 'LOADING FIGHTERS...';
+                    
+                    // Reset character picker to P1 for next time
+                    cpActiveSlot = 0;
+                    document.getElementById('cp-slot-1').classList.remove('cp-slot-active');
+                    document.getElementById('cp-slot-0').classList.add('cp-slot-active');
+                    
+                    window.startPhaserMatch(cpPicks[0], cpPicks[1]);
+                    addFeed('&#9670;', meta.display + ' entered the arena!', 'now', 'feed-system');
+                }, 150);
+            }
+        };
+        
+        window.onGameStarted = function() {
+            startGame();
+        };
+
+        var startGame = function () {
+            $('loading').style.visibility = 'hidden';
+            $('arena').style.visibility = 'visible';
+            $('utils').style.visibility = 'visible';
+
+            var winModal = $('win-modal');
+            if (winModal) {
+                winModal.style.opacity = '0';
+                setTimeout(function () { winModal.style.display = 'none'; }, 300);
+            }
+
+            $('vs-overlay').style.opacity = '1';
+            setTimeout(function () {
+                $('vs-overlay').style.opacity = '0';
+            }, 1500);
+            addFeed('&#9876;', 'Round Start!', 'now', 'feed-system');
+            scaleArena();
+
+            // Reset healthbars to full green
+            updateHpBar('player1Life', 100);
+            updateHpBar('player2Life', 100);
+
+            // Start idle rune animations
+            startRuneIdleLoop();
+        };
+
+        // Maps HP % to the correct segmented bar image
+        // Progress6=full, Progress7=5/6, Progress8=4/6, Progress9=3/6, Progress10=1/6
+        function hpToSegImage(pct) {
+            if (pct > 83) return 'small-healthbar/power-bar/Progress6.png'; // all 6 segs
+            if (pct > 66) return 'small-healthbar/power-bar/Progress7.png'; // 5 segs
+            if (pct > 50) return 'small-healthbar/power-bar/Progress8.png'; // 4 segs
+            if (pct > 33) return 'small-healthbar/power-bar/Progress9.png'; // 3 segs
+            if (pct >  0) return 'small-healthbar/power-bar/Progress10.png'; // 1-2 segs
+            return 'small-healthbar/power-bar/Progress10.png'; // dead — show last frame
+        }
+
+        function updateHpBar(id, pct) {
+            var el = $(id);
+            if (!el) return;
+            // Swap the image frame
+            el.src = hpToSegImage(pct);
+            // Danger flash effect on low HP
+            if (pct <= 20) {
+                el.classList.add('life-danger');
+            } else {
+                el.classList.remove('life-danger');
+            }
+        }
+
+        // Trigger a rune animation on a random rune for the given player
+        var RUNE_ANIMS = ['rune-glow', 'rune-shock', 'rune-pulse'];
+        function triggerRune(playerId) {
+            var row = $(playerId);
+            if (!row) return;
+            var runes = row.querySelectorAll('.rune');
+            var rune = runes[Math.floor(Math.random() * runes.length)];
+            // Remove all existing anim classes first
+            rune.classList.remove('rune-glow', 'rune-shock', 'rune-pulse');
+            // Force reflow to restart animation
+            void rune.offsetWidth;
+            var anim = RUNE_ANIMS[Math.floor(Math.random() * RUNE_ANIMS.length)];
+            rune.classList.add(anim);
+            // Clean up after animation
+            rune.addEventListener('animationend', function cleanup() {
+                rune.classList.remove(anim);
+                rune.removeEventListener('animationend', cleanup);
+            });
+        }
+
+        // Idle rune loop — randomly fires runes every 1.5–4 seconds per player
+        var runeLoopActive = false;
+        function startRuneIdleLoop() {
+            if (runeLoopActive) return;
+            runeLoopActive = true;
+            function scheduleRune(playerId) {
+                var delay = 1500 + Math.random() * 2500;
+                setTimeout(function() {
+                    if (!runeLoopActive) return;
+                    triggerRune(playerId);
+                    scheduleRune(playerId);
+                }, delay);
+            }
+            scheduleRune('runes-p1');
+            scheduleRune('runes-p2');
+        }
+        function stopRuneIdleLoop() { runeLoopActive = false; }
+
+
+        window.onFighterHit = function(attackerIdx, dmg, newDefenderHp, attackerKey) {
+            hitCount++;
+            var nameMap = { 'char04': 'Robot V1', 'floatrobo': 'FloatRobo', 'crimsonbot': 'CrimsonBot', 'toxicbot': 'ToxicBot', 'voidbot': 'VoidBot' };
+            var attackerName = (nameMap[attackerKey] || attackerKey) + ' ' + (attackerIdx + 1);
+            
+            if (attackerIdx === 0) { // P1 hit P2
+                p2Life = newDefenderHp;
+                updateHpBar('player2Life', p2Life);
+                if($('qi-p2-hp')) $('qi-p2-hp').textContent = Math.round(p2Life) + '%';
+                // Trigger a rune animation on attacker (P1)
+                triggerRune('runes-p1');
+            } else {
+                p1Life = newDefenderHp;
+                updateHpBar('player1Life', p1Life);
+                if($('qi-p1-hp')) $('qi-p1-hp').textContent = Math.round(p1Life) + '%';
+                // Trigger a rune animation on attacker (P2)
+                triggerRune('runes-p2');
+            }
+
+            totalDamage += dmg;
+            if ($('total-damage')) $('total-damage').innerHTML = totalDamage + ' <span class="tb-stat-icon">&#9876;</span>';
+            if ($('tb-hits')) $('tb-hits').innerHTML = hitCount + ' &nbsp;<span class="live-badge">LIVE</span>';
+            if ($('mb-damage')) $('mb-damage').textContent = totalDamage;
+            if ($('mb-hits')) $('mb-hits').innerHTML = hitCount + ' <span class="live-badge">LIVE</span>';
+
+            updatePredictions(p1Life, p2Life);
+            updateKingHP(currentKing);
+
+            if (dmg > 0) {
+                var cls = dmg >= 15 ? 'feed-crit' : '';
+                var icon = dmg >= 15 ? '&#9889;' : '&#9658;';
+                addFeed(icon, attackerName + ' Strike &minus;' + dmg + ' HP', 'now', cls);
+            }
+        };
+
+        window.onGameEnd = function(loserIdx) {
+            var nameMap = { 'char04': 'Robot V1', 'floatrobo': 'FloatRobo', 'robopepe': 'Robo Pepe', 'crimsonbot': 'CrimsonBot', 'toxicbot': 'ToxicBot', 'voidbot': 'VoidBot', 'silverwarrior': 'Silver Warrior', 'pepe': 'Pepe', 'kano': 'Kano', 'subzero': 'Sub-Zero' };
+            var portraitMap = { 'pepe': 'PP', 'kano': 'KN', 'subzero': 'SZ', 'char04': 'R1', 'floatrobo': 'FR', 'robopepe': 'RP', 'crimsonbot': 'CB', 'toxicbot': 'TX', 'voidbot': 'VB', 'silverwarrior': 'SW' };
+            
+            var winnerIdx = loserIdx === 0 ? 1 : 0;
+            var loserId = cpPicks[loserIdx];
+            var loserName = (nameMap[loserId] || loserId) + ' ' + (loserIdx + 1);
+            var winnerId = cpPicks[winnerIdx];
+            var winnerDisplay = nameMap[winnerId] || winnerId;
+            var winnerName = winnerDisplay + ' ' + (winnerIdx + 1);
+            currentKing = winnerId + winnerIdx;
+            kingStreak++;
+            kingDefended++;
+
+            if ($('ck-name')) $('ck-name').textContent = winnerName;
+            if ($('ck-portrait')) { $('ck-portrait').textContent = portraitMap[winnerId] || 'XX'; $('ck-portrait').className = 'ck-portrait ' + (winnerId !== 'kano' ? 'ck-p1' : 'ck-p2'); }
+            if ($('ks-streak')) $('ks-streak').textContent = kingStreak + ' WINS';
+            if ($('ks-defended')) $('ks-defended').textContent = kingDefended + ' TIMES';
+            if ($('ks-earned')) $('ks-earned').textContent = '+' + (kingStreak * 2450) + ' BC';
+            if ($('bb-name')) $('bb-name').textContent = winnerName;
+            if ($('bb-portrait')) { $('bb-portrait').textContent = portraitMap[winnerId] || 'XX'; $('bb-portrait').className = 'bb-portrait ' + (winnerId !== 'kano' ? 'bb-p1' : 'bb-p2'); }
+            if ($('mb-king')) $('mb-king').textContent = winnerName;
+            addFeed('&#9812;', winnerName + ' WINS! ' + loserName + ' defeated.', 'now', 'feed-win');
+
+            if (typeof confetti !== 'undefined') {
+                confetti({
+                    particleCount: 150,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    colors: ['#8855ee', '#44aaff', '#c49aff', '#ffffff']
+                });
+            }
+            var winModal = $('win-modal');
+            if (winModal) {
+                var rewardAmount = 1800 + (kingStreak * 650) + (winnerIdx * 250) + (Math.floor(totalDamage / 10) * 100);
+                var winnerLevel = 10 + (kingStreak * 3) + winnerIdx;
+                if ($('win-title')) $('win-title').textContent = winnerDisplay.toUpperCase() + ' WINS!';
+                if ($('win-level')) $('win-level').textContent = 'Level ' + winnerLevel;
+                if ($('win-reward')) $('win-reward').textContent = '+' + rewardAmount;
+                winModal.style.display = 'flex';
+                void winModal.offsetWidth;
+                winModal.style.opacity = '1';
+            }
+
+            setTimeout(function () {
+                p1Life = 100; p2Life = 100;
+                $('player1Life').style.width = '100%';
+                $('player2Life').style.width = '100%';
+                if($('qi-p1-hp')) $('qi-p1-hp').textContent = '100%';
+                if($('qi-p2-hp')) $('qi-p2-hp').textContent = '100%';
+                totalDamage = 0; hitCount = 0;
+                if ($('total-damage')) $('total-damage').innerHTML = '0 <span class="tb-stat-icon">&#9876;</span>';
+                if ($('tb-hits')) $('tb-hits').innerHTML = '0 &nbsp;<span class="live-badge">LIVE</span>';
+                if ($('mb-damage')) $('mb-damage').textContent = '0';
+                if ($('mb-hits')) $('mb-hits').innerHTML = '0 <span class="live-badge">LIVE</span>';
+
+                if (winModal) {
+                    winModal.style.opacity = '0';
+                    setTimeout(function () { winModal.style.display = 'none'; }, 300);
+                }
+
+                if($('vs-overlay')) {
                     $('vs-overlay').style.opacity = '1';
                     setTimeout(function () { $('vs-overlay').style.opacity = '0'; }, 1500);
-                    addFeed('&#9876;', 'New Round Start!', 'now', 'feed-system');
-                    mk.game._restartRound();
-                    updatePredictions(p1Life, p2Life);
-                }, 3000);
-            }
-        },
-        gameType: 'ai'
-    };
+                }
+                addFeed('&#9876;', 'New Round Start!', 'now', 'feed-system');
+                window.startPhaserMatch(cpPicks[0], cpPicks[1]);
+                updatePredictions(p1Life, p2Life);
+            }, 3000);
+        };
 
-    mk.start(options).ready(function () { startGame(); });
-}());
+        scaleArena();
+        window.startPhaserMatch(cpPicks[0], cpPicks[1]);
+    }());
 </script>
 </body>
+
 </html>

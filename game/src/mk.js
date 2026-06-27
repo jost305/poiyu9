@@ -117,7 +117,7 @@
       f = this.fighters[i];
       f.setArena(this.arena);
     }
-    f.setX(600 - mk.config.ARENA_RIGHT_BOUND - 50);
+    f.setX(this.arena.width - mk.config.ARENA_RIGHT_BOUND - 50);
   };
 
   mk.controllers.Base.prototype.fighterAttacked = function (fighter, damage) {
@@ -647,7 +647,7 @@
       f.setLife(100);
       f._position.x = f._orientation === mk.fighters.orientations.LEFT
         ? conf.ARENA_LEFT_BOUND + 20
-        : 600 - conf.ARENA_RIGHT_BOUND - 50;
+        : (f._arena ? f._arena.width : 600) - conf.ARENA_RIGHT_BOUND - 50;
       f._position.y = conf.PLAYER_TOP;
       f.setMove(m.STAND);
     });
@@ -749,9 +749,39 @@
       f = this.fighters[i];
       img = f.getState();
       if (img && img.complete && img.naturalWidth > 0) {
-        this._context.drawImage(img, f.getX(), f.getY(),
-          Math.round(img.naturalWidth * scale),
-          Math.round(img.naturalHeight * scale));
+        var fWidth = Math.round(img.naturalWidth * scale);
+        var fHeight = Math.round(img.naturalHeight * scale);
+        this._context.drawImage(img, f.getX(), f.getY(), fWidth, fHeight);
+
+        // Draw Floating Health Bar
+        if (f.getLife() > 0) {
+            var hpW = 40;
+            var hpH = 4;
+            var hpX = f.getX() + (fWidth / 2) - (hpW / 2);
+            var hpY = f.getY() + 10;
+
+            this._context.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            this._context.beginPath();
+            if (this._context.roundRect) this._context.roundRect(hpX, hpY, hpW, hpH, 2);
+            else this._context.rect(hpX, hpY, hpW, hpH);
+            this._context.fill();
+
+            var lifePct = Math.max(0, f.getLife() / 100);
+            this._context.fillStyle = lifePct > 0.3 ? '#22cc55' : '#dd2233';
+            this._context.beginPath();
+            var fillW = Math.max(0, hpW * lifePct);
+            if (this._context.roundRect) this._context.roundRect(hpX, hpY, fillW, hpH, 2);
+            else this._context.rect(hpX, hpY, fillW, hpH);
+            this._context.fill();
+            
+            // tiny border
+            this._context.strokeStyle = 'rgba(255,255,255,0.2)';
+            this._context.lineWidth = 1;
+            this._context.beginPath();
+            if (this._context.roundRect) this._context.roundRect(hpX, hpY, hpW, hpH, 2);
+            else this._context.rect(hpX, hpY, hpW, hpH);
+            this._context.stroke();
+        }
       }
     }
   };
@@ -1659,10 +1689,13 @@
   mk.fighters = {};
 
   mk.fighters.list = {
-    'subzero': true,
-    'kano': true,
     'pepe': true,
-    'char04': true
+    'char04': true,
+    'floatrobo': true,
+    'silverwarrior': true,
+    'crimsonbot': true,
+    'toxicbot': true,
+    'voidbot': true
   };
 
   mk.fighters.orientations = {
@@ -1838,12 +1871,7 @@
       if (this.getMove().type === m.SQUAT) {
         this.setMove(m.SQUAT_ENDURE);
       } else {
-        if (attackType === m.UPPERCUT ||
-          attackType === m.SPIN_KICK) {
-          this.setMove(m.KNOCK_DOWN);
-        } else {
-          this.setMove(m.ENDURE);
-        }
+        this.setMove(m.ENDURE);
       }
     }
     this.setLife(this.getLife() - damage);

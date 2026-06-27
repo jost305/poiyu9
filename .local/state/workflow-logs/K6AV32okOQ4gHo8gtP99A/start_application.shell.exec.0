@@ -1,0 +1,13 @@
+[1G[0K⠙[1G[0K⠹[1G[0K⠸[1G[0K
+up to date, audited 91 packages in 742ms
+[1G[0K⠸[1G[0K
+[1G[0K⠸[1G[0K16 packages are looking for funding
+[1G[0K⠸[1G[0K  run `npm fund` for details
+[1G[0K⠸[1G[0K
+found [32m[1m0[22m[39m vulnerabilities
+[1G[0K⠸[1G[0K[1mnpm[22m [96mnotice[39m
+[1mnpm[22m [96mnotice[39m New [31mmajor[39m version of npm available! [31m10.8.2[39m -> [34m11.17.0[39m
+[1mnpm[22m [96mnotice[39m Changelog: [34mhttps://github.com/npm/cli/releases/tag/v11.17.0[39m
+[1mnpm[22m [96mnotice[39m To update run: [4mnpm install -g npm@11.17.0[24m
+[1mnpm[22m [96mnotice[39m
+[1G[0K⠸[1G[0K

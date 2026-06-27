@@ -23,7 +23,7 @@
     }
 
     #main-area {
-        flex: 0 0 58%;
+        flex: 1;
         min-height: 0;
         overflow: hidden;
     }

@@ -55,14 +55,14 @@ html, body {
     flex-direction: column;
     width: 100vw;
     height: 100vh;
-    background: var(--bg);
+    position: relative;
 }
 
 /* ══════════════════════════════════════════
    TOP BAR
 ══════════════════════════════════════════ */
 #top-bar {
-    display: none !important;
+    display: flex;
 }
 
 .tb-left {
@@ -157,7 +157,7 @@ html, body {
     background: var(--panel);
     border-right: 1px solid var(--border);
     overflow-y: auto;
-    scrollbar-width: none;
+    scrollbar-width: auto; /* Show scrollbar */
     flex-direction: column;
 }
 #left-panel::-webkit-scrollbar { display: none; }
@@ -281,7 +281,7 @@ html, body {
 }
 
 #parent {
-    width: 600px; height: 400px;
+    width: 1200px; height: 800px;
     position: absolute;
     top: 0; left: 0;
     transform-origin: top left;
@@ -291,8 +291,9 @@ html, body {
 #arena-bg {
     position: absolute; top: 0; left: 0;
     width: 100%; height: 100%;
+    background-image: url('../images/arenas/bantah/arena.png');
     background-size: cover;
-    background-position: center;
+    background-position: center bottom;
     background-repeat: no-repeat;
     z-index: 0;
 }
@@ -430,13 +431,13 @@ canvas { display: block; background: transparent; }
 ══════════════════════════════════════════ */
 #right-panel {
     display: flex;
-    width: 180px;
+    width: 280px;
     flex-shrink: 0;
     background: var(--panel);
     border-right: 1px solid var(--border);
     border-left: none;
     overflow-y: auto;
-    scrollbar-width: none;
+    scrollbar-width: auto; /* Show scrollbar */
     flex-direction: column;
     order: -1;
 }
@@ -473,24 +474,24 @@ canvas { display: block; background: transparent; }
     font-size: 8px; color: var(--text3); text-align: center;
     padding: 0 8px 6px; letter-spacing: 0.5px; min-height: 14px;
 }
-.cp-roster {
-    display: flex; flex-direction: column; gap: 4px; padding: 0 8px;
+.cp-roster { padding-bottom: 20px; 
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 0 8px;
 }
 .cp-card {
-    display: flex; align-items: center; gap: 8px;
-    padding: 5px 8px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    padding: 8px 4px;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 6px;
     cursor: pointer;
     color: var(--text2);
     transition: border-color 0.15s, background 0.15s;
-    text-align: left; width: 100%;
+    text-align: center; width: 100%;
 }
 .cp-card:hover { border-color: rgba(136,85,238,0.4); background: rgba(136,85,238,0.08); }
 .cp-card img { width: 32px; height: 32px; object-fit: contain; image-rendering: pixelated; flex-shrink: 0; }
 .cp-card span { font-size: 9px; font-weight: 700; letter-spacing: 1px; color: var(--text2); }
-#right-panel::-webkit-scrollbar { display: none; }
+#right-panel::-webkit-scrollbar { width: 6px; background: rgba(0,0,0,0.2); } #right-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
 
 /* Current King */
 .current-king-card {
@@ -613,7 +614,7 @@ canvas { display: block; background: transparent; }
 .shrine-time { font-size: 11px; font-weight: 700; color: var(--text2); font-variant-numeric: tabular-nums; }
 
 
-/* ── IN-GAME OVERLAY ── */
+/* ── IN-GAME HUD ── */
 #utils {
     visibility: hidden;
     z-index: 10;
@@ -622,31 +623,476 @@ canvas { display: block; background: transparent; }
     width: 100%; height: 100%;
     pointer-events: none;
 }
-.lifebar {
-    width: 38%; height: 18px;
-    background: rgba(0,0,0,0.75);
-    border: 2px solid rgba(255,255,255,0.25);
-    border-radius: 3px;
+
+/* Each side HUD block: avatar + info stacked */
+.hud-block {
     position: absolute;
+    top: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+}
+.hud-p1 { left: 6px; flex-direction: row; }
+.hud-p2 { right: 6px; flex-direction: row-reverse; }
+
+/* Fighter avatar portrait box */
+.hud-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.6);
     overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px rgba(0,0,0,0.8), 0 0 4px rgba(255,255,255,0.1);
 }
-#player1LifeBar { left: 3%; top: 7%; border-radius: 3px 0 0 3px; }
-#player2LifeBar { right: 3%; top: 7%; border-radius: 0 3px 3px 0; }
-#player1LifeBar .life { float: left; border-radius: 3px 0 0 3px; }
-#player2LifeBar .life { float: right; border-radius: 0 3px 3px 0; }
-.life {
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, #0e6e21, #22cc55);
-    box-shadow: 0 0 8px rgba(34,204,85,0.5);
-    transition: width 0.25s ease;
+.hud-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transform: scale(1.4) translateY(8%);
+    /* P1 faces right by default in the stand sprite folder */
 }
-.playerName {
-    position: absolute;
-    font-size: clamp(10px, 1.5vw, 15px); font-weight: 800;
+/* Flip P2's avatar so it faces left (towards the fight) */
+#hud-avatar-p2 img { transform: scale(1.4) translateY(8%) scaleX(-1); }
+
+/* Info column: name + bar */
+.hud-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: clamp(104px, 12vw, 150px);
+    min-width: 0;
+    max-width: 150px;
+}
+.hud-info-right { align-items: flex-end; }
+
+.hud-name {
+    font-size: clamp(8px, 1.1vw, 12px);
+    font-weight: 900;
     color: #fff;
-    text-shadow: 0 1px 6px rgba(0,0,0,1), 0 0 12px rgba(0,0,0,0.8);
+    text-shadow: 0 1px 4px #000, 0 0 10px #000;
     letter-spacing: 1px;
     text-transform: uppercase;
+    line-height: 1;
 }
-#player1Name { left: 3%; top: 1.5%; }
-#player2Name { right: 3%; top: 1.5%; text-align: right; }
+.hud-name-right { text-align: right; }
+
+.hud-bar-wrap {
+    width: 100%;
+    max-width: 150px;
+}
+
+/* Slim healthbar */
+.lifebar {
+    width: 100%;
+    height: 10px;
+    background: rgba(0,0,0,0.75);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    overflow: hidden;
+}
+#player1LifeBar .life { float: left; border-radius: 999px; }
+#player2LifeBar .life { float: right; border-radius: 999px; }
+
+/* 
+  Healthbar with blood-drain effect:
+  The bar itself is always the CURRENT HP color.
+  A pseudo-element trails behind showing the "lost blood" in dark crimson.
+  HP color transitions: green (100%) → yellow (50%) → orange (30%) → red (15%)
+*/
+.life {
+    width: 100%; height: 100%;
+    border-radius: 999px;
+    /* Color is driven by JS setting --hp-pct on the element */
+    background: linear-gradient(90deg,
+        hsl(calc(var(--hp-pct, 100) * 1.2deg), 90%, 35%),
+        hsl(calc(var(--hp-pct, 100) * 1.2deg), 90%, 50%)
+    );
+    box-shadow: 0 0 8px hsla(calc(var(--hp-pct, 100) * 1.2deg), 90%, 50%, 0.7);
+    transition: width 0.3s ease, background 0.5s ease, box-shadow 0.5s ease;
+    position: relative;
+}
+/* Danger pulse when HP is critically low (driven by .life-danger class) */
+.life.life-danger {
+    animation: hp-danger-pulse 0.6s ease-in-out infinite alternate;
+}
+@keyframes hp-danger-pulse {
+    from { box-shadow: 0 0 6px rgba(255,30,30,0.6); }
+    to   { box-shadow: 0 0 20px rgba(255,30,30,1), 0 0 40px rgba(255,0,0,0.4); }
+}
+
+/* ── SEGMENTED IMAGE HEALTHBAR ── */
+.hud-segbar {
+    display: block;
+    width: 100%;
+    height: auto;
+    image-rendering: crisp-edges;
+    border-radius: 3px;
+    background: rgba(0,0,0,0.42);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.65);
+    filter: drop-shadow(0 0 2px rgba(0, 255, 80, 0.5));
+    transition: filter 0.3s ease;
+}
+/* P2 bar is mirrored so it drains from the correct side */
+.hud-segbar-right {
+    transform: scaleX(-1);
+}
+/* Danger flash on critically low HP */
+.hud-segbar.life-danger {
+    animation: seg-danger-pulse 0.5s ease-in-out infinite alternate;
+}
+@keyframes seg-danger-pulse {
+    from { filter: drop-shadow(0 0 4px rgba(255,30,30,0.6)); }
+    to   { filter: drop-shadow(0 0 12px rgba(255,0,0,1)); }
+}
+
+/* ── RUNE POWER SLOTS ── */
+.rune-row {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+}
+.rune-row-right { flex-direction: row-reverse; }
+
+.rune {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7px;
+    line-height: 1;
+    cursor: default;
+    position: relative;
+    overflow: visible;
+    transition: transform 0.15s;
+}
+/* Rune content from data-attr */
+.rune::before { content: attr(data-rune); }
+
+/* Each rune has its own always-on color identity */
+.rune[title="Shock"] {
+    color: #44ddff;
+    border: 1px solid rgba(68,221,255,0.5);
+    background: rgba(0,180,255,0.12);
+    box-shadow: 0 0 5px rgba(68,221,255,0.4), inset 0 0 4px rgba(0,200,255,0.15);
+    text-shadow: 0 0 4px #00ddff;
+}
+.rune[title="Fire"] {
+    color: #ff8833;
+    border: 1px solid rgba(255,120,40,0.5);
+    background: rgba(255,80,0,0.12);
+    box-shadow: 0 0 5px rgba(255,100,20,0.45), inset 0 0 4px rgba(255,80,0,0.15);
+    text-shadow: 0 0 4px #ff6600;
+}
+.rune[title="Death"] {
+    color: #cc77ff;
+    border: 1px solid rgba(180,80,255,0.5);
+    background: rgba(130,0,255,0.12);
+    box-shadow: 0 0 5px rgba(160,60,255,0.45), inset 0 0 4px rgba(120,0,255,0.15);
+    text-shadow: 0 0 4px #aa00ff;
+}
+.rune[title="Power"] {
+    color: #ffe044;
+    border: 1px solid rgba(255,210,50,0.5);
+    background: rgba(200,150,0,0.12);
+    box-shadow: 0 0 5px rgba(255,200,30,0.45), inset 0 0 4px rgba(200,140,0,0.15);
+    text-shadow: 0 0 4px #ffcc00;
+}
+
+/* Activated rune states — burst on top of the always-on base */
+.rune.rune-glow  { animation: rune-glow-anim  0.9s ease-out forwards; }
+.rune.rune-shock { animation: rune-shock-anim 0.5s ease-out forwards; }
+.rune.rune-pulse { animation: rune-pulse-anim 1.2s ease-in-out forwards; }
+
+@keyframes rune-glow-anim {
+    0%   { transform: scale(1);    box-shadow: 0 0 5px rgba(255,100,20,0.45); }
+    40%  { transform: scale(1.35); color: #ffee00; border-color: #ffee00; box-shadow: 0 0 14px #ffcc00, 0 0 28px #ff6600; background: rgba(255,160,0,0.35); text-shadow: 0 0 8px #ffdd00; }
+    100% { transform: scale(1);    box-shadow: 0 0 5px rgba(255,100,20,0.45); }
+}
+@keyframes rune-shock-anim {
+    0%   { transform: scale(1);    box-shadow: 0 0 5px rgba(68,221,255,0.4); }
+    30%  { transform: scale(1.4);  color: #ffffff; border-color: #88ffff; box-shadow: 0 0 18px #00eeff, 0 0 32px #0099cc; background: rgba(0,220,255,0.35); text-shadow: 0 0 10px #fff; }
+    60%  { transform: scale(0.88); }
+    100% { transform: scale(1);    box-shadow: 0 0 5px rgba(68,221,255,0.4); }
+}
+@keyframes rune-pulse-anim {
+    0%   { transform: scale(1);    box-shadow: 0 0 5px rgba(160,60,255,0.45); }
+    50%  { transform: scale(1.4);  color: #eeb0ff; border-color: #dd66ff; box-shadow: 0 0 20px #cc44ff, 0 0 40px #6600cc; background: rgba(180,50,255,0.4); text-shadow: 0 0 10px #ee88ff; }
+    100% { transform: scale(1);    box-shadow: 0 0 5px rgba(160,60,255,0.45); }
+}
+
+
+/* ══════════════════════════════════════════
+   MOBILE ACTION BAR
+══════════════════════════════════════════ */
+#mobile-action-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 6px 10px;
+    z-index: 20;
+    pointer-events: auto;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 70%, transparent 100%);
+}
+
+.skills-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.skill-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    cursor: pointer;
+    background: radial-gradient(circle at top, rgba(255,255,255,0.2) 0%, transparent 60%), #222;
+    border: 2px solid;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.2);
+    transition: transform 0.1s;
+}
+.skill-btn:active { transform: scale(0.92); }
+
+.skill-gold { border-color: var(--gold); background-color: #533300; }
+.skill-purple { border-color: var(--purple2); background-color: #331155; }
+.skill-green { border-color: var(--green); background-color: #114422; }
+
+.skill-icon { font-size: 16px; margin-bottom: 0px; }
+.skill-name { font-size: 6px; font-weight: 800; text-align: center; line-height: 1; width: 120%; position: absolute; bottom: -8px; text-shadow: 0 1px 2px #000; }
+.skill-energy { font-size: 8px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 1px 2px; border-radius: 2px; position: absolute; bottom: 2px; }
+
+.energy-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.5);
+    border-radius: 12px;
+    padding: 4px 12px;
+    margin: 6px auto;
+    gap: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.energy-label { font-size: 8px; font-weight: 800; letter-spacing: 1px; color: #88aaff; margin-right: 4px; }
+.energy-pip { font-size: 12px; color: #444; }
+.energy-pip.active { color: #44aaff; text-shadow: 0 0 8px #44aaff; }
+
+.bottom-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-end-turn {
+    flex: 1;
+    background: linear-gradient(to bottom, #ffcc00, #dd8800);
+    border: 2px solid #ffee66;
+    border-radius: 8px;
+    color: #442200;
+    font-size: 14px;
+    font-weight: 900;
+    padding: 8px 0;
+    box-shadow: 0 4px 15px rgba(255, 170, 0, 0.4), inset 0 2px 4px rgba(255,255,255,0.5);
+    cursor: pointer;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+}
+.btn-end-turn:active { transform: translateY(2px); box-shadow: 0 2px 5px rgba(255, 170, 0, 0.4); }
+
+.btn-x2, .btn-settings {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+}
+
+
+/* ══════════════════════════════════════════
+   MOBILE NAV FOOTER
+══════════════════════════════════════════ */
+#mobile-nav-footer {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 64px;
+    background: rgba(15, 20, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 50;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #8899aa;
+    cursor: pointer;
+    flex: 1;
+    transition: all 0.2s;
+    height: 100%;
+}
+
+.nav-item:active {
+    transform: scale(0.95);
+}
+
+.nav-item.active {
+    color: #fff;
+    background: linear-gradient(to top, rgba(68, 170, 255, 0.1) 0%, transparent 100%);
+    border-top: 2px solid #44aaff;
+    margin-top: -1px;
+}
+
+.nav-item.active .nav-icon {
+    text-shadow: 0 0 10px rgba(68, 170, 255, 0.8);
+    transform: translateY(-2px);
+    color: #44aaff;
+}
+
+.nav-icon {
+    font-size: 22px;
+    margin-bottom: 4px;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.nav-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+
+/* ══════════════════════════════════════════
+   RESPONSIVE DESIGN FOR DESKTOP / MOBILE
+══════════════════════════════════════════ */
+@media (min-width: 769px) {
+    #mobile-nav-footer {
+        display: none !important;
+    }
+    #mobile-action-bar {
+        display: none !important;
+    }
+    #arena-bg {
+        
+    }
+}
+
+@media (max-width: 768px) {
+    #hud-root {
+        max-width: 450px !important;
+        margin: 0 auto !important;
+        height: 100dvh !important;
+        overflow: hidden;
+    }
+    #left-panel, #right-panel, #top-bar {
+        display: none !important;
+    }
+    #pre-match-modal {
+        display: none !important;
+    }
+    .bantah-hud {
+        display: none !important;
+    }
+    #arena-bg {
+        background-image: url('../images/arenas/bantah-arena-mobile.png') !important;
+    }
+}
+
+.win-modal {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.48);
+    backdrop-filter: blur(3px);
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.win-banner {
+    position: relative;
+    width: min(74vw, 680px);
+    aspect-ratio: 679 / 304;
+    background: url('../win-modal-template.svg') center / contain no-repeat;
+    filter: drop-shadow(0 14px 26px rgba(0,0,0,0.45));
+}
+
+.win-title {
+    position: absolute;
+    z-index: 1;
+    left: 32.5%;
+    right: 2.8%;
+    top: 40%;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(20px, 3.65vw, 42px);
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0 5px 0 rgba(0,0,0,0.22);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.win-level {
+    position: absolute;
+    z-index: 1;
+    left: 35.5%;
+    top: 77.2%;
+    color: #fff;
+    font-size: clamp(13px, 2.25vw, 27px);
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+    white-space: nowrap;
+}
+
+.win-reward {
+    position: absolute;
+    z-index: 1;
+    left: 79.5%;
+    right: 3.8%;
+    top: 76%;
+    color: #75ff2e;
+    font-size: clamp(14px, 2.6vw, 31px);
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 0 10px rgba(117,255,46,0.5);
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .win-banner {
+        width: min(96vw, 390px);
+    }
+    .win-title {
+        font-size: clamp(18px, 7vw, 30px);
+    }
+}
