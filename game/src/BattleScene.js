@@ -7,6 +7,13 @@ class BattleScene extends Phaser.Scene {
         this.p1Key = window.BATTLE_P1 || 'char04';
         this.p2Key = window.BATTLE_P2 || 'floatrobo';
 
+        console.log('[BattleScene] preload: p1=' + this.p1Key + ', p2=' + this.p2Key);
+
+        // Log any asset load failures
+        this.load.on('loaderror', (fileObj) => {
+            console.error('[BattleScene] LOAD ERROR:', fileObj.key, fileObj.src);
+        });
+
         this.loadFighterAssets(this.p1Key);
         this.loadFighterAssets(this.p2Key);
 

@@ -5,9 +5,9 @@
     <title>MK Arena</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.86.0/dist/phaser.min.js"></script>
-    <script src="src/Fighter.js?v=31"></script>
-    <script src="src/BattleScene.js?v=31"></script>
-    <script src="src/game.js?v=31"></script>
+    <script src="src/Fighter.js?v=32"></script>
+    <script src="src/BattleScene.js?v=32"></script>
+    <script src="src/game.js?v=32"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="styles/styles.css?v=29" />
@@ -259,6 +259,10 @@
                 <button class="cp-card cp-card-voidbot" onclick="cpPickFighter('voidbot')">
                     <img src="images/fighters/voidbot/left/stand/0.png" alt="Voidbot">
                     <span>VOIDBOT</span>
+                </button>
+                <button class="cp-card cp-card-furyman" onclick="cpPickFighter('furyman')">
+                    <img src="images/fighters/furyman/left/stand/0.png" alt="Furyman">
+                    <span>FURY</span>
                 </button>
             </div>
         </div>
@@ -560,7 +564,8 @@
             robopepe: { display: 'ROBO PEPE', img: 'images/fighters/robopepe/left/stand/0.png', cfg: { name: 'robopepe', width: 65, height: 45 } },
             crimsonbot: { display: 'CRIMSONBOT', img: 'images/fighters/crimsonbot/left/stand/0.png', cfg: { name: 'crimsonbot', width: 65, height: 45 } },
             toxicbot: { display: 'TOXICBOT', img: 'images/fighters/toxicbot/left/stand/0.png', cfg: { name: 'toxicbot', width: 65, height: 45 } },
-            voidbot: { display: 'VOIDBOT', img: 'images/fighters/voidbot/left/stand/0.png', cfg: { name: 'voidbot', width: 65, height: 45 } }
+            voidbot: { display: 'VOIDBOT', img: 'images/fighters/voidbot/left/stand/0.png', cfg: { name: 'voidbot', width: 65, height: 45 } },
+            furyman: { display: 'FURY', img: 'images/fighters/furyman/left/stand/0.png', cfg: { name: 'furyman', width: 100, height: 100 } }
         };
         var cpPicks = ['robopepe', 'floatrobo'];
         var cpActiveSlot = 0;
@@ -716,7 +721,7 @@
 
         window.onFighterHit = function(attackerIdx, dmg, newDefenderHp, attackerKey) {
             hitCount++;
-            var nameMap = { 'char04': 'Robot V1', 'floatrobo': 'FloatRobo', 'crimsonbot': 'CrimsonBot', 'toxicbot': 'ToxicBot', 'voidbot': 'VoidBot' };
+            var nameMap = { 'char04': 'Robot V1', 'floatrobo': 'FloatRobo', 'crimsonbot': 'CrimsonBot', 'toxicbot': 'ToxicBot', 'voidbot': 'VoidBot', 'furyman': 'Fury' };
             var attackerName = (nameMap[attackerKey] || attackerKey) + ' ' + (attackerIdx + 1);
             
             if (attackerIdx === 0) { // P1 hit P2
@@ -750,8 +755,8 @@
         };
 
         window.onGameEnd = function(loserIdx) {
-            var nameMap = { 'char04': 'Robot V1', 'floatrobo': 'FloatRobo', 'robopepe': 'Robo Pepe', 'crimsonbot': 'CrimsonBot', 'toxicbot': 'ToxicBot', 'voidbot': 'VoidBot', 'silverwarrior': 'Silver Warrior', 'pepe': 'Pepe', 'kano': 'Kano', 'subzero': 'Sub-Zero' };
-            var portraitMap = { 'pepe': 'PP', 'kano': 'KN', 'subzero': 'SZ', 'char04': 'R1', 'floatrobo': 'FR', 'robopepe': 'RP', 'crimsonbot': 'CB', 'toxicbot': 'TX', 'voidbot': 'VB', 'silverwarrior': 'SW' };
+            var nameMap = { 'char04': 'Robot V1', 'floatrobo': 'FloatRobo', 'robopepe': 'Robo Pepe', 'crimsonbot': 'CrimsonBot', 'toxicbot': 'ToxicBot', 'voidbot': 'VoidBot', 'silverwarrior': 'Silver Warrior', 'pepe': 'Pepe', 'kano': 'Kano', 'subzero': 'Sub-Zero', 'furyman': 'Fury' };
+            var portraitMap = { 'pepe': 'PP', 'kano': 'KN', 'subzero': 'SZ', 'char04': 'R1', 'floatrobo': 'FR', 'robopepe': 'RP', 'crimsonbot': 'CB', 'toxicbot': 'TX', 'voidbot': 'VB', 'silverwarrior': 'SW', 'furyman': 'FM' };
             
             var winnerIdx = loserIdx === 0 ? 1 : 0;
             var loserId = cpPicks[loserIdx];

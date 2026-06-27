@@ -25,7 +25,11 @@ class Fighter extends Phaser.GameObjects.Container {
         
         // Scale based on what mk.js did (scale 0.5 for desktop, 0.65 for mobile)
         const isMobile = window.innerWidth <= 768;
-        this.sprite.setScale(isMobile ? 1.10 : 0.80);
+        let baseScale = isMobile ? 1.10 : 0.80;
+        if (key === 'furyman') {
+            baseScale = isMobile ? 0.25 : 0.20;
+        }
+        this.sprite.setScale(baseScale);
 
         const shadowW = Phaser.Math.Clamp(this.sprite.displayWidth * 0.46, isMobile ? 116 : 76, isMobile ? 190 : 150);
         const shadowH = isMobile ? 28 : 22;
