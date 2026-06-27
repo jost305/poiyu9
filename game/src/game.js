@@ -3,6 +3,7 @@ const CHAR_META = {
     "crimsonbot": {"stand": 18, "attack": 31}, 
     "floatrobo": {"stand": 12, "attack": 3}, 
     "flokiwarrior": {"stand": 9, "attack": 8}, 
+    "furyman": {"stand": 1, "attack": 1, "block": 1, "hit": 1},
     "kano": {"stand": 9, "attack": 8}, 
     "pepe": {"stand": 9, "attack": 8}, 
     "robopepe": {"stand": 12, "attack": 3}, 

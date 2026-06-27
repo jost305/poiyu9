@@ -77,6 +77,20 @@ class BattleScene extends Phaser.Scene {
         for (let i = 0; i < meta.attack; i++) {
             this.load.image(`${key}_attack_${i}`, `images/fighters/${key}/left/high-punch/${i}.png`);
         }
+
+        // Load block frames if defined
+        if (meta.block) {
+            for (let i = 0; i < meta.block; i++) {
+                this.load.image(`${key}_block_${i}`, `images/fighters/${key}/left/block/${i}.png`);
+            }
+        }
+
+        // Load hit frames if defined
+        if (meta.hit) {
+            for (let i = 0; i < meta.hit; i++) {
+                this.load.image(`${key}_hit_${i}`, `images/fighters/${key}/left/hit/${i}.png`);
+            }
+        }
     }
 
     create() {
@@ -232,6 +246,32 @@ class BattleScene extends Phaser.Scene {
                 });
             }
         }
+
+        if (meta.block && !this.anims.exists(`${key}_block_anim`)) {
+            const blockFrames = [];
+            for (let i = 0; i < meta.block; i++) {
+                blockFrames.push({ key: `${key}_block_${i}` });
+            }
+            this.anims.create({
+                key: `${key}_block_anim`,
+                frames: blockFrames,
+                frameRate: 15,
+                repeat: 0
+            });
+        }
+
+        if (meta.hit && !this.anims.exists(`${key}_hit_anim`)) {
+            const hitFrames = [];
+            for (let i = 0; i < meta.hit; i++) {
+                hitFrames.push({ key: `${key}_hit_${i}` });
+            }
+            this.anims.create({
+                key: `${key}_hit_anim`,
+                frames: hitFrames,
+                frameRate: 15,
+                repeat: 0
+            });
+        }
     }
 
     startAILoop() {
@@ -336,20 +376,31 @@ class BattleScene extends Phaser.Scene {
 
         if (attacker.state === 'idle') {
             // Pre-calculate damage so the spell type can be chosen before launch
-            const damage = Phaser.Math.Between(5, 15);
+            const baseDamage = Phaser.Math.Between(5, 15);
 
             const onHit = () => {
-                defender.takeHit(damage);
-
-                // Play visual hit spark effect on the defender, pass damage to determine explosion size
-                this.playHitSpark(defender.x, defender.y - 60, damage);
+                // 30% chance for defender to block if they are idle
+                const doesBlock = defender.state === 'idle' && Math.random() < 0.3;
                 
-                // Show floating damage text
-                const isCrit = damage >= 12;
-                this.showFloatingText(defender.x, defender.y - 120, `-${damage}`, isCrit ? '#ff1744' : '#ff6d00', isCrit);
+                let damage = baseDamage;
+                if (doesBlock) {
+                    damage = Math.floor(damage / 2);
+                    defender.blockHit(damage);
+                    this.showFloatingText(defender.x, defender.y - 120, `BLOCK -${damage}`, '#448aff', false);
+                    this.playSfx('sfx_magic_sparkle', { volume: 0.5, detune: 0 }); // A block sound
+                } else {
+                    defender.takeHit(damage);
+                    
+                    // Play visual hit spark effect on the defender
+                    this.playHitSpark(defender.x, defender.y - 60, damage);
+                    
+                    // Show floating damage text
+                    const isCrit = damage >= 12;
+                    this.showFloatingText(defender.x, defender.y - 120, `-${damage}`, isCrit ? '#ff1744' : '#ff6d00', isCrit);
+                }
                 
-                // 30% chance to show floating BC Gained
-                if (Math.random() > 0.7) {
+                // 30% chance to show floating BC Gained (only if not blocked, or maybe always)
+                if (!doesBlock && Math.random() > 0.7) {
                     const bcGained = Phaser.Math.Between(1, 5);
                     this.time.delayedCall(200, () => {
                         this.playSfx('sfx_magic_sparkle', { volume: 0.34, detune: 180 });

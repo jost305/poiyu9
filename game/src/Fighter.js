@@ -313,18 +313,63 @@ class Fighter extends Phaser.GameObjects.Container {
         // Recoil 16-32px (HD)
         const recoil = this.isPlayer1 ? -24 : 24;
         
+        if (this.state !== 'dead') {
+            this.state = 'hit';
+            this.stopHover();
+            if (this.scene.anims.exists(this.fighterKey + '_hit_anim')) {
+                this.sprite.play(this.fighterKey + '_hit_anim');
+            }
+        }
+        
         this.scene.tweens.add({
             targets: this,
             x: this.x + recoil,
             duration: 60,
             yoyo: true,
-            ease: 'Quad.easeOut'
+            ease: 'Quad.easeOut',
+            onComplete: () => {
+                if (this.state !== 'dead') {
+                    this.state = 'idle';
+                    this.resumeHover();
+                    this.sprite.play(this.fighterKey + '_stand_anim');
+                }
+            }
         });
         
         // Flash white (tint)
         this.sprite.setTintFill(0xffffff);
         this.scene.time.delayedCall(100, () => {
             this.sprite.clearTint();
+        });
+    }
+
+    blockHit(damage) {
+        this.hp = Math.max(0, this.hp - damage);
+        this.updateNameplate();
+
+        if (this.state !== 'dead') {
+            this.state = 'blocking';
+            this.stopHover();
+            if (this.scene.anims.exists(this.fighterKey + '_block_anim')) {
+                this.sprite.play(this.fighterKey + '_block_anim');
+            }
+        }
+
+        const recoil = this.isPlayer1 ? -10 : 10;
+        
+        this.scene.tweens.add({
+            targets: this,
+            x: this.x + recoil,
+            duration: 120,
+            yoyo: true,
+            ease: 'Cubic.easeOut',
+            onComplete: () => {
+                if (this.state !== 'dead') {
+                    this.state = 'idle';
+                    this.resumeHover();
+                    this.sprite.play(this.fighterKey + '_stand_anim');
+                }
+            }
         });
     }
     
@@ -379,7 +424,8 @@ Fighter.displayNames = {
     pepe: 'Pepe',
     kano: 'Kano',
     subzero: 'Sub-Zero',
-    flokiwarrior: 'Floki Warrior'
+    flokiwarrior: 'Floki Warrior',
+    furyman: 'Fury Man'
 };
 
 Fighter.visibleTopPadding = {
@@ -388,5 +434,6 @@ Fighter.visibleTopPadding = {
     silverwarrior: 115,
     pepe: 58,
     kano: 1,
-    subzero: 2
+    subzero: 2,
+    furyman: 15
 };
