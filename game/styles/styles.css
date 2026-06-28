@@ -669,13 +669,20 @@ canvas { display: block; background: transparent; }
 .hud-info-right { align-items: flex-end; }
 
 .hud-name {
-    font-size: clamp(8px, 1.1vw, 12px);
-    font-weight: 900;
+    font-size: 16px;
+    font-weight: 800;
     color: #fff;
-    text-shadow: 0 1px 4px #000, 0 0 10px #000;
-    letter-spacing: 1px;
+    margin-bottom: 2px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     text-transform: uppercase;
+    letter-spacing: 1px;
     line-height: 1;
+}
+.bc-counter {
+    color: #ffcc00;
+    font-size: 0.85em;
+    margin: 0 10px;
+    text-shadow: 1px 1px 3px #000;
 }
 .hud-name-right { text-align: right; }
 
@@ -751,16 +758,17 @@ canvas { display: block; background: transparent; }
 /* ── RUNE POWER SLOTS ── */
 .rune-row {
     display: flex;
-    gap: 4px;
-    margin-top: 4px;
+    gap: 8px;
+    margin-top: 6px;
+    align-items: center;
 }
 .rune-row-right { flex-direction: row-reverse; }
 
 .rune {
-    width: 14px; height: 14px;
-    border-radius: 3px;
+    width: 36px; height: 36px;
+    border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 7px;
+    font-size: 20px;
     line-height: 1;
     cursor: default;
     position: relative;
@@ -771,57 +779,52 @@ canvas { display: block; background: transparent; }
 .rune::before { content: attr(data-rune); }
 
 /* Each rune has its own always-on color identity */
-.rune[title="Shock"] {
-    color: #44ddff;
-    border: 1px solid rgba(68,221,255,0.5);
-    background: rgba(0,180,255,0.12);
-    box-shadow: 0 0 5px rgba(68,221,255,0.4), inset 0 0 4px rgba(0,200,255,0.15);
-    text-shadow: 0 0 4px #00ddff;
+.rune[title="Potion"] {
+    color: #44ff66;
+    border: 2px solid rgba(68,255,100,0.6);
+    background: rgba(0,255,80,0.15);
+    box-shadow: 0 0 10px rgba(68,255,100,0.5), inset 0 0 8px rgba(0,255,80,0.2);
+    text-shadow: 0 0 6px #00ff44;
 }
-.rune[title="Fire"] {
-    color: #ff8833;
-    border: 1px solid rgba(255,120,40,0.5);
-    background: rgba(255,80,0,0.12);
-    box-shadow: 0 0 5px rgba(255,100,20,0.45), inset 0 0 4px rgba(255,80,0,0.15);
-    text-shadow: 0 0 4px #ff6600;
+.rune[title="Shield"] {
+    color: #ffd700;
+    border: 2px solid rgba(255,215,0,0.6);
+    background: rgba(255,215,0,0.15);
+    box-shadow: 0 0 10px rgba(255,215,0,0.55), inset 0 0 8px rgba(255,215,0,0.2);
+    text-shadow: 0 0 6px #ffcc00;
 }
-.rune[title="Death"] {
-    color: #cc77ff;
-    border: 1px solid rgba(180,80,255,0.5);
-    background: rgba(130,0,255,0.12);
-    box-shadow: 0 0 5px rgba(160,60,255,0.45), inset 0 0 4px rgba(120,0,255,0.15);
-    text-shadow: 0 0 4px #aa00ff;
+.rune[title="Empty"] {
+    color: #555555;
+    border: 2px solid rgba(100,100,100,0.4);
+    background: rgba(60,60,60,0.12);
+    box-shadow: none;
+    text-shadow: none;
+    opacity: 0.45;
 }
 .rune[title="Thunder"] {
     color: #00e5ff;
-    border: 1px solid rgba(0, 229, 255, 0.5);
-    background: rgba(0, 180, 255, 0.12);
-    box-shadow: 0 0 5px rgba(0, 200, 255, 0.45), inset 0 0 4px rgba(0, 140, 255, 0.15);
-    text-shadow: 0 0 4px #00bfff;
+    border: 2px solid rgba(0, 229, 255, 0.6);
+    background: rgba(0, 180, 255,0.15);
+    box-shadow: 0 0 10px rgba(0, 200, 255, 0.55), inset 0 0 8px rgba(0, 140, 255, 0.2);
+    text-shadow: 0 0 6px #00bfff;
 }
 
-/* Activated rune states — burst on top of the always-on base */
-.rune.rune-glow    { animation: rune-glow-anim    0.9s ease-out forwards; }
-.rune.rune-shock   { animation: rune-shock-anim   0.5s ease-out forwards; }
-.rune.rune-pulse   { animation: rune-pulse-anim   1.2s ease-in-out forwards; }
-.rune.rune-thunder { animation: rune-thunder-anim 0.7s ease-out forwards; }
+.rune.rune-potion-active { animation: rune-potion-anim 0.8s ease-out forwards; }
+.rune.rune-shield-active { animation: rune-shield-anim 0.6s ease-out forwards; }
+.rune.rune-thunder-active { animation: rune-thunder-anim 0.7s ease-out forwards; }
 
-@keyframes rune-glow-anim {
-    0%   { transform: scale(1);    box-shadow: 0 0 5px rgba(255,100,20,0.45); }
-    40%  { transform: scale(1.35); color: #ffee00; border-color: #ffee00; box-shadow: 0 0 14px #ffcc00, 0 0 28px #ff6600; background: rgba(255,160,0,0.35); text-shadow: 0 0 8px #ffdd00; }
-    100% { transform: scale(1);    box-shadow: 0 0 5px rgba(255,100,20,0.45); }
+@keyframes rune-potion-anim {
+    0%   { transform: scale(1);    box-shadow: 0 0 5px rgba(68,255,100,0.4); }
+    40%  { transform: scale(1.4);  color: #ffffff; border-color: #aaffaa; box-shadow: 0 0 16px #44ff66, 0 0 32px #00ff44; background: rgba(0,255,80,0.4); text-shadow: 0 0 10px #fff; }
+    100% { transform: scale(1);    box-shadow: 0 0 5px rgba(68,255,100,0.4); }
 }
-@keyframes rune-shock-anim {
-    0%   { transform: scale(1);    box-shadow: 0 0 5px rgba(68,221,255,0.4); }
-    30%  { transform: scale(1.4);  color: #ffffff; border-color: #88ffff; box-shadow: 0 0 18px #00eeff, 0 0 32px #0099cc; background: rgba(0,220,255,0.35); text-shadow: 0 0 10px #fff; }
-    60%  { transform: scale(0.88); }
-    100% { transform: scale(1);    box-shadow: 0 0 5px rgba(68,221,255,0.4); }
+@keyframes rune-shield-anim {
+    0%   { transform: scale(1);    box-shadow: 0 0 5px rgba(255,215,0,0.45); }
+    30%  { transform: scale(1.45); color: #ffffff; border-color: #ffffaa; box-shadow: 0 0 20px #ffcc00, 0 0 40px #ffaa00; background: rgba(255,215,0,0.45); text-shadow: 0 0 12px #fff; }
+    60%  { transform: scale(0.9); }
+    100% { transform: scale(1);    box-shadow: 0 0 5px rgba(255,215,0,0.45); }
 }
-@keyframes rune-pulse-anim {
-    0%   { transform: scale(1);    box-shadow: 0 0 5px rgba(160,60,255,0.45); }
-    50%  { transform: scale(1.4);  color: #eeb0ff; border-color: #dd66ff; box-shadow: 0 0 20px #cc44ff, 0 0 40px #6600cc; background: rgba(180,50,255,0.4); text-shadow: 0 0 10px #ee88ff; }
-    100% { transform: scale(1);    box-shadow: 0 0 5px rgba(160,60,255,0.45); }
-}
+
 @keyframes rune-thunder-anim {
     0%   { transform: scale(1)    rotate(0deg);   box-shadow: 0 0 5px rgba(0,229,255,0.45); }
     20%  { transform: scale(1.5)  rotate(-5deg);  color: #ffffff; border-color: #00ffff; box-shadow: 0 0 24px #00e5ff, 0 0 48px #0066ff; background: rgba(0,220,255,0.5); text-shadow: 0 0 14px #fff, 0 0 28px #00e5ff; }
@@ -829,6 +832,170 @@ canvas { display: block; background: transparent; }
     70%  { transform: scale(1.25) rotate(-3deg); color: #00e5ff; border-color: #00aaff; box-shadow: 0 0 14px #00ccff; }
     100% { transform: scale(1)    rotate(0deg);   box-shadow: 0 0 5px rgba(0,229,255,0.45); }
 }
+
+/* ══════════════════════════════════════════
+   TCG RUNE CARD HAND
+══════════════════════════════════════════ */
+#rune-card-hand {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 14px;
+    align-items: flex-end;
+    padding: 0 24px 14px;
+    z-index: 200;
+    pointer-events: none;
+}
+
+.rune-card {
+    pointer-events: all;
+    width: 120px;
+    background: linear-gradient(160deg, rgba(18,18,32,0.97) 0%, rgba(8,8,20,0.97) 100%);
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 10px 8px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    cursor: default;
+    transform: translateY(0) rotate(0deg);
+    transition: transform 0.22s cubic-bezier(0.23,1,0.32,1),
+                box-shadow 0.22s ease,
+                border-color 0.22s ease;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+}
+
+/* Fan layout — slightly rotate outer cards */
+#rune-card-hand .rune-card:nth-child(1) { transform: translateY(6px) rotate(-4deg); }
+#rune-card-hand .rune-card:nth-child(2) { transform: translateY(2px) rotate(-1.5deg); }
+#rune-card-hand .rune-card:nth-child(3) { transform: translateY(2px) rotate(1.5deg); }
+#rune-card-hand .rune-card:nth-child(4) { transform: translateY(6px) rotate(4deg); }
+
+.rune-card:hover {
+    transform: translateY(-22px) rotate(0deg) !important;
+    z-index: 10;
+}
+
+/* Per-card color theming */
+.rune-card[data-rune="potion"] {
+    border-color: rgba(68,255,100,0.55);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 18px rgba(68,255,100,0.35);
+}
+.rune-card[data-rune="potion"]:hover {
+    border-color: rgba(68,255,100,0.9);
+    box-shadow: 0 20px 48px rgba(0,0,0,0.8), 0 0 30px rgba(68,255,100,0.55);
+}
+.rune-card[data-rune="shield"] {
+    border-color: rgba(255,215,0,0.55);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 18px rgba(255,215,0,0.3);
+}
+.rune-card[data-rune="shield"]:hover {
+    border-color: rgba(255,215,0,0.9);
+    box-shadow: 0 20px 48px rgba(0,0,0,0.8), 0 0 30px rgba(255,215,0,0.5);
+}
+.rune-card[data-rune="thunder"] {
+    border-color: rgba(0,229,255,0.55);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 18px rgba(0,229,255,0.3);
+}
+.rune-card[data-rune="thunder"]:hover {
+    border-color: rgba(0,229,255,0.9);
+    box-shadow: 0 20px 48px rgba(0,0,0,0.8), 0 0 30px rgba(0,229,255,0.5);
+}
+.rune-card-locked {
+    opacity: 0.5;
+    filter: grayscale(0.7);
+}
+.rune-card-locked:hover { opacity: 0.7; filter: grayscale(0.4); }
+
+/* Cost badge — top-left circle */
+.rune-card-cost {
+    position: absolute;
+    top: -10px; left: -10px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a1a3a, #0a0a1a);
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+.rune-card[data-rune="potion"] .rune-card-cost  { border-color: #44ff66; color: #44ff66; }
+.rune-card[data-rune="shield"] .rune-card-cost   { border-color: #ffd700; color: #ffd700; }
+.rune-card[data-rune="thunder"] .rune-card-cost  { border-color: #00e5ff; color: #00e5ff; }
+.locked-cost { border-color: #555 !important; color: #777 !important; }
+
+/* Icon area */
+.rune-card-icon {
+    font-size: 36px;
+    line-height: 1;
+    filter: drop-shadow(0 0 8px currentColor);
+    padding: 6px 0 2px;
+}
+.potion-icon  { filter: drop-shadow(0 0 10px #44ff66); }
+.shield-icon  { filter: drop-shadow(0 0 10px #ffd700); }
+.thunder-icon { filter: drop-shadow(0 0 10px #00e5ff); }
+.locked-icon  { filter: grayscale(1) brightness(0.5); }
+
+/* Card text body */
+.rune-card-body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    text-align: center;
+}
+.rune-card-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fff;
+}
+.rune-card-type {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+.rune-card[data-rune="potion"]  .rune-card-type { color: #44ff8855; }
+.rune-card[data-rune="shield"]  .rune-card-type { color: #ffd70066; }
+.rune-card[data-rune="thunder"] .rune-card-type { color: #00e5ff66; }
+
+.rune-card-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 7.5px;
+    color: rgba(200,200,220,0.75);
+    line-height: 1.4;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding-top: 5px;
+    margin-top: 2px;
+}
+.rune-card-desc strong {
+    color: #fff;
+}
+
+/* Activated state — flash when rune triggers in game */
+.rune-card.card-activated {
+    animation: card-activate-pulse 0.6s ease-out;
+}
+@keyframes card-activate-pulse {
+    0%   { box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 0px transparent; }
+    40%  { transform: translateY(-30px) rotate(0deg) scale(1.08) !important;
+            box-shadow: 0 28px 60px rgba(0,0,0,0.9), 0 0 50px rgba(255,255,255,0.5); }
+    100% { box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 0px transparent; }
+}
+
 
 /* ══════════════════════════════════════════
    MOBILE ACTION BAR

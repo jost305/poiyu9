@@ -11,6 +11,12 @@ class Fighter extends Phaser.GameObjects.Container {
         this.maxHp = 100;
         this.hp = 100;
 
+        // --- RUNE ECONOMY SYSTEM ---
+        this.bcBalance = 0;
+        this.runes = ['potion', 'shield', 'thunder'];
+        this.potionUsed = false;
+        this.shieldActive = false;
+
         // Sprite uses the 0th frame texture so it doesn't flash a missing texture square
         this.sprite = scene.add.sprite(0, 0, key + '_stand_0');
         this.sprite.setOrigin(0.5, 1);
@@ -33,11 +39,34 @@ class Fighter extends Phaser.GameObjects.Container {
 
         const shadowW = Phaser.Math.Clamp(this.sprite.displayWidth * 0.46, isMobile ? 116 : 76, isMobile ? 190 : 150);
         const shadowH = isMobile ? 28 : 22;
-        this.groundShadow = scene.add.ellipse(0, -3, shadowW, shadowH, 0x000000, 0.28);
+
+        // Restore the ground shadow
+        this.groundShadow = scene.add.ellipse(0, -3, shadowW, shadowH, 0x000000, 0.32);
         this.groundShadowCore = scene.add.ellipse(0, -3, shadowW * 0.58, shadowH * 0.45, 0x000000, 0.22);
 
-        // Add to container
-        this.add([this.groundShadow, this.groundShadowCore, this.sprite]);
+        // Per-fighter aura color
+        let auraColorOuter = 0xff6600; // default: gold-orange outer ring
+        let auraColorInner = 0xffee00; // default: bright yellow inner ring
+        if (key === 'floatrobo') {
+            auraColorOuter = 0x0088ff; // blue outer
+            auraColorInner = 0x00e5ff; // cyan inner
+        } else if (key === 'char04') {
+            auraColorOuter = 0xcc0055; // deep magenta outer
+            auraColorInner = 0xff2288; // bright pink inner
+        }
+
+        // Animated Burning Aura — three layered ellipses that pulse and shift
+        const aW = shadowW * 1.05, aH = shadowH * 1.6;
+        this.auraOuter = scene.add.ellipse(0, -4, aW,       aH,       auraColorOuter, 0.0);
+        this.auraRing  = scene.add.ellipse(0, -4, aW * 0.8, aH * 0.8, auraColorInner, 0.0);
+        this.auraCore  = scene.add.ellipse(0, -4, aW * 0.5, aH * 0.5, 0xffffff,       0.0);
+
+        this.auraOuter.setBlendMode(Phaser.BlendModes.ADD);
+        this.auraRing.setBlendMode(Phaser.BlendModes.ADD);
+        this.auraCore.setBlendMode(Phaser.BlendModes.ADD);
+
+        // Add all to container — aura BELOW shadow, shadow BELOW sprite
+        this.add([this.auraOuter, this.auraRing, this.auraCore, this.groundShadow, this.groundShadowCore, this.sprite]);
         this.createNameplate();
         scene.add.existing(this);
         this.setDepth(4);
@@ -179,6 +208,50 @@ class Fighter extends Phaser.GameObjects.Container {
             repeat: -1,
             ease: 'Sine.easeInOut'
         });
+
+        this.startAura();
+    }
+
+    startAura() {
+        if (!this.auraOuter) return;
+
+        // Outer ring: slow breathe
+        this.scene.tweens.add({
+            targets: this.auraOuter,
+            alpha: { from: 0.55, to: 0.25 },
+            scaleX: { from: 1.0, to: 1.08 },
+            scaleY: { from: 1.0, to: 1.12 },
+            duration: 900,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
+
+        // Inner ring: faster pulse, offset phase
+        this.scene.tweens.add({
+            targets: this.auraRing,
+            alpha: { from: 0.7, to: 0.35 },
+            scaleX: { from: 1.0, to: 1.12 },
+            scaleY: { from: 1.0, to: 1.18 },
+            duration: 600,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut',
+            delay: 150
+        });
+
+        // Core: fast bright flicker
+        this.scene.tweens.add({
+            targets: this.auraCore,
+            alpha: { from: 0.65, to: 0.1 },
+            scaleX: { from: 1.0, to: 1.2 },
+            scaleY: { from: 1.0, to: 1.3 },
+            duration: 400,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Quad.easeOut',
+            delay: 75
+        });
     }
     
     stopHover() {
@@ -252,27 +325,24 @@ class Fighter extends Phaser.GameObjects.Container {
             this.sprite.play(this.fighterKey + '_attack_anim');
         }
         
-        // 2. Choose the spell sprite based on damage tier
-        //   Light (5–9)  → Fire Arrow  (tight, fast, small)
-        //   Medium (10–12) → Fire Ball (rounder, bigger)
-        //   Heavy (13+)  → Fire Spell  (wide, blazing)
-        let spellKey, spellAnim, spellScale;
+        // 2. Use the new Warlock Fireball — scale based on damage tier
+        let spellKey = 'fx_newfireball_1';
+        let spellAnim = 'fx_newfireball_anim';
+        let spellScale;
         if (damage >= 13) {
-            spellKey   = 'fx_firespell_1';
-            spellAnim  = 'fx_firespell_anim';
-            spellScale = 0.30; // doubled for HD
+            spellScale = 0.50; // Heavy — big blazing ball
             if (this.scene.playSfx) this.scene.playSfx('sfx_magic_cast', { volume: 0.72, detune: -160 });
         } else if (damage >= 10) {
-            spellKey   = 'fx_fireball_1';
-            spellAnim  = 'fx_fireball_anim';
-            spellScale = 0.26; // doubled for HD
+            spellScale = 0.40; // Medium
             if (this.scene.playSfx) this.scene.playSfx('sfx_magic_cast', { volume: 0.58, detune: 0 });
         } else {
-            spellKey   = 'fx_firearrow_1';
-            spellAnim  = 'fx_firearrow_anim';
-            spellScale = 0.32; // Fire Arrow doubled for HD
+            spellScale = 0.32; // Light — smaller ball
             if (this.scene.playSfx) this.scene.playSfx('sfx_smoke_puff', { volume: 0.42, detune: 240 });
         }
+
+        // Light up the Fire rune on the attacker's HUD
+        const runeId = this.isPlayer1 ? 'runes-p1' : 'runes-p2';
+        if (window.triggerFireRune) window.triggerFireRune(runeId);
         
         console.log('Casting magic:', spellKey, 'Damage:', damage, 'Scale:', spellScale);
         
@@ -298,7 +368,7 @@ class Fighter extends Phaser.GameObjects.Container {
             ease: 'Linear',
             onComplete: () => {
                 proj.destroy();
-                if (onHitCallback) onHitCallback();
+                if (onHitCallback) onHitCallback('fire');
                 
                 this.scene.time.delayedCall(150, () => {
                     this.sprite.play(this.fighterKey + '_stand_anim');
@@ -308,6 +378,51 @@ class Fighter extends Phaser.GameObjects.Container {
                 });
             }
         });
+    }
+
+    activateShield() {
+        if (this.state !== 'idle' || this.shieldActive) return;
+        
+        this.shieldActive = true;
+        this.scene.playSfx('sfx_magic_cast', { volume: 0.6, detune: 200 });
+        
+        // Visual Shield Bubble
+        const shieldVfx = this.scene.add.sprite(0, -(this.sprite.displayHeight * 0.45), 'fx_explosion6_8');
+        const targetSize = Math.max(this.sprite.displayWidth, this.sprite.displayHeight) * 2.2;
+        const scale = targetSize / shieldVfx.width;
+        shieldVfx.setScale(scale);
+        shieldVfx.setAlpha(0.7);
+        shieldVfx.setTint(0xffd700); // Gold shield
+        shieldVfx.setBlendMode(Phaser.BlendModes.ADD);
+        this.add(shieldVfx);
+
+        // Pulse effect
+        this.scene.tweens.add({
+            targets: shieldVfx,
+            scale: scale * 1.05,
+            alpha: 0.4,
+            duration: 500,
+            yoyo: true,
+            repeat: -1
+        });
+
+        // Timeout to remove shield after 5 seconds if not hit
+        this.scene.time.delayedCall(5000, () => {
+            if (this.shieldActive) {
+                this.shieldActive = false;
+                shieldVfx.destroy();
+            }
+        });
+
+        // Also clean it up if it gets used up (handled in takeHit)
+        // Let's hook a check into the update loop or just rely on takeHit destroying it.
+        // For simplicity, we can just let it fade or destroy it when takeHit resets shieldActive.
+        // Wait, takeHit doesn't destroy the VFX! I need to store the VFX reference on the fighter.
+        this.shieldVfx = shieldVfx;
+
+        // Light up the shield rune
+        const runeId = this.isPlayer1 ? 'runes-p1' : 'runes-p2';
+        if (window.triggerShieldRune) window.triggerShieldRune(runeId);
     }
 
     attackThunderStraight(opponent, damage, onHitCallback) {
@@ -339,7 +454,7 @@ class Fighter extends Phaser.GameObjects.Container {
             ease: 'Power2',
             onComplete: () => {
                 proj.destroy();
-                if (onHitCallback) onHitCallback();
+                if (onHitCallback) onHitCallback('thunder');
                 this.scene.cameras.main.shake(300, 0.03); // Massive shake
                 
                 this.scene.time.delayedCall(150, () => {
@@ -398,11 +513,60 @@ class Fighter extends Phaser.GameObjects.Container {
             }
         });
     }
+    showFloatText(text, color) {
+        const floatText = this.scene.add.text(this.x, this.y - 100, text, {
+            fontFamily: 'Inter',
+            fontSize: '24px',
+            fontStyle: 'bold',
+            color: color,
+            stroke: '#000000',
+            strokeThickness: 4
+        }).setOrigin(0.5, 0.5);
+
+        this.scene.tweens.add({
+            targets: floatText,
+            y: floatText.y - 60,
+            alpha: 0,
+            duration: 1200,
+            ease: 'Power2',
+            onComplete: () => floatText.destroy()
+        });
+    }
 
     takeHit(damage) {
+        // --- 🛡️ SHIELD RUNE MECHANIC ---
+        if (this.shieldActive) {
+            this.showFloatText('BLOCKED', '#ffcc00');
+            this.scene.playSfx('sfx_magic_cast', { volume: 0.5, detune: 400 });
+            // Deactivate shield after absorbing one hit
+            this.shieldActive = false;
+            if (this.shieldVfx) {
+                this.shieldVfx.destroy();
+                this.shieldVfx = null;
+            }
+            return;
+        }
+
         this.hp = Math.max(0, this.hp - damage);
         this.updateNameplate();
         
+        // --- 🧪 BANTAH POTION RUNE MECHANIC ---
+        if (this.hp > 0 && this.hp < 35 && this.runes.includes('potion') && !this.potionUsed) {
+            this.potionUsed = true;
+            this.hp = Math.min(100, this.hp + 30);
+            this.updateNameplate();
+            
+            // Visual feedback
+            this.showFloatText('+30 HP', '#44ff66');
+            this.sprite.setTintFill(0x44ff66);
+            this.scene.time.delayedCall(200, () => this.sprite.clearTint());
+            this.scene.playSfx('sfx_magic_cast', { volume: 0.6, detune: 800 });
+            
+            // Light up Potion rune on HUD
+            const runeId = this.isPlayer1 ? 'runes-p1' : 'runes-p2';
+            if (window.triggerPotionRune) window.triggerPotionRune(runeId);
+        }
+
         // Recoil 16-32px (HD)
         const recoil = this.isPlayer1 ? -24 : 24;
         

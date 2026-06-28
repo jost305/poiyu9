@@ -54,6 +54,11 @@ class BattleScene extends Phaser.Scene {
             this.load.image(`fx_fireball_${i}`, `images/fx/fireball/Fire Ball_Frame_${num}.png`);
         }
 
+        // Load New Warlock Fireball (8 frames) — replaces old fireball as main spell
+        for (let i = 1; i <= 8; i++) {
+            this.load.image(`fx_newfireball_${i}`, `images/fx/newfireball/Warlock_skill1_frame${i}.png`);
+        }
+
         // Load Fire Spell (8 frames) — heavy/crit hits (dmg 13+)
         for (let i = 1; i <= 8; i++) {
             const num = i < 10 ? `0${i}` : `${i}`;
@@ -122,6 +127,12 @@ class BattleScene extends Phaser.Scene {
         bg.displayWidth = targetWidth;
         bg.displayHeight = targetHeight;
 
+        // Generate a soft glowing particle for the aura base
+        const graphics = this.make.graphics({x: 0, y: 0, add: false});
+        graphics.fillStyle(0xffffff, 1.0);
+        graphics.fillCircle(8, 8, 8);
+        graphics.generateTexture('aura_particle', 16, 16);
+
         // Create animations first!
         this.createAnimations(this.p1Key);
         this.createAnimations(this.p2Key);
@@ -152,6 +163,13 @@ class BattleScene extends Phaser.Scene {
             const frames = [];
             for (let i = 1; i <= 8; i++) frames.push({ key: `fx_fireball_${i}` });
             this.anims.create({ key: 'fx_fireball_anim', frames, frameRate: 18, repeat: -1 });
+        }
+
+        // Create new warlock fireball animation
+        if (!this.anims.exists('fx_newfireball_anim')) {
+            const frames = [];
+            for (let i = 1; i <= 8; i++) frames.push({ key: `fx_newfireball_${i}` });
+            this.anims.create({ key: 'fx_newfireball_anim', frames, frameRate: 16, repeat: -1 });
         }
 
         // Create fire spell animation (heavy/crit hits)
@@ -419,9 +437,9 @@ class BattleScene extends Phaser.Scene {
             // Pre-calculate damage so the spell type can be chosen before launch
             const baseDamage = Phaser.Math.Between(5, 15);
 
-            const onHit = () => {
-                // 30% chance for defender to block if they are idle
-                const doesBlock = defender.state === 'idle' && Math.random() < 0.3;
+            const onHit = (attackType) => {
+                // 30% chance for defender to block if they are idle (and don't have active shield, shield auto-blocks in takeHit)
+                const doesBlock = defender.state === 'idle' && Math.random() < 0.3 && !defender.shieldActive;
                 
                 let damage = baseDamage;
                 if (doesBlock) {
@@ -438,15 +456,31 @@ class BattleScene extends Phaser.Scene {
                     // Show floating damage text
                     const isCrit = damage >= 12;
                     this.showFloatingText(defender.x, defender.y - 120, `-${damage}`, isCrit ? '#ff1744' : '#ff6d00', isCrit);
-                }
-                
-                // 30% chance to show floating BC Gained (only if not blocked, or maybe always)
-                if (!doesBlock && Math.random() > 0.7) {
-                    const bcGained = Phaser.Math.Between(1, 5);
-                    this.time.delayedCall(200, () => {
-                        this.playSfx('sfx_magic_sparkle', { volume: 0.34, detune: 180 });
-                        this.showFloatingText(attacker.x, attacker.y - 160, `+${bcGained} BC`, '#ffd600');
-                    });
+
+                    // --- ⚡ THUNDER BC STEAL MECHANIC ---
+                    if (attackType === 'thunder') {
+                        const bcStolen = Phaser.Math.Between(10, 35);
+                        defender.bcBalance -= bcStolen;
+                        attacker.bcBalance += bcStolen;
+                        
+                        // Prevent negative balance for defender
+                        if (defender.bcBalance < 0) {
+                            attacker.bcBalance += defender.bcBalance; // give back the difference
+                            defender.bcBalance = 0;
+                        }
+
+                        // Update DOM
+                        if (window.updateBCBalance) {
+                            window.updateBCBalance(attacker.isPlayer1 ? 0 : 1, attacker.bcBalance);
+                            window.updateBCBalance(defender.isPlayer1 ? 0 : 1, defender.bcBalance);
+                        }
+
+                        this.time.delayedCall(200, () => {
+                            this.playSfx('sfx_magic_sparkle', { volume: 0.34, detune: 180 });
+                            this.showFloatingText(attacker.x, attacker.y - 160, `+${bcStolen} BC`, '#ffd600');
+                            this.showFloatingText(defender.x, defender.y - 160, `-${bcStolen} BC`, '#ff0000');
+                        });
+                    }
                 }
 
                 // Shake camera
@@ -470,15 +504,20 @@ class BattleScene extends Phaser.Scene {
                 }
             };
 
-            // Massive Thunder Attacks (15% chance total)
             const rand = Math.random();
-            if (rand < 0.075) {
+            
+            // 🛡️ Shield Rune (10% chance to activate if equipped and not already active)
+            if (rand < 0.10 && attacker.runes.includes('shield') && !attacker.shieldActive) {
+                attacker.activateShield();
+            }
+            // ⚡ Massive Thunder Attacks (15% chance total)
+            else if (rand < 0.175 && attacker.runes.includes('thunder')) {
                 // Trigger Thunder Top
                 attacker.attackThunderTop(defender, baseDamage * 2, onHit);
-            } else if (rand < 0.15) {
+            } else if (rand < 0.25 && attacker.runes.includes('thunder')) {
                 // Trigger Thunder Straight
                 attacker.attackThunderStraight(defender, baseDamage * 2, onHit);
-            } else if (rand > 0.575) {
+            } else if (rand > 0.60) {
                 // Dash attack
                 attacker.attack(defender, onHit);
             } else {

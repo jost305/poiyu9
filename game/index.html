@@ -5,12 +5,12 @@
     <title>MK Arena</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.86.0/dist/phaser.min.js"></script>
-    <script src="src/Fighter.js?v=38"></script>
-    <script src="src/BattleScene.js?v=38"></script>
-    <script src="src/game.js?v=38"></script>
+    <script src="src/Fighter.js?v=42"></script>
+    <script src="src/BattleScene.js?v=42"></script>
+    <script src="src/game.js?v=42"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link rel="stylesheet" href="styles/styles.css?v=30" />
+    <link rel="stylesheet" href="styles/styles.css?v=31" />
     <link rel="stylesheet" href="styles/mobile.css?v=30" />
 </head>
 <body>
@@ -171,41 +171,31 @@
         </div>
         <!-- HUD lives outside the scaled parent so it's always visible -->
         <div id="utils">
-            <!-- P1 HUD: avatar left, bar grows right -->
+            <!-- P1 HUD: avatar left, runes right -->
             <div class="hud-block hud-p1">
                 <div class="hud-avatar" id="hud-avatar-p1">
                     <img id="hud-img-p1" src="images/fighters/char04/left/stand/0.png" alt="P1">
                 </div>
                 <div class="hud-info">
-                    <div class="hud-name" id="player1Name">ROBOT V1</div>
-                    <div class="hud-bar-wrap">
-                        <!-- Segmented image healthbar -->
-                        <img id="player1Life" class="hud-segbar" src="small-healthbar/power-bar/Progress6.png" alt="P1 HP">
-                        <!-- Rune power slots -->
-                        <div class="rune-row" id="runes-p1">
-                            <span class="rune" data-rune="⚡" title="Shock"></span>
-                            <span class="rune" data-rune="🔥" title="Fire"></span>
-                            <span class="rune" data-rune="💀" title="Death"></span>
-                            <span class="rune" data-rune="🌩️" title="Thunder"></span>
-                        </div>
+                    <!-- Rune power slots -->
+                    <div class="rune-row" id="runes-p1">
+                        <span class="rune" data-rune="🧪" title="Potion"></span>
+                        <span class="rune" data-rune="🛡️" title="Shield"></span>
+                        <span class="rune" data-rune="🌩️" title="Thunder"></span>
+                        <span class="rune" data-rune="🔒" title="Empty"></span>
                     </div>
                 </div>
             </div>
 
-            <!-- P2 HUD: bar grows left, avatar right -->
+            <!-- P2 HUD: runes left, avatar right -->
             <div class="hud-block hud-p2">
                 <div class="hud-info hud-info-right">
-                    <div class="hud-name hud-name-right" id="player2Name">FLOATROBO</div>
-                    <div class="hud-bar-wrap">
-                        <!-- Segmented image healthbar (mirrored for P2) -->
-                        <img id="player2Life" class="hud-segbar hud-segbar-right" src="small-healthbar/power-bar/Progress6.png" alt="P2 HP">
-                        <!-- Rune power slots -->
-                        <div class="rune-row rune-row-right" id="runes-p2">
-                            <span class="rune" data-rune="🌩️" title="Thunder"></span>
-                            <span class="rune" data-rune="💀" title="Death"></span>
-                            <span class="rune" data-rune="🔥" title="Fire"></span>
-                            <span class="rune" data-rune="⚡" title="Shock"></span>
-                        </div>
+                    <!-- Rune power slots -->
+                    <div class="rune-row rune-row-right" id="runes-p2">
+                        <span class="rune" data-rune="🔒" title="Empty"></span>
+                        <span class="rune" data-rune="🌩️" title="Thunder"></span>
+                        <span class="rune" data-rune="🛡️" title="Shield"></span>
+                        <span class="rune" data-rune="🧪" title="Potion"></span>
                     </div>
                 </div>
                 <div class="hud-avatar" id="hud-avatar-p2">
@@ -215,7 +205,50 @@
         </div>
     </div>
 
-    <!-- RIGHT PANEL -->
+    <!-- ── TCG RUNE CARD HAND ── -->
+    <div id="rune-card-hand">
+        <div class="rune-card" id="rune-card-potion" data-rune="potion">
+            <div class="rune-card-cost">1</div>
+            <div class="rune-card-icon potion-icon">🧪</div>
+            <div class="rune-card-body">
+                <div class="rune-card-name">BANTAH POTION</div>
+                <div class="rune-card-type">Restoration</div>
+                <div class="rune-card-desc">Instantly restores <strong>+30 HP</strong>. Auto-triggers when HP falls below 35%. One use per battle.</div>
+            </div>
+        </div>
+
+        <div class="rune-card" id="rune-card-shield" data-rune="shield">
+            <div class="rune-card-cost">2</div>
+            <div class="rune-card-icon shield-icon">🛡️</div>
+            <div class="rune-card-body">
+                <div class="rune-card-name">SHIELD</div>
+                <div class="rune-card-type">Defense</div>
+                <div class="rune-card-desc">Creates a <strong>gold barrier</strong> that absorbs the next incoming hit completely. Lasts 5 seconds.</div>
+            </div>
+        </div>
+
+        <div class="rune-card" id="rune-card-thunder" data-rune="thunder">
+            <div class="rune-card-cost">3</div>
+            <div class="rune-card-icon thunder-icon">🌩️</div>
+            <div class="rune-card-body">
+                <div class="rune-card-name">THUNDER</div>
+                <div class="rune-card-type">Offense · BC Steal</div>
+                <div class="rune-card-desc">Summons <strong>massive lightning</strong>. Steals 10–35 BC from opponent on hit. Chain attacks possible.</div>
+            </div>
+        </div>
+
+        <div class="rune-card rune-card-locked" id="rune-card-empty" data-rune="empty">
+            <div class="rune-card-cost locked-cost">?</div>
+            <div class="rune-card-icon locked-icon">🔒</div>
+            <div class="rune-card-body">
+                <div class="rune-card-name">LOCKED</div>
+                <div class="rune-card-type">Earn to Unlock</div>
+                <div class="rune-card-desc">Reach <strong>20 Wins</strong> and collect 500 BC to unlock a new rune slot for your fighter.</div>
+            </div>
+        </div>
+    </div>
+
+
     <div id="right-panel">
 
         <!-- CHARACTER PICKER -->
@@ -707,7 +740,58 @@
             var row = $(playerId);
             if (!row) return;
             var thunderRune = row.querySelector('.rune[title="Thunder"]');
-            if (thunderRune) _activateRune(thunderRune, 'rune-thunder');
+            if (thunderRune) _activateRune(thunderRune, 'rune-thunder-active');
+        };
+
+        // Specifically light up the Fire rune when a fire attack fires
+        window.triggerFireRune = function(playerId) {
+            var row = $(playerId);
+            if (!row) return;
+            var fireRune = row.querySelector('.rune[title="Fire"]');
+            if (fireRune) _activateRune(fireRune, 'rune-glow'); // The 'glow' animation matches the fire theme well
+        };
+
+        // Specifically light up the Shield rune when activated
+        window.triggerShieldRune = function(playerId) {
+            var row = $(playerId);
+            if (!row) return;
+            var shieldRune = row.querySelector('.rune[title="Shield"]');
+            if (shieldRune) _activateRune(shieldRune, 'rune-shield-active');
+        };
+
+        // Specifically light up the Potion rune when activated
+        window.triggerPotionRune = function(playerId) {
+            var row = $(playerId);
+            if (!row) return;
+            var potionRune = row.querySelector('.rune[title="Potion"]');
+            if (potionRune) _activateRune(potionRune, 'rune-potion-active');
+            _activateCard('rune-card-potion');
+        };
+
+        // Flash a card in the TCG hand
+        function _activateCard(cardId) {
+            var card = document.getElementById(cardId);
+            if (!card) return;
+            card.classList.remove('card-activated');
+            void card.offsetWidth;
+            card.classList.add('card-activated');
+            card.addEventListener('animationend', function cleanup() {
+                card.classList.remove('card-activated');
+                card.removeEventListener('animationend', cleanup);
+            });
+        }
+
+        // Wire card flashes into existing triggers
+        var _origThunder = window.triggerThunderRune;
+        window.triggerThunderRune = function(playerId) { _origThunder(playerId); _activateCard('rune-card-thunder'); };
+        var _origShield = window.triggerShieldRune;
+        window.triggerShieldRune = function(playerId) { _origShield(playerId); _activateCard('rune-card-shield'); };
+
+        // Update the BC balance on the UI
+        window.updateBCBalance = function(playerIndex, balance) {
+            var elId = playerIndex === 0 ? 'p1-bc' : 'p2-bc';
+            var el = document.getElementById(elId);
+            if (el) el.innerText = '💰 ' + balance + ' BC';
         };
 
         // Idle rune loop — randomly fires runes every 1.5–4 seconds per player
