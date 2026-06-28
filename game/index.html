@@ -82,10 +82,10 @@
                         </div>
                     </div>
                     <div class="tb-vdivider"></div>
-                    <nav class="tb-nav">
-                        <a href="#" class="tb-nav-item">Docs</a>
-                        <a href="#" class="tb-nav-item">Marketplace</a>
-                        <a href="#" class="tb-nav-item tb-nav-create">Create</a>
+                    <nav class="tb-nav" id="tb-nav">
+                        <a href="#" class="tb-nav-item" data-page="docs" onclick="openPage('docs');return false">Docs</a>
+                        <a href="#" class="tb-nav-item" data-page="marketplace" onclick="openPage('marketplace');return false">Marketplace</a>
+                        <a href="#" class="tb-nav-item tb-nav-create" data-page="create" onclick="openPage('create');return false">Create</a>
                     </nav>
                 </div>
                 <div class="tb-right">
@@ -883,6 +883,419 @@
         </div>
         <!-- /hud-root -->
 
+        <!-- ══════════════════════════════════════════
+             PAGE OVERLAYS (Docs / Marketplace / Create)
+        ══════════════════════════════════════════ -->
+
+        <!-- DOCS SECTION -->
+        <div id="page-docs" class="page-overlay" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">📖 Documentation</h1>
+                    <p class="pg-subtitle">Everything you need to master MK Arena</p>
+                </div>
+                <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+            </div>
+            <div class="pg-body">
+                <aside class="docs-sidebar">
+                    <nav class="docs-nav">
+                        <div class="docs-nav-group">
+                            <div class="docs-nav-label">Getting Started</div>
+                            <a class="docs-nav-link active" href="#" onclick="showDoc('intro')">Introduction</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('quickstart')">Quick Start</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('wallet')">Connect Wallet</a>
+                        </div>
+                        <div class="docs-nav-group">
+                            <div class="docs-nav-label">Game Mechanics</div>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('fighters')">Fighters & Stats</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('koth')">King of the Hill</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('runes')">Rune Abilities</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('betting')">Betting System</a>
+                        </div>
+                        <div class="docs-nav-group">
+                            <div class="docs-nav-label">Economy</div>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('bc')">Battle Coins (BC)</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('rewards')">Rewards & Treasury</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('nft')">NFT Fighters</a>
+                        </div>
+                        <div class="docs-nav-group">
+                            <div class="docs-nav-label">Reference</div>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('api')">API Reference</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('faq')">FAQ</a>
+                        </div>
+                    </nav>
+                </aside>
+                <article class="docs-content">
+                    <div class="doc-page" id="doc-intro">
+                        <div class="doc-hero">
+                            <span class="doc-hero-icon">⚔</span>
+                            <div>
+                                <h2 class="doc-h1">Welcome to MK Arena</h2>
+                                <p class="doc-lead">MK Arena is a fully on-chain autonomous fighting game where AI-powered fighters battle for the throne in real time.</p>
+                            </div>
+                        </div>
+                        <div class="doc-cards">
+                            <div class="doc-card">
+                                <div class="doc-card-icon">👾</div>
+                                <h3 class="doc-card-title">Autonomous Fighters</h3>
+                                <p class="doc-card-desc">Each fighter is an on-chain agent with unique stats, abilities, and AI that evolves through every match.</p>
+                            </div>
+                            <div class="doc-card">
+                                <div class="doc-card-icon">♛</div>
+                                <h3 class="doc-card-title">King of the Hill</h3>
+                                <p class="doc-card-desc">Challengers queue up to dethrone the reigning King. The longer a King holds the throne, the greater the treasury reward.</p>
+                            </div>
+                            <div class="doc-card">
+                                <div class="doc-card-icon">💰</div>
+                                <h3 class="doc-card-title">Live Betting</h3>
+                                <p class="doc-card-desc">Wager Battle Coins on any active match. Correct predictions earn proportional payouts from the live pool.</p>
+                            </div>
+                            <div class="doc-card">
+                                <div class="doc-card-icon">🛠</div>
+                                <h3 class="doc-card-title">Build Your Fighter</h3>
+                                <p class="doc-card-desc">Design a fighter, set its strategy, mint it as an NFT, and send it into the arena to battle autonomously.</p>
+                            </div>
+                        </div>
+                        <div class="doc-section">
+                            <h2 class="doc-h2">How It Works</h2>
+                            <ol class="doc-steps">
+                                <li class="doc-step"><span class="doc-step-num">1</span><div><strong>Connect</strong> your wallet to register your identity and access your fighters.</div></li>
+                                <li class="doc-step"><span class="doc-step-num">2</span><div><strong>Create or acquire</strong> a fighter from the Marketplace — each has unique Power, Speed, Defense, and special Rune abilities.</div></li>
+                                <li class="doc-step"><span class="doc-step-num">3</span><div><strong>Enter the queue</strong> — your fighter joins the challenger line and waits for its match against the current King.</div></li>
+                                <li class="doc-step"><span class="doc-step-num">4</span><div><strong>Watch and bet</strong> — place wagers on the live match to earn BC from the prediction pool.</div></li>
+                                <li class="doc-step"><span class="doc-step-num">5</span><div><strong>Claim rewards</strong> — winners receive BC payouts. A reigning King earns continuous treasury income.</div></li>
+                            </ol>
+                        </div>
+                        <div class="doc-section">
+                            <h2 class="doc-h2">Core Stats</h2>
+                            <div class="doc-stats-grid">
+                                <div class="doc-stat-row"><span class="doc-stat-name">⚡ ATK</span><span class="doc-stat-desc">Base damage per hit. Higher ATK = more damage dealt.</span></div>
+                                <div class="doc-stat-row"><span class="doc-stat-name">🛡 DEF</span><span class="doc-stat-desc">Damage reduction percentage per incoming hit.</span></div>
+                                <div class="doc-stat-row"><span class="doc-stat-name">💨 SPD</span><span class="doc-stat-desc">Attack frequency. Higher SPD = more hits per second.</span></div>
+                                <div class="doc-stat-row"><span class="doc-stat-name">❤ HP</span><span class="doc-stat-desc">Total health pool. Fight ends when HP reaches zero.</span></div>
+                                <div class="doc-stat-row"><span class="doc-stat-name">🔮 PWR</span><span class="doc-stat-desc">Overall power score. Determines queue tier and matchmaking.</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <!-- MARKETPLACE SECTION -->
+        <div id="page-marketplace" class="page-overlay" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">🛒 Marketplace</h1>
+                    <p class="pg-subtitle">Buy, sell, and trade fighters &amp; items</p>
+                </div>
+                <div class="mkt-header-actions">
+                    <div class="mkt-search-wrap">
+                        <span class="mkt-search-icon">🔍</span>
+                        <input type="text" class="mkt-search" placeholder="Search fighters, items…" />
+                    </div>
+                    <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+                </div>
+            </div>
+            <div class="pg-body">
+                <div class="mkt-filters">
+                    <button class="mkt-filter active" onclick="mktFilter(this,'all')">All</button>
+                    <button class="mkt-filter" onclick="mktFilter(this,'fighters')">Fighters</button>
+                    <button class="mkt-filter" onclick="mktFilter(this,'items')">Items</button>
+                    <button class="mkt-filter" onclick="mktFilter(this,'skins')">Skins</button>
+                    <button class="mkt-filter" onclick="mktFilter(this,'runes')">Runes</button>
+                    <div class="mkt-sort-wrap">
+                        <select class="mkt-sort">
+                            <option>Newest First</option>
+                            <option>Price: Low → High</option>
+                            <option>Price: High → Low</option>
+                            <option>Highest Power</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mkt-grid">
+                    <!-- Fighter cards -->
+                    <div class="mkt-card" data-type="fighters">
+                        <div class="mkt-card-badge">FIGHTER</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#1a0a2e,#2d1b4e)">
+                            <span style="font-size:52px;line-height:1">🤖</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Robot V1</div>
+                            <div class="mkt-card-owner">0xA12F…B7C9</div>
+                            <div class="mkt-card-stats">
+                                <span>⚡ 480</span><span>🛡 310</span><span>💨 128</span>
+                            </div>
+                            <div class="mkt-card-power">PWR <strong class="gold">2,450</strong></div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">12,000 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="fighters">
+                        <div class="mkt-card-badge mkt-badge-hot">🔥 HOT</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a1a2e,#1b3d4e)">
+                            <span style="font-size:52px;line-height:1">🦾</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Floatrobo</div>
+                            <div class="mkt-card-owner">0xB34E…C8D1</div>
+                            <div class="mkt-card-stats">
+                                <span>⚡ 390</span><span>🛡 420</span><span>💨 155</span>
+                            </div>
+                            <div class="mkt-card-power">PWR <strong class="gold">2,310</strong></div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">9,500 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="fighters">
+                        <div class="mkt-card-badge mkt-badge-rare">💎 RARE</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#1a2e0a,#2e4e1b)">
+                            <span style="font-size:52px;line-height:1">🐸</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Robo Pepe</div>
+                            <div class="mkt-card-owner">0xC56D…D2E4</div>
+                            <div class="mkt-card-stats">
+                                <span>⚡ 510</span><span>🛡 280</span><span>💨 200</span>
+                            </div>
+                            <div class="mkt-card-power">PWR <strong class="gold">2,180</strong></div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">22,000 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="fighters">
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#2e0a0a,#4e1b1b)">
+                            <span style="font-size:52px;line-height:1">🦀</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-badge mkt-badge-inline">FIGHTER</div>
+                            <div class="mkt-card-name">Crimsonbot</div>
+                            <div class="mkt-card-owner">0xD78F…E3F5</div>
+                            <div class="mkt-card-stats">
+                                <span>⚡ 460</span><span>🛡 340</span><span>💨 140</span>
+                            </div>
+                            <div class="mkt-card-power">PWR <strong class="gold">2,050</strong></div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">7,800 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Items -->
+                    <div class="mkt-card" data-type="items">
+                        <div class="mkt-card-badge mkt-badge-item">ITEM</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#1a1a0a,#3a3a10)">
+                            <span style="font-size:52px;line-height:1">🧪</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Bantah Potion ×5</div>
+                            <div class="mkt-card-owner">Restore 30 HP below 35%</div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">800 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="runes">
+                        <div class="mkt-card-badge mkt-badge-rune">RUNE</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a102e,#1b2560)">
+                            <span style="font-size:52px;line-height:1">⚡</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Thunder Rune</div>
+                            <div class="mkt-card-owner">Steal 10–35 BC on hit</div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">3,200 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="skins">
+                        <div class="mkt-card-badge mkt-badge-skin">SKIN</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#2e0a2e,#4e1b4e)">
+                            <span style="font-size:52px;line-height:1">👑</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">King Crown Skin</div>
+                            <div class="mkt-card-owner">Cosmetic — all fighters</div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">5,000 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="runes">
+                        <div class="mkt-card-badge mkt-badge-rune">RUNE</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a2e1a,#1b6035)">
+                            <span style="font-size:52px;line-height:1">🛡</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Iron Shield Rune</div>
+                            <div class="mkt-card-owner">Absorbs next incoming hit</div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">2,600 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CREATE SECTION -->
+        <div id="page-create" class="page-overlay" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">🛠 Create Fighter</h1>
+                    <p class="pg-subtitle">Design your fighter and mint it to the arena</p>
+                </div>
+                <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+            </div>
+            <div class="pg-body">
+                <div class="create-layout">
+                    <!-- Preview -->
+                    <div class="create-preview">
+                        <div class="create-preview-card">
+                            <div class="create-avatar" id="create-avatar">🤖</div>
+                            <div class="create-preview-name" id="create-preview-name">YOUR FIGHTER</div>
+                            <div class="create-preview-stats">
+                                <div class="cps-row"><span>⚡ ATK</span><span id="prev-atk" class="gold">400</span></div>
+                                <div class="cps-row"><span>🛡 DEF</span><span id="prev-def">300</span></div>
+                                <div class="cps-row"><span>💨 SPD</span><span id="prev-spd">130</span></div>
+                                <div class="cps-row"><span>❤ HP</span><span id="prev-hp">8,000</span></div>
+                            </div>
+                            <div class="create-preview-pwr">
+                                <span class="cps-label">POWER</span>
+                                <span class="cps-pwr gold" id="prev-pwr">2,000</span>
+                            </div>
+                        </div>
+                        <div class="create-cost-box">
+                            <div class="create-cost-label">Mint Cost</div>
+                            <div class="create-cost-val gold">5,000 BC</div>
+                            <div class="create-cost-sub">+ gas fees</div>
+                        </div>
+                    </div>
+
+                    <!-- Builder Form -->
+                    <div class="create-form">
+                        <div class="create-section-title">① Identity</div>
+                        <div class="create-row">
+                            <label class="create-label">Fighter Name</label>
+                            <input type="text" class="create-input" id="fighter-name" placeholder="e.g. ShadowBot X" maxlength="24"
+                                oninput="document.getElementById('create-preview-name').textContent=this.value||'YOUR FIGHTER'" />
+                        </div>
+                        <div class="create-row">
+                            <label class="create-label">Avatar</label>
+                            <div class="create-avatar-picker">
+                                <button class="av-btn active" onclick="pickAvatar(this,'🤖')">🤖</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🦾')">🦾</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🐸')">🐸</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🦀')">🦀</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'👹')">👹</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🐲')">🐲</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'💀')">💀</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'⚡')">⚡</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🔥')">🔥</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🌪')">🌪</button>
+                            </div>
+                        </div>
+
+                        <div class="create-section-title">② Allocate Stats <span class="create-points-badge"><span id="pts-remaining">20</span> pts left</span></div>
+                        <div class="create-stat-row">
+                            <span class="create-stat-icon">⚡</span>
+                            <span class="create-stat-name">Attack</span>
+                            <div class="create-stat-bar-wrap">
+                                <input type="range" class="create-slider" id="sl-atk" min="0" max="20" value="5"
+                                    oninput="updateStats()" />
+                                <div class="create-stat-fill" id="fill-atk"></div>
+                            </div>
+                            <span class="create-stat-val" id="val-atk">400+</span>
+                        </div>
+                        <div class="create-stat-row">
+                            <span class="create-stat-icon">🛡</span>
+                            <span class="create-stat-name">Defense</span>
+                            <div class="create-stat-bar-wrap">
+                                <input type="range" class="create-slider" id="sl-def" min="0" max="20" value="5"
+                                    oninput="updateStats()" />
+                                <div class="create-stat-fill" id="fill-def"></div>
+                            </div>
+                            <span class="create-stat-val" id="val-def">300+</span>
+                        </div>
+                        <div class="create-stat-row">
+                            <span class="create-stat-icon">💨</span>
+                            <span class="create-stat-name">Speed</span>
+                            <div class="create-stat-bar-wrap">
+                                <input type="range" class="create-slider" id="sl-spd" min="0" max="20" value="5"
+                                    oninput="updateStats()" />
+                                <div class="create-stat-fill" id="fill-spd"></div>
+                            </div>
+                            <span class="create-stat-val" id="val-spd">130+</span>
+                        </div>
+
+                        <div class="create-section-title">③ Choose Runes <span class="create-points-badge">Pick 2</span></div>
+                        <div class="create-rune-grid">
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> ⚡ Thunder — steal BC on hit
+                            </label>
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🛡 Iron Shield — absorb 1 hit
+                            </label>
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🧪 Bantah Potion — heal when low HP
+                            </label>
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🌀 Phase Shift — dodge next attack
+                            </label>
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 💥 Overcharge — burst damage ×2
+                            </label>
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🩸 Lifesteal — heal 15% of damage dealt
+                            </label>
+                        </div>
+
+                        <div class="create-section-title">④ Strategy</div>
+                        <div class="create-strategy-grid">
+                            <label class="create-strategy-opt" id="strat-aggressive">
+                                <input type="radio" name="strategy" value="aggressive" onchange="updateStrategy(this)" />
+                                <span class="strat-icon">⚔</span>
+                                <span class="strat-name">Aggressive</span>
+                                <span class="strat-desc">All-in offense, high risk</span>
+                            </label>
+                            <label class="create-strategy-opt" id="strat-defensive">
+                                <input type="radio" name="strategy" value="defensive" onchange="updateStrategy(this)" />
+                                <span class="strat-icon">🛡</span>
+                                <span class="strat-name">Defensive</span>
+                                <span class="strat-desc">Outlast through attrition</span>
+                            </label>
+                            <label class="create-strategy-opt" id="strat-balanced">
+                                <input type="radio" name="strategy" value="balanced" checked onchange="updateStrategy(this)" />
+                                <span class="strat-icon">⚖</span>
+                                <span class="strat-name">Balanced</span>
+                                <span class="strat-desc">Adaptive mixed tactics</span>
+                            </label>
+                            <label class="create-strategy-opt" id="strat-trickster">
+                                <input type="radio" name="strategy" value="trickster" onchange="updateStrategy(this)" />
+                                <span class="strat-icon">🎭</span>
+                                <span class="strat-name">Trickster</span>
+                                <span class="strat-desc">Unpredictable, evasive</span>
+                            </label>
+                        </div>
+
+                        <div class="create-actions">
+                            <button class="create-btn-secondary" onclick="resetCreate()">Reset</button>
+                            <button class="create-btn-primary" onclick="mintFighter()">⚡ Mint Fighter — 5,000 BC</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script>
             (function () {
                 function $(id) {
@@ -1295,6 +1708,140 @@
                 requestAnimationFrame(scaleArena);
                 window.startPhaserMatch(cpPicks[0], cpPicks[1]);
             })();
+        </script>
+
+        <script>
+        /* ── Page navigation ── */
+        var _activePage = null;
+
+        function openPage(name) {
+            /* If already open, close it (toggle) */
+            if (_activePage === name) { closePage(); return; }
+
+            /* Hide all overlays */
+            ['docs','marketplace','create'].forEach(function(p) {
+                var el = document.getElementById('page-' + p);
+                if (el) el.style.display = 'none';
+            });
+
+            /* Show requested overlay */
+            var target = document.getElementById('page-' + name);
+            if (target) {
+                target.style.display = 'flex';
+                _activePage = name;
+            }
+
+            /* Highlight active nav item */
+            document.querySelectorAll('.tb-nav-item').forEach(function(a) {
+                a.classList.toggle('tb-nav-active', a.dataset.page === name);
+            });
+        }
+
+        function closePage() {
+            ['docs','marketplace','create'].forEach(function(p) {
+                var el = document.getElementById('page-' + p);
+                if (el) el.style.display = 'none';
+            });
+            document.querySelectorAll('.tb-nav-item').forEach(function(a) {
+                a.classList.remove('tb-nav-active');
+            });
+            _activePage = null;
+        }
+
+        /* ── Docs sidebar navigation ── */
+        function showDoc(id) {
+            document.querySelectorAll('.doc-page').forEach(function(p) { p.style.display = 'none'; });
+            var page = document.getElementById('doc-' + id);
+            if (page) page.style.display = 'block';
+            document.querySelectorAll('.docs-nav-link').forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('onclick') && a.getAttribute('onclick').includes("'" + id + "'"));
+            });
+            return false;
+        }
+
+        /* ── Marketplace filter ── */
+        function mktFilter(btn, type) {
+            document.querySelectorAll('.mkt-filter').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('.mkt-card').forEach(function(c) {
+                c.style.display = (type === 'all' || c.dataset.type === type) ? 'flex' : 'none';
+            });
+        }
+
+        /* ── Create fighter ── */
+        var _totalPoints = 20;
+
+        function updateStats() {
+            var atk = parseInt(document.getElementById('sl-atk').value) || 0;
+            var def = parseInt(document.getElementById('sl-def').value) || 0;
+            var spd = parseInt(document.getElementById('sl-spd').value) || 0;
+            var used = atk + def + spd;
+            var remaining = _totalPoints - used;
+
+            if (remaining < 0) {
+                /* Clamp — prevent over-allocation */
+                var last = event && event.target;
+                if (last) last.value = parseInt(last.value) + remaining;
+                remaining = 0;
+            }
+            document.getElementById('pts-remaining').textContent = Math.max(0, _totalPoints - (
+                parseInt(document.getElementById('sl-atk').value) +
+                parseInt(document.getElementById('sl-def').value) +
+                parseInt(document.getElementById('sl-spd').value)
+            ));
+
+            var a = parseInt(document.getElementById('sl-atk').value);
+            var d = parseInt(document.getElementById('sl-def').value);
+            var s = parseInt(document.getElementById('sl-spd').value);
+
+            document.getElementById('val-atk').textContent = (300 + a * 15) + '';
+            document.getElementById('val-def').textContent = (200 + d * 10) + '';
+            document.getElementById('val-spd').textContent = (100 + s * 6)  + '';
+            document.getElementById('prev-atk').textContent = (300 + a * 15) + '';
+            document.getElementById('prev-def').textContent = (200 + d * 10) + '';
+            document.getElementById('prev-spd').textContent = (100 + s * 6)  + '';
+            document.getElementById('prev-pwr').textContent = (1500 + a * 20 + d * 15 + s * 12).toLocaleString();
+
+            ['atk','def','spd'].forEach(function(stat) {
+                var fill = document.getElementById('fill-' + stat);
+                var sl = document.getElementById('sl-' + stat);
+                if (fill && sl) fill.style.width = (parseInt(sl.value) / 20 * 100) + '%';
+            });
+        }
+
+        function checkRunes() {
+            var cbs = document.querySelectorAll('.create-rune-cb');
+            var checked = Array.from(cbs).filter(function(c){ return c.checked; });
+            if (checked.length > 2) { event.target.checked = false; }
+        }
+
+        function pickAvatar(btn, emoji) {
+            document.querySelectorAll('.av-btn').forEach(function(b){ b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.getElementById('create-avatar').textContent = emoji;
+        }
+
+        function updateStrategy(radio) {
+            document.querySelectorAll('.create-strategy-opt').forEach(function(l){ l.classList.remove('active'); });
+            radio.closest('.create-strategy-opt').classList.add('active');
+        }
+        /* Pre-select balanced strategy */
+        document.addEventListener('DOMContentLoaded', function() {
+            var bal = document.querySelector('[value="balanced"]');
+            if (bal) bal.closest('.create-strategy-opt').classList.add('active');
+        });
+
+        function resetCreate() {
+            ['sl-atk','sl-def','sl-spd'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=5; });
+            document.querySelectorAll('.create-rune-cb').forEach(function(c){ c.checked=false; });
+            document.getElementById('fighter-name').value = '';
+            document.getElementById('create-preview-name').textContent = 'YOUR FIGHTER';
+            updateStats();
+        }
+
+        function mintFighter() {
+            alert('Minting coming soon — connect your wallet to proceed.');
+        }
         </script>
     </body>
 </html>
