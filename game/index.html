@@ -784,6 +784,19 @@
         if (bgm) bgm.muted = !soundOn;
     };
 
+    /* ── Loading Screen ── */
+    window.onGameStarted = function () {
+        var loadingEl = $('loading');
+        if (loadingEl) loadingEl.style.display = 'none';
+    };
+
+    var _origStartPhaserMatch = window.startPhaserMatch;
+    window.startPhaserMatch = function (p1Key, p2Key) {
+        var loadingEl = $('loading');
+        if (loadingEl) loadingEl.style.display = 'flex';
+        _origStartPhaserMatch(p1Key, p2Key);
+    };
+
     /* ── Init ── */
     addFeed('♛', 'challenger.sol has challenged the King!', '00:12', 'feed-system');
     addFeed('⚡', 'Round Start!', '00:09', 'feed-system');
