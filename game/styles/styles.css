@@ -792,18 +792,19 @@ canvas { display: block; background: transparent; }
     box-shadow: 0 0 5px rgba(160,60,255,0.45), inset 0 0 4px rgba(120,0,255,0.15);
     text-shadow: 0 0 4px #aa00ff;
 }
-.rune[title="Power"] {
-    color: #ffe044;
-    border: 1px solid rgba(255,210,50,0.5);
-    background: rgba(200,150,0,0.12);
-    box-shadow: 0 0 5px rgba(255,200,30,0.45), inset 0 0 4px rgba(200,140,0,0.15);
-    text-shadow: 0 0 4px #ffcc00;
+.rune[title="Thunder"] {
+    color: #00e5ff;
+    border: 1px solid rgba(0, 229, 255, 0.5);
+    background: rgba(0, 180, 255, 0.12);
+    box-shadow: 0 0 5px rgba(0, 200, 255, 0.45), inset 0 0 4px rgba(0, 140, 255, 0.15);
+    text-shadow: 0 0 4px #00bfff;
 }
 
 /* Activated rune states — burst on top of the always-on base */
-.rune.rune-glow  { animation: rune-glow-anim  0.9s ease-out forwards; }
-.rune.rune-shock { animation: rune-shock-anim 0.5s ease-out forwards; }
-.rune.rune-pulse { animation: rune-pulse-anim 1.2s ease-in-out forwards; }
+.rune.rune-glow    { animation: rune-glow-anim    0.9s ease-out forwards; }
+.rune.rune-shock   { animation: rune-shock-anim   0.5s ease-out forwards; }
+.rune.rune-pulse   { animation: rune-pulse-anim   1.2s ease-in-out forwards; }
+.rune.rune-thunder { animation: rune-thunder-anim 0.7s ease-out forwards; }
 
 @keyframes rune-glow-anim {
     0%   { transform: scale(1);    box-shadow: 0 0 5px rgba(255,100,20,0.45); }
@@ -821,7 +822,13 @@ canvas { display: block; background: transparent; }
     50%  { transform: scale(1.4);  color: #eeb0ff; border-color: #dd66ff; box-shadow: 0 0 20px #cc44ff, 0 0 40px #6600cc; background: rgba(180,50,255,0.4); text-shadow: 0 0 10px #ee88ff; }
     100% { transform: scale(1);    box-shadow: 0 0 5px rgba(160,60,255,0.45); }
 }
-
+@keyframes rune-thunder-anim {
+    0%   { transform: scale(1)    rotate(0deg);   box-shadow: 0 0 5px rgba(0,229,255,0.45); }
+    20%  { transform: scale(1.5)  rotate(-5deg);  color: #ffffff; border-color: #00ffff; box-shadow: 0 0 24px #00e5ff, 0 0 48px #0066ff; background: rgba(0,220,255,0.5); text-shadow: 0 0 14px #fff, 0 0 28px #00e5ff; }
+    45%  { transform: scale(0.9)  rotate(5deg); }
+    70%  { transform: scale(1.25) rotate(-3deg); color: #00e5ff; border-color: #00aaff; box-shadow: 0 0 14px #00ccff; }
+    100% { transform: scale(1)    rotate(0deg);   box-shadow: 0 0 5px rgba(0,229,255,0.45); }
+}
 
 /* ══════════════════════════════════════════
    MOBILE ACTION BAR

@@ -5,13 +5,13 @@
     <title>MK Arena</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.86.0/dist/phaser.min.js"></script>
-    <script src="src/Fighter.js?v=32"></script>
-    <script src="src/BattleScene.js?v=32"></script>
-    <script src="src/game.js?v=32"></script>
+    <script src="src/Fighter.js?v=38"></script>
+    <script src="src/BattleScene.js?v=38"></script>
+    <script src="src/game.js?v=38"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link rel="stylesheet" href="styles/styles.css?v=29" />
-    <link rel="stylesheet" href="styles/mobile.css?v=29" />
+    <link rel="stylesheet" href="styles/styles.css?v=30" />
+    <link rel="stylesheet" href="styles/mobile.css?v=30" />
 </head>
 <body>
 
@@ -186,7 +186,7 @@
                             <span class="rune" data-rune="⚡" title="Shock"></span>
                             <span class="rune" data-rune="🔥" title="Fire"></span>
                             <span class="rune" data-rune="💀" title="Death"></span>
-                            <span class="rune" data-rune="✦" title="Power"></span>
+                            <span class="rune" data-rune="🌩️" title="Thunder"></span>
                         </div>
                     </div>
                 </div>
@@ -201,7 +201,7 @@
                         <img id="player2Life" class="hud-segbar hud-segbar-right" src="small-healthbar/power-bar/Progress6.png" alt="P2 HP">
                         <!-- Rune power slots -->
                         <div class="rune-row rune-row-right" id="runes-p2">
-                            <span class="rune" data-rune="✦" title="Power"></span>
+                            <span class="rune" data-rune="🌩️" title="Thunder"></span>
                             <span class="rune" data-rune="💀" title="Death"></span>
                             <span class="rune" data-rune="🔥" title="Fire"></span>
                             <span class="rune" data-rune="⚡" title="Shock"></span>
@@ -681,24 +681,34 @@
         }
 
         // Trigger a rune animation on a random rune for the given player
-        var RUNE_ANIMS = ['rune-glow', 'rune-shock', 'rune-pulse'];
-        function triggerRune(playerId) {
-            var row = $(playerId);
-            if (!row) return;
-            var runes = row.querySelectorAll('.rune');
-            var rune = runes[Math.floor(Math.random() * runes.length)];
-            // Remove all existing anim classes first
-            rune.classList.remove('rune-glow', 'rune-shock', 'rune-pulse');
-            // Force reflow to restart animation
-            void rune.offsetWidth;
-            var anim = RUNE_ANIMS[Math.floor(Math.random() * RUNE_ANIMS.length)];
+        var RUNE_ANIMS = ['rune-glow', 'rune-shock', 'rune-pulse', 'rune-thunder'];
+        var ALL_RUNE_CLASSES = ['rune-glow', 'rune-shock', 'rune-pulse', 'rune-thunder'];
+
+        function _activateRune(rune, anim) {
+            rune.classList.remove(...ALL_RUNE_CLASSES);
+            void rune.offsetWidth; // Force reflow to restart animation
             rune.classList.add(anim);
-            // Clean up after animation
             rune.addEventListener('animationend', function cleanup() {
                 rune.classList.remove(anim);
                 rune.removeEventListener('animationend', cleanup);
             });
         }
+
+        function triggerRune(playerId) {
+            var row = $(playerId);
+            if (!row) return;
+            var runes = row.querySelectorAll('.rune');
+            var rune = runes[Math.floor(Math.random() * runes.length)];
+            _activateRune(rune, RUNE_ANIMS[Math.floor(Math.random() * RUNE_ANIMS.length)]);
+        }
+
+        // Specifically light up the Thunder rune when a thunder attack fires
+        window.triggerThunderRune = function(playerId) {
+            var row = $(playerId);
+            if (!row) return;
+            var thunderRune = row.querySelector('.rune[title="Thunder"]');
+            if (thunderRune) _activateRune(thunderRune, 'rune-thunder');
+        };
 
         // Idle rune loop — randomly fires runes every 1.5–4 seconds per player
         var runeLoopActive = false;

@@ -310,6 +310,95 @@ class Fighter extends Phaser.GameObjects.Container {
         });
     }
 
+    attackThunderStraight(opponent, damage, onHitCallback) {
+        if (this.state !== 'idle') return;
+        this.state = 'attacking';
+        this.stopHover();
+
+        this.sprite.play(this.fighterKey + '_attack_anim');
+        this.scene.playSfx('sfx_magic_cast', { volume: 0.6 });
+
+        // Light up the thunder rune on the attacker's HUD
+        const runeId = this.isPlayer1 ? 'runes-p1' : 'runes-p2';
+        if (window.triggerThunderRune) window.triggerThunderRune(runeId);
+
+        const spawnX = this.isPlayer1 ? this.homeX + 50 : this.homeX - 50;
+        const spawnY = this.homeY - 70;
+
+        const proj = this.scene.add.sprite(spawnX, spawnY, 'fx_thunder_straight_1');
+        proj.play('fx_thunder_straight_anim');
+        
+        const isMobile = window.innerWidth <= 768;
+        proj.setScale(isMobile ? 1.5 : 2.0);
+        proj.setFlipX(!this.isPlayer1);
+        
+        this.scene.tweens.add({
+            targets: proj,
+            x: opponent.homeX,
+            duration: 250,
+            ease: 'Power2',
+            onComplete: () => {
+                proj.destroy();
+                if (onHitCallback) onHitCallback();
+                this.scene.cameras.main.shake(300, 0.03); // Massive shake
+                
+                this.scene.time.delayedCall(150, () => {
+                    this.sprite.play(this.fighterKey + '_stand_anim');
+                    this.state = 'idle';
+                    this.resumeHover();
+                });
+            }
+        });
+    }
+
+    attackThunderTop(opponent, damage, onHitCallback) {
+        if (this.state !== 'idle') return;
+        this.state = 'attacking';
+        this.stopHover();
+
+        this.scene.playSfx('sfx_magic_cast', { volume: 0.7 });
+
+        // Light up the thunder rune on the attacker's HUD
+        const runeId = this.isPlayer1 ? 'runes-p1' : 'runes-p2';
+        if (window.triggerThunderRune) window.triggerThunderRune(runeId);
+
+        // Float up high
+        this.scene.tweens.add({
+            targets: this,
+            y: this.y - 180,
+            duration: 300,
+            ease: 'Sine.easeOut',
+            onComplete: () => {
+                this.sprite.play(this.fighterKey + '_attack_anim');
+
+                // Summon thunder on top of opponent
+                const proj = this.scene.add.sprite(opponent.homeX, opponent.homeY - 100, 'fx_thunder_top_1');
+                proj.play('fx_thunder_top_anim');
+                const isMobile = window.innerWidth <= 768;
+                proj.setScale(isMobile ? 2.0 : 2.5);
+
+                proj.once('animationcomplete', () => {
+                    proj.destroy();
+                    if (onHitCallback) onHitCallback();
+                    this.scene.cameras.main.shake(400, 0.04); // Extra massive shake
+
+                    // Float back down
+                    this.scene.tweens.add({
+                        targets: this,
+                        y: this.homeY,
+                        duration: 300,
+                        ease: 'Sine.easeIn',
+                        onComplete: () => {
+                            this.sprite.play(this.fighterKey + '_stand_anim');
+                            this.state = 'idle';
+                            this.resumeHover();
+                        }
+                    });
+                });
+            }
+        });
+    }
+
     takeHit(damage) {
         this.hp = Math.max(0, this.hp - damage);
         this.updateNameplate();
@@ -328,7 +417,7 @@ class Fighter extends Phaser.GameObjects.Container {
         this.scene.tweens.add({
             targets: this,
             x: this.x + recoil,
-            duration: 60,
+            duration: 200, // slower hit recoil so the glitch state is visible
             yoyo: true,
             ease: 'Quad.easeOut',
             onComplete: () => {
@@ -357,6 +446,38 @@ class Fighter extends Phaser.GameObjects.Container {
             if (this.scene.anims.exists(this.fighterKey + '_block_anim')) {
                 this.sprite.play(this.fighterKey + '_block_anim');
             }
+            // Add Explosion 6 Frame 8 as a magical block shield bubble
+            const shieldVfx = this.scene.add.sprite(0, -(this.sprite.displayHeight * 0.45), 'fx_explosion6_8');
+            
+            // Calculate scale so the shield is a big ball covering the fighter
+            const targetSize = Math.max(this.sprite.displayWidth, this.sprite.displayHeight) * 2.2;
+            const scale = targetSize / shieldVfx.width;
+            shieldVfx.setScale(scale);
+            
+            shieldVfx.setAlpha(0.6);
+            shieldVfx.setTint(0x00d4ff); // Tint it cyan/blue so it doesn't look like a standard fire explosion
+            shieldVfx.setBlendMode(Phaser.BlendModes.ADD);
+            
+            this.add(shieldVfx); // Add to the Fighter container so it shakes with the fighter
+            
+            // Slower pulse effect so it lasts longer
+            this.scene.tweens.add({
+                targets: shieldVfx,
+                scale: scale * 1.05,
+                alpha: 0.85,
+                duration: 220,
+                yoyo: true,
+                repeat: 0,
+                onComplete: () => {
+                    // Slower fade out
+                    this.scene.tweens.add({
+                        targets: shieldVfx,
+                        alpha: 0,
+                        duration: 200,
+                        onComplete: () => shieldVfx.destroy()
+                    });
+                }
+            });
         }
 
         const recoil = this.isPlayer1 ? -10 : 10;
@@ -364,7 +485,7 @@ class Fighter extends Phaser.GameObjects.Container {
         this.scene.tweens.add({
             targets: this,
             x: this.x + recoil,
-            duration: 120,
+            duration: 180, // match to the longer shield effect
             yoyo: true,
             ease: 'Cubic.easeOut',
             onComplete: () => {

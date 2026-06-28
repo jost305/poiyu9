@@ -69,6 +69,16 @@ class BattleScene extends Phaser.Scene {
         for (let i = 1; i <= 10; i++) {
             this.load.image(`fx_explosion8_${i}`, `images/fx/explosion8/Explosion_${i}.png`);
         }
+
+        // Load Thunder Straight (4 frames)
+        for (let i = 1; i <= 4; i++) {
+            this.load.image(`fx_thunder_straight_${i}`, `images/fx/thunder_straight/lightning_skill2_frame${i}.png`);
+        }
+
+        // Load Thunder Top (5 frames)
+        for (let i = 1; i <= 5; i++) {
+            this.load.image(`fx_thunder_top_${i}`, `images/fx/thunder_top/lightning_skill4_frame${i}.png`);
+        }
     }
 
     loadFighterAssets(key) {
@@ -178,7 +188,31 @@ class BattleScene extends Phaser.Scene {
             });
         }
 
+        if (!this.anims.exists('fx_thunder_straight_anim')) {
+            const straightFrames = [];
+            for (let i = 1; i <= 4; i++) {
+                straightFrames.push({ key: `fx_thunder_straight_${i}` });
+            }
+            this.anims.create({
+                key: 'fx_thunder_straight_anim',
+                frames: straightFrames,
+                frameRate: 12,
+                repeat: 0
+            });
+        }
 
+        if (!this.anims.exists('fx_thunder_top_anim')) {
+            const topFrames = [];
+            for (let i = 1; i <= 5; i++) {
+                topFrames.push({ key: `fx_thunder_top_${i}` });
+            }
+            this.anims.create({
+                key: 'fx_thunder_top_anim',
+                frames: topFrames,
+                frameRate: 12,
+                repeat: 0
+            });
+        }
         const playerTop = isMobile ? 890 : 585;
 
         // P1 starts on left — closer to center
@@ -436,11 +470,20 @@ class BattleScene extends Phaser.Scene {
                 }
             };
 
-            // 50% chance to dash attack, 50% chance to shoot a magic spell
-            if (Math.random() > 0.5) {
+            // Massive Thunder Attacks (15% chance total)
+            const rand = Math.random();
+            if (rand < 0.075) {
+                // Trigger Thunder Top
+                attacker.attackThunderTop(defender, baseDamage * 2, onHit);
+            } else if (rand < 0.15) {
+                // Trigger Thunder Straight
+                attacker.attackThunderStraight(defender, baseDamage * 2, onHit);
+            } else if (rand > 0.575) {
+                // Dash attack
                 attacker.attack(defender, onHit);
             } else {
-                attacker.shootFireball(defender, damage, onHit);
+                // Fireball magic
+                attacker.shootFireball(defender, baseDamage, onHit);
             }
         }
         
