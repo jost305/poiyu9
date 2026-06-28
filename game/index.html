@@ -10,7 +10,7 @@
     <script src="src/game.js?v=42"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link rel="stylesheet" href="styles/styles.css?v=31" />
+    <link rel="stylesheet" href="styles/styles.css?v=32" />
     <link rel="stylesheet" href="styles/mobile.css?v=30" />
 </head>
 <body>
@@ -203,11 +203,10 @@
                 </div>
             </div>
         </div>
-    </div>
 
     <!-- ── TCG RUNE CARD HAND ── -->
-    <div id="rune-card-hand">
-        <div class="rune-card" id="rune-card-potion" data-rune="potion">
+    <div id="rune-card-hand" aria-label="Rune cards">
+        <div class="rune-card" id="rune-card-potion" data-rune="potion" data-status="READY" role="button" tabindex="0" aria-label="Bantah Potion rune card">
             <div class="rune-card-cost">1</div>
             <div class="rune-card-icon potion-icon">🧪</div>
             <div class="rune-card-body">
@@ -215,9 +214,10 @@
                 <div class="rune-card-type">Restoration</div>
                 <div class="rune-card-desc">Instantly restores <strong>+30 HP</strong>. Auto-triggers when HP falls below 35%. One use per battle.</div>
             </div>
+            <div class="rune-card-meter" aria-hidden="true"><span></span></div>
         </div>
 
-        <div class="rune-card" id="rune-card-shield" data-rune="shield">
+        <div class="rune-card" id="rune-card-shield" data-rune="shield" data-status="READY" role="button" tabindex="0" aria-label="Shield rune card">
             <div class="rune-card-cost">2</div>
             <div class="rune-card-icon shield-icon">🛡️</div>
             <div class="rune-card-body">
@@ -225,9 +225,10 @@
                 <div class="rune-card-type">Defense</div>
                 <div class="rune-card-desc">Creates a <strong>gold barrier</strong> that absorbs the next incoming hit completely. Lasts 5 seconds.</div>
             </div>
+            <div class="rune-card-meter" aria-hidden="true"><span></span></div>
         </div>
 
-        <div class="rune-card" id="rune-card-thunder" data-rune="thunder">
+        <div class="rune-card" id="rune-card-thunder" data-rune="thunder" data-status="READY" role="button" tabindex="0" aria-label="Thunder rune card">
             <div class="rune-card-cost">3</div>
             <div class="rune-card-icon thunder-icon">🌩️</div>
             <div class="rune-card-body">
@@ -235,9 +236,10 @@
                 <div class="rune-card-type">Offense · BC Steal</div>
                 <div class="rune-card-desc">Summons <strong>massive lightning</strong>. Steals 10–35 BC from opponent on hit. Chain attacks possible.</div>
             </div>
+            <div class="rune-card-meter" aria-hidden="true"><span></span></div>
         </div>
 
-        <div class="rune-card rune-card-locked" id="rune-card-empty" data-rune="empty">
+        <div class="rune-card rune-card-locked" id="rune-card-empty" data-rune="empty" data-status="LOCKED" aria-disabled="true">
             <div class="rune-card-cost locked-cost">?</div>
             <div class="rune-card-icon locked-icon">🔒</div>
             <div class="rune-card-body">
@@ -245,7 +247,9 @@
                 <div class="rune-card-type">Earn to Unlock</div>
                 <div class="rune-card-desc">Reach <strong>20 Wins</strong> and collect 500 BC to unlock a new rune slot for your fighter.</div>
             </div>
+            <div class="rune-card-meter" aria-hidden="true"><span></span></div>
         </div>
+    </div>
     </div>
 
 
@@ -472,6 +476,16 @@
                 utils.style.height = (baseH * scale) + 'px';
             }
 
+            var cardHand = $('rune-card-hand');
+            if (cardHand) {
+                var arenaW = baseW * scale;
+                var arenaH = baseH * scale;
+                var handGap = isMobile ? 8 : 14;
+                cardHand.style.left = (offsetX + arenaW / 2) + 'px';
+                cardHand.style.bottom = Math.max(handGap, availH - (offsetY + arenaH) + handGap) + 'px';
+                cardHand.style.width = Math.min(arenaW - (isMobile ? 12 : 24), isMobile ? 320 : 480) + 'px';
+            }
+
             if (typeof mk !== 'undefined' && mk.config) {
                 mk.config.FIGHTER_SCALE = isMobile ? 1.10 : 0.80;
                 mk.config.PLAYER_TOP = isMobile ? 700 : 400;
@@ -684,6 +698,7 @@
             // Reset healthbars to full green
             updateHpBar('player1Life', 100);
             updateHpBar('player2Life', 100);
+            resetRuneCardHand();
 
             // Start idle rune animations
             startRuneIdleLoop();
@@ -759,33 +774,146 @@
             if (shieldRune) _activateRune(shieldRune, 'rune-shield-active');
         };
 
+        var RUNE_CARD_IDS = {
+            potion: 'rune-card-potion',
+            shield: 'rune-card-shield',
+            thunder: 'rune-card-thunder',
+            empty: 'rune-card-empty'
+        };
+        var RUNE_CARD_CLASSES = ['card-activated', 'card-ready', 'card-warning', 'card-spent', 'card-hit', 'card-selected'];
+        var runeCardState = { hits: 0, potionSpent: false };
+
+        function _getRuneCard(cardOrRune) {
+            if (cardOrRune && cardOrRune.nodeType === 1) return cardOrRune;
+            return document.getElementById(RUNE_CARD_IDS[cardOrRune] || cardOrRune);
+        }
+
+        function _setRuneCardStatus(cardOrRune, status) {
+            var card = _getRuneCard(cardOrRune);
+            if (card) card.setAttribute('data-status', status);
+        }
+
+        function _setRuneCardCharge(cardOrRune, pct) {
+            var card = _getRuneCard(cardOrRune);
+            if (!card) return;
+            var safePct = Math.max(0, Math.min(100, pct));
+            card.style.setProperty('--card-charge', safePct + '%');
+        }
+
+        function _pulseRuneCard(cardOrRune, cls, status, resetStatus) {
+            var card = _getRuneCard(cardOrRune);
+            if (!card || card.classList.contains('rune-card-locked')) return;
+            if (status) _setRuneCardStatus(card, status);
+            card.classList.remove(cls);
+            void card.offsetWidth;
+            card.classList.add(cls);
+            setTimeout(function () {
+                card.classList.remove(cls);
+            }, cls === 'card-hit' ? 330 : 720);
+            if (resetStatus) {
+                setTimeout(function () {
+                    if (!card.classList.contains('card-spent') && !card.classList.contains('card-warning')) {
+                        _setRuneCardStatus(card, resetStatus);
+                    }
+                }, 760);
+            }
+        }
+
+        function _activateCard(cardOrRune, status) {
+            _setRuneCardCharge(cardOrRune, 100);
+            _pulseRuneCard(cardOrRune, 'card-activated', status || 'CAST', 'READY');
+        }
+
+        function _spendRuneCard(cardOrRune) {
+            var card = _getRuneCard(cardOrRune);
+            if (!card) return;
+            if (cardOrRune === 'potion' || card.id === RUNE_CARD_IDS.potion) {
+                runeCardState.potionSpent = true;
+            }
+            setTimeout(function () {
+                card.classList.add('card-spent');
+                card.classList.remove('card-warning');
+                _setRuneCardStatus(card, 'USED');
+                _setRuneCardCharge(card, 0);
+            }, 420);
+        }
+
+        function resetRuneCardHand() {
+            runeCardState.hits = 0;
+            runeCardState.potionSpent = false;
+            Object.keys(RUNE_CARD_IDS).forEach(function (rune) {
+                var card = _getRuneCard(rune);
+                if (!card) return;
+                RUNE_CARD_CLASSES.forEach(function (cls) { card.classList.remove(cls); });
+                _setRuneCardStatus(card, rune === 'empty' ? 'LOCKED' : 'READY');
+                _setRuneCardCharge(card, rune === 'empty' ? 0 : 100);
+            });
+            bindRuneCardHand();
+        }
+
+        function updateRuneCardsOnHit(dmg) {
+            runeCardState.hits++;
+
+            var thunderCharge = Math.min(100, 45 + (runeCardState.hits * 8) + (dmg * 2));
+            _setRuneCardCharge('thunder', thunderCharge);
+            _pulseRuneCard('thunder', dmg >= 12 ? 'card-ready' : 'card-hit', dmg >= 12 ? 'HOT' : 'CHARGE', 'READY');
+
+            _setRuneCardCharge('shield', Math.min(100, 65 + (dmg * 3)));
+            _pulseRuneCard('shield', 'card-hit', 'GUARD', 'READY');
+
+            if (!runeCardState.potionSpent) {
+                var lowestHp = Math.min(p1Life, p2Life);
+                var potionCard = _getRuneCard('potion');
+                if (potionCard) {
+                    _setRuneCardCharge('potion', Math.max(20, 100 - lowestHp));
+                    if (lowestHp <= 35) {
+                        potionCard.classList.add('card-warning');
+                        _setRuneCardStatus('potion', 'LOW HP');
+                        _pulseRuneCard('potion', 'card-ready', 'LOW HP');
+                    } else {
+                        potionCard.classList.remove('card-warning');
+                        _setRuneCardStatus('potion', 'READY');
+                    }
+                }
+            }
+        }
+
+        function bindRuneCardHand() {
+            var hand = $('rune-card-hand');
+            if (!hand || hand.dataset.bound === '1') return;
+            hand.dataset.bound = '1';
+            var cards = hand.querySelectorAll('.rune-card:not(.rune-card-locked)');
+            Array.prototype.forEach.call(cards, function (card) {
+                function selectCard() {
+                    if (card.classList.contains('card-spent')) return;
+                    var currentStatus = card.getAttribute('data-status') === 'LOW HP' ? 'LOW HP' : 'READY';
+                    _pulseRuneCard(card, 'card-selected', 'QUEUED', currentStatus);
+                }
+                card.addEventListener('click', selectCard);
+                card.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectCard();
+                    }
+                });
+            });
+        }
+
         // Specifically light up the Potion rune when activated
         window.triggerPotionRune = function(playerId) {
             var row = $(playerId);
             if (!row) return;
             var potionRune = row.querySelector('.rune[title="Potion"]');
             if (potionRune) _activateRune(potionRune, 'rune-potion-active');
-            _activateCard('rune-card-potion');
+            _activateCard('potion', 'HEAL');
+            _spendRuneCard('potion');
         };
-
-        // Flash a card in the TCG hand
-        function _activateCard(cardId) {
-            var card = document.getElementById(cardId);
-            if (!card) return;
-            card.classList.remove('card-activated');
-            void card.offsetWidth;
-            card.classList.add('card-activated');
-            card.addEventListener('animationend', function cleanup() {
-                card.classList.remove('card-activated');
-                card.removeEventListener('animationend', cleanup);
-            });
-        }
 
         // Wire card flashes into existing triggers
         var _origThunder = window.triggerThunderRune;
-        window.triggerThunderRune = function(playerId) { _origThunder(playerId); _activateCard('rune-card-thunder'); };
+        window.triggerThunderRune = function(playerId) { _origThunder(playerId); _activateCard('thunder', 'STRIKE'); };
         var _origShield = window.triggerShieldRune;
-        window.triggerShieldRune = function(playerId) { _origShield(playerId); _activateCard('rune-card-shield'); };
+        window.triggerShieldRune = function(playerId) { _origShield(playerId); _activateCard('shield', 'SHIELD'); };
 
         // Update the BC balance on the UI
         window.updateBCBalance = function(playerIndex, balance) {
@@ -831,6 +959,7 @@
                 // Trigger a rune animation on attacker (P2)
                 triggerRune('runes-p2');
             }
+            updateRuneCardsOnHit(dmg);
 
             totalDamage += dmg;
             if ($('total-damage')) $('total-damage').innerHTML = totalDamage + ' <span class="tb-stat-icon">&#9876;</span>';

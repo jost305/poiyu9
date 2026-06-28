@@ -19,11 +19,7 @@ class BattleScene extends Phaser.Scene {
 
         // Load background
         const isMobile = window.innerWidth <= 768;
-        if (isMobile) {
-            this.load.image('bg', 'images/arenas/bantah-arena-mobile.png');
-        } else {
-            this.load.image('bg', 'images/arenas/bantah-arena.png');
-        }
+        this.load.image('bg', 'images/arenas/night2-arena.png');
 
         this.load.svg('bantah_rune_one', 'bantah-rune-one.svg', { width: 256, height: 256 });
         this.load.image('hp_seg_6', 'small-healthbar/power-bar/Progress6.png');
