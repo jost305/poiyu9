@@ -441,16 +441,13 @@ html, body {
     background: #050508;
     min-width: 0;
     min-height: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 #parent {
     width: 1200px; height: 800px;
-    position: relative;
-    flex-shrink: 0;
-    transform-origin: center center;
+    position: absolute;
+    top: 0; left: 0;
+    transform-origin: top left;
     overflow: hidden;
 }
 
