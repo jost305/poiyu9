@@ -603,27 +603,30 @@
         var scaleW = availW / baseW;
         var scaleH = availH / baseH;
         var scale = isMobile ? Math.max(scaleW, scaleH) : Math.min(scaleW, scaleH);
-        var offsetX = (availW - baseW * scale) / 2;
-        var offsetY = (availH - baseH * scale) / 2;
         parent.style.transform = 'scale(' + scale + ')';
-        parent.style.left = offsetX + 'px';
-        parent.style.top = offsetY + 'px';
-        parent.style.marginTop = '0';
+
+        /* Overlay utils to cover the scaled parent exactly */
         var utils = $('utils');
         if (utils) {
+            var scaledW = baseW * scale;
+            var scaledH = baseH * scale;
+            var offsetX = (availW - scaledW) / 2;
+            var offsetY = (availH - scaledH) / 2;
             utils.style.position = 'absolute';
             utils.style.left = offsetX + 'px';
             utils.style.top = offsetY + 'px';
-            utils.style.width = (baseW * scale) + 'px';
-            utils.style.height = (baseH * scale) + 'px';
+            utils.style.width = scaledW + 'px';
+            utils.style.height = scaledH + 'px';
         }
         var cardHand = $('rune-card-hand');
         if (cardHand) {
             var arenaW = baseW * scale;
             var arenaH = baseH * scale;
+            var offX = (availW - arenaW) / 2;
+            var offY = (availH - arenaH) / 2;
             var handGap = isMobile ? 8 : 14;
-            cardHand.style.left = (offsetX + arenaW / 2) + 'px';
-            cardHand.style.bottom = Math.max(handGap, availH - (offsetY + arenaH) + handGap) + 'px';
+            cardHand.style.left = (offX + arenaW / 2) + 'px';
+            cardHand.style.bottom = Math.max(handGap, availH - (offY + arenaH) + handGap) + 'px';
             cardHand.style.width = Math.min(arenaW - (isMobile ? 12 : 24), isMobile ? 320 : 480) + 'px';
         }
         if (typeof mk !== 'undefined' && mk.config) {
