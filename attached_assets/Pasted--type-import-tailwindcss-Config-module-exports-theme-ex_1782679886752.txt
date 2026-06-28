@@ -1,0 +1,109 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        // Base background system
+        bg: {
+          950: "#000010",
+          900: "#050518",
+          850: "#0A0A1A",
+          800: "#101020",
+          700: "#181830",
+        },
+
+        // Surface layers (cards, HUD panels)
+        surface: {
+          900: "#0A0A1A",
+          800: "#101020",
+          700: "#202030",
+          600: "#303040",
+        },
+
+        // Primary neon accents
+        neon: {
+          purple: "#8B5CF6",
+          violet: "#A855F7",
+          blue: "#3B82F6",
+          cyan: "#22D3EE",
+          green: "#22C55E",
+          lime: "#A3E635",
+          orange: "#F97316",
+          red: "#EF4444",
+          pink: "#EC4899",
+          gold: "#FBBF24",
+        },
+
+        // UI state colors
+        state: {
+          success: "#22C55E",
+          warning: "#FBBF24",
+          danger: "#EF4444",
+          info: "#3B82F6",
+        },
+
+        // Text hierarchy
+        text: {
+          primary: "#E5E7EB",
+          secondary: "#9CA3AF",
+          muted: "#6B7280",
+          disabled: "#374151",
+        },
+
+        // Glow / FX overlays
+        glow: {
+          purple: "rgba(168, 85, 247, 0.35)",
+          blue: "rgba(59, 130, 246, 0.35)",
+          cyan: "rgba(34, 211, 238, 0.35)",
+          green: "rgba(34, 197, 94, 0.25)",
+          orange: "rgba(249, 115, 22, 0.25)",
+        },
+      },
+
+      boxShadow: {
+        neon: "0 0 20px rgba(139, 92, 246, 0.6)",
+        neonBlue: "0 0 20px rgba(59, 130, 246, 0.5)",
+        neonGreen: "0 0 20px rgba(34, 197, 94, 0.4)",
+        insetSoft: "inset 0 0 12px rgba(255,255,255,0.05)",
+      },
+
+      backgroundImage: {
+        "arena-radial":
+          "radial-gradient(circle at center, rgba(139,92,246,0.15), transparent 60%)",
+        "grid-glow":
+          "linear-gradient(180deg, rgba(59,130,246,0.08), rgba(0,0,0,0))",
+      },
+
+      borderRadius: {
+        xl2: "1.25rem",
+        xl3: "1.75rem",
+      },
+
+      fontFamily: {
+        display: ["Orbitron", "sans-serif"],
+        ui: ["Inter", "sans-serif"],
+      },
+
+      animation: {
+        glow: "glow 2.5s ease-in-out infinite alternate",
+        float: "float 4s ease-in-out infinite",
+        pulseSoft: "pulseSoft 3s ease-in-out infinite",
+      },
+
+      keyframes: {
+        glow: {
+          "0%": { boxShadow: "0 0 10px rgba(139,92,246,0.3)" },
+          "100%": { boxShadow: "0 0 25px rgba(139,92,246,0.7)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
+        pulseSoft: {
+          "0%, 100%": { opacity: 1 },
+          "50%": { opacity: 0.6 },
+        },
+      },
+    },
+  },
+};
