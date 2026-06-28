@@ -219,6 +219,36 @@ html, body {
     flex-shrink: 0;
 }
 
+.tb-nav {
+    display: flex; align-items: center; gap: 2px;
+    padding: 0 6px;
+}
+.tb-nav-item {
+    font-family: var(--font-ui);
+    font-size: 12px; font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 4px 12px;
+    border-radius: 5px;
+    letter-spacing: 0.3px;
+    transition: color 0.15s, background 0.15s;
+    white-space: nowrap;
+}
+.tb-nav-item:hover {
+    color: var(--text-primary);
+    background: rgba(139,92,246,0.12);
+}
+.tb-nav-create {
+    color: var(--neon-violet);
+    border: 1px solid rgba(139,92,246,0.4);
+    background: rgba(139,92,246,0.08);
+}
+.tb-nav-create:hover {
+    background: rgba(139,92,246,0.22);
+    color: #fff;
+    border-color: rgba(139,92,246,0.7);
+}
+
 .tb-mini-stat {
     display: flex; flex-direction: column; align-items: center;
     padding: 0 8px;
