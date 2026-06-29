@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -73,8 +72,8 @@
     --bottom-h:  128px;
 
     /* ── Fonts ── */
-    --font-display: 'Orbitron', sans-serif;
-    --font-ui:      'Inter', sans-serif;
+    --font-display: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --font-ui:      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 /* ══════════════════════════════════════════
@@ -662,7 +661,7 @@ canvas { display: block; background: transparent; }
 }
 .fx-dmg {
     position: absolute;
-    font-family: 'Inter', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-weight: 900; font-size: 28px;
     text-shadow: 0 2px 8px rgba(0,0,0,.8), 0 0 20px currentColor;
     white-space: nowrap;
@@ -1487,7 +1486,7 @@ html.light .trollbox-input-row { background: rgba(0,0,0,0.03); }
 /* Force game fonts back — bantahbro sets monospace on the root class */
 .page-overlay,
 .page-overlay * {
-    font-family: 'Inter', ui-sans-serif, sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 .page-overlay .pg-title,
 .page-overlay .doc-h1,
@@ -1499,7 +1498,7 @@ html.light .trollbox-input-row { background: rgba(0,0,0,0.03); }
 .page-overlay .create-cost-val,
 .page-overlay .create-section-title,
 .page-overlay .create-btn-primary {
-    font-family: 'Orbitron', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .page-overlay {
@@ -2243,7 +2242,7 @@ body.page-active .page-overlay { bottom: 0; }
     display: flex; align-items: center; gap: 10px;
 }
 .create-points-badge {
-    font-family: 'Inter', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
     background: rgb(var(--bb-primary-rgb) / 0.1);
     border: 1px solid var(--bb-border);
@@ -2260,7 +2259,7 @@ body.page-active .page-overlay { bottom: 0; }
     border-radius: 7px; color: var(--bb-foreground);
     font-size: 14px; font-weight: 600;
     padding: 9px 14px; outline: none;
-    font-family: 'Inter', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     transition: border-color 0.12s;
     max-width: 340px;
 }
@@ -2346,7 +2345,7 @@ body.page-active .page-overlay { bottom: 0; }
     border-radius: 8px; color: var(--bb-muted-foreground);
     font-size: 13px; font-weight: 600;
     padding: 11px 22px; cursor: pointer;
-    font-family: 'Inter', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     transition: all 0.12s;
 }
 .create-btn-secondary:hover { border-color: hsl(var(--bb-primary)); color: var(--bb-foreground); }
@@ -2430,7 +2429,7 @@ body.page-active .page-overlay { bottom: 0; }
     border: 1px solid transparent;
     background: transparent;
     color: var(--bb-muted-foreground);
-    font-family: 'Orbitron', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 10px; font-weight: 700; letter-spacing: 0.8px;
     cursor: pointer; transition: all 0.15s;
 }
@@ -2547,7 +2546,7 @@ body.page-active .page-overlay { bottom: 0; }
     border: 1px solid transparent;
     background: transparent;
     color: var(--bb-muted-foreground);
-    font-family: 'Orbitron', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 10px; font-weight: 700; letter-spacing: 0.8px;
     cursor: pointer;
     transition: all 0.15s;
@@ -2575,7 +2574,7 @@ body.page-active .page-overlay { bottom: 0; }
 .lb-th {
     padding: 10px 14px;
     text-align: left;
-    font-family: 'Orbitron', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 9px; font-weight: 700; letter-spacing: 1px;
     color: var(--bb-muted-foreground);
     text-transform: uppercase;
@@ -2599,7 +2598,7 @@ body.page-active .page-overlay { bottom: 0; }
 
 .lb-rank { text-align: center; padding: 12px 8px; font-size: 18px; }
 .lb-rank-n {
-    font-family: 'Orbitron', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 13px; font-weight: 700;
     color: var(--bb-muted-foreground);
     text-align: center;
@@ -2617,7 +2616,7 @@ body.page-active .page-overlay { bottom: 0; }
     border: 1px solid rgba(139,92,246,0.2);
 }
 .lb-name {
-    font-family: 'Orbitron', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 11px; font-weight: 700;
     color: var(--bb-foreground);
 }
@@ -2683,7 +2682,7 @@ body.page-active .page-overlay { bottom: 0; }
     border: none; outline: none;
     font-size: 15px;
     color: #fff;
-    font-family: 'Inter', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     caret-color: rgba(139,92,246,0.8);
 }
 .search-modal-input::placeholder { color: rgba(255,255,255,0.3); }
@@ -2707,7 +2706,7 @@ body.page-active .page-overlay { bottom: 0; }
     text-align: center;
     color: rgba(255,255,255,0.3);
     font-size: 13px;
-    font-family: 'Inter', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .search-result-item {
@@ -2718,7 +2717,7 @@ body.page-active .page-overlay { bottom: 0; }
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.1s;
-    font-family: 'Inter', sans-serif;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 .search-result-item:hover,
 .search-result-item.selected {
