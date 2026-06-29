@@ -793,68 +793,71 @@ canvas { display: block; background: transparent; }
 #right-panel::-webkit-scrollbar { width: 3px; }
 #right-panel::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.3); border-radius: 2px; }
 
-/* ── Current King ── */
-.rp-king-section { padding: 10px 0 8px; }
+/* ── Top 3 Fighters ── */
+.rp-top3-section { padding: 10px 0 6px; }
+.rp-hdr-sub { font-size: 7px; font-weight: 600; letter-spacing: 1px; color: var(--text3); margin-left: 4px; }
 
-.current-king-card {
-    display: flex; align-items: center; gap: 9px;
-    margin: 0 8px 8px;
-    padding: 9px;
-    background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(16,16,32,0.8));
-    border: 1px solid rgba(139,92,246,0.22);
+.top3-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px;
+    margin: 0 6px 4px;
     border-radius: 8px;
-    box-shadow: var(--shadow-inset-soft);
+    border: 1px solid transparent;
+    transition: background 0.15s;
 }
-.ck-portrait {
-    width: 48px; height: 48px;
-    border-radius: 7px;
-    border: 2px solid var(--neon-purple);
+.top3-row:hover { background: rgba(255,255,255,0.03); }
+.top3-gold   { border-color: rgba(251,191,36,0.18); background: rgba(251,191,36,0.04); }
+.top3-silver { border-color: rgba(192,192,192,0.14); background: rgba(192,192,192,0.03); }
+.top3-bronze { border-color: rgba(205,127,50,0.14); background: rgba(205,127,50,0.03); }
+
+.top3-medal { font-size: 16px; flex-shrink: 0; width: 20px; text-align: center; }
+
+.top3-avatar {
+    width: 36px; height: 36px; flex-shrink: 0;
+    border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    border: 1px solid rgba(139,92,246,0.2);
+}
+
+.top3-info { flex: 1; min-width: 0; }
+.top3-name {
     font-family: var(--font-display); font-size: 11px; font-weight: 700;
-    flex-shrink: 0;
-    background: linear-gradient(135deg, #080820, #121240);
-    color: var(--neon-cyan);
-    box-shadow: 0 0 16px rgba(139,92,246,0.45), var(--shadow-inset-soft);
-    animation: glow 2.5s ease-in-out infinite alternate;
+    color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    line-height: 1; letter-spacing: 0.5px;
 }
-.ck-info { flex: 1; min-width: 0; }
-.ck-name  { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1; letter-spacing: 1px; }
-.ck-row-badges { display: flex; align-items: center; gap: 5px; margin: 3px 0 2px; }
-.ck-title { font-family: var(--font-display); font-size: 7px; font-weight: 600; letter-spacing: 1.5px; color: var(--neon-gold); text-transform: uppercase; }
-.ck-crown { font-size: 14px; color: var(--neon-gold); text-shadow: 0 0 10px rgba(251,191,36,0.6); animation: pulseSoft 3s ease-in-out infinite; }
-.ck-streak { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--neon-gold); letter-spacing: 1px; line-height: 1; text-shadow: 0 0 14px rgba(251,191,36,0.5); }
-
-.king-stats { padding: 0 10px 6px; display: flex; flex-direction: column; gap: 3px; }
-.ks-row { display: flex; justify-content: space-between; align-items: center; }
-.ks-label { font-size: 9px; font-weight: 600; letter-spacing: 1.5px; color: var(--text3); text-transform: uppercase; }
-.ks-val   { font-size: 12px; font-weight: 700; color: var(--text); }
-
-.king-hp-row {
-    display: flex; align-items: center; gap: 6px;
-    padding: 4px 10px 4px;
+.top3-meta {
+    display: flex; align-items: center; gap: 4px;
+    margin: 3px 0 4px;
 }
-.khp-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; color: var(--text3); text-transform: uppercase; min-width: 40px; }
-.khp-bar   { flex: 1; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
-.khp-fill  { height: 100%; width: 100%; background: linear-gradient(90deg, var(--neon-green), var(--neon-lime)); border-radius: 3px; transition: width 0.4s ease; box-shadow: 0 0 8px var(--glow-green); }
-.khp-pct   { font-size: 9px; font-weight: 700; color: var(--neon-green); min-width: 30px; text-align: right; text-shadow: 0 0 8px var(--glow-green); }
-
-.king-power-row {
-    display: flex; align-items: center; gap: 6px;
-    padding: 2px 10px 6px;
+.top3-wins { font-family: var(--font-display); font-size: 9px; font-weight: 700; color: var(--neon-gold); }
+.top3-dot  { font-size: 9px; color: var(--text3); }
+.top3-pwr  { font-size: 9px; color: var(--text3); }
+.top3-bar-wrap {
+    height: 3px; background: rgba(255,255,255,0.07);
+    border-radius: 2px; overflow: hidden;
 }
-.kp-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; color: var(--text3); text-transform: uppercase; min-width: 40px; }
-.kp-val   { font-size: 13px; font-weight: 700; color: var(--text); flex: 1; }
+.top3-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
 
-.king-rune-icons { display: flex; gap: 3px; }
-.kri {
-    width: 20px; height: 20px;
-    border-radius: 4px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px;
+.top3-status { font-size: 14px; flex-shrink: 0; }
+
+.top3-view-all {
+    display: block; width: calc(100% - 20px);
+    margin: 6px 10px 2px;
+    padding: 6px 0;
+    background: rgba(139,92,246,0.08);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 7px;
+    color: rgba(139,92,246,0.9);
+    font-family: var(--font-display); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.8px; text-align: center; cursor: pointer;
+    transition: all 0.15s;
 }
-.kri-locked { opacity: 0.3; filter: grayscale(1); }
+.top3-view-all:hover {
+    background: rgba(139,92,246,0.18);
+    border-color: rgba(139,92,246,0.45);
+    color: #fff;
+}
 
 /* ── Battle Feed ── */
 .rp-feed-section { flex: 1; overflow: hidden; display: flex; flex-direction: column; }

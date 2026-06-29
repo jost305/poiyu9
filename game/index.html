@@ -420,53 +420,65 @@
 
                 <!-- RIGHT PANEL -->
                 <div id="right-panel">
-                    <!-- CURRENT KING -->
-                    <div class="panel-section rp-king-section">
-                        <div class="rp-section-hdr">CURRENT KING</div>
-                        <div class="current-king-card" id="king-card">
-                            <div class="ck-portrait" id="ck-portrait">SZ</div>
-                            <div class="ck-info">
-                                <div class="ck-name" id="ck-name">Sub-Zero</div>
-                                <div class="ck-row-badges">
-                                    <div class="ck-title">KING OF THE HILL</div>
-                                    <span class="ck-crown">♛</span>
+                    <!-- TOP 3 BY WINS -->
+                    <div class="panel-section rp-top3-section">
+                        <div class="rp-section-hdr">TOP FIGHTERS <span class="rp-hdr-sub">BY WINS</span></div>
+
+                        <!-- #1 -->
+                        <div class="top3-row top3-gold">
+                            <div class="top3-medal">🥇</div>
+                            <div class="top3-avatar" style="background:linear-gradient(135deg,#1a0a2e,#3d1b7e)">🤖</div>
+                            <div class="top3-info">
+                                <div class="top3-name">Robot V1</div>
+                                <div class="top3-meta">
+                                    <span class="top3-wins">247 W</span>
+                                    <span class="top3-dot">·</span>
+                                    <span class="top3-pwr">2,450 PWR</span>
                                 </div>
-                                <div class="ck-streak" id="ks-streak">
-                                    0 WINS
+                                <div class="top3-bar-wrap">
+                                    <div class="top3-bar-fill" style="width:100%;background:linear-gradient(90deg,#facc15,#f59e0b)"></div>
                                 </div>
                             </div>
+                            <span class="top3-status top3-king">👑</span>
                         </div>
-                        <div class="king-stats">
-                            <div class="ks-row">
-                                <span class="ks-label">DEFENDED</span>
-                                <span class="ks-val" id="ks-defended"
-                                    >0 TIMES</span
-                                >
+
+                        <!-- #2 -->
+                        <div class="top3-row top3-silver">
+                            <div class="top3-medal">🥈</div>
+                            <div class="top3-avatar" style="background:linear-gradient(135deg,#0a1a2e,#1b3d7e)">🦾</div>
+                            <div class="top3-info">
+                                <div class="top3-name">Floatrobo</div>
+                                <div class="top3-meta">
+                                    <span class="top3-wins">198 W</span>
+                                    <span class="top3-dot">·</span>
+                                    <span class="top3-pwr">2,310 PWR</span>
+                                </div>
+                                <div class="top3-bar-wrap">
+                                    <div class="top3-bar-fill" style="width:80%;background:linear-gradient(90deg,#60a5fa,#3b82f6)"></div>
+                                </div>
                             </div>
-                            <div class="ks-row">
-                                <span class="ks-label">EARNED</span>
-                                <span class="ks-val green" id="ks-earned"
-                                    >+0 BC</span
-                                >
-                            </div>
+                            <span class="top3-status top3-queue">⏳</span>
                         </div>
-                        <div class="king-hp-row">
-                            <span class="khp-label">HEALTH</span>
-                            <div class="khp-bar">
-                                <div class="khp-fill" id="king-hp-fill"></div>
+
+                        <!-- #3 -->
+                        <div class="top3-row top3-bronze">
+                            <div class="top3-medal">🥉</div>
+                            <div class="top3-avatar" style="background:linear-gradient(135deg,#1a2e0a,#2e7e1b)">🐸</div>
+                            <div class="top3-info">
+                                <div class="top3-name">Robo Pepe</div>
+                                <div class="top3-meta">
+                                    <span class="top3-wins">162 W</span>
+                                    <span class="top3-dot">·</span>
+                                    <span class="top3-pwr">2,180 PWR</span>
+                                </div>
+                                <div class="top3-bar-wrap">
+                                    <div class="top3-bar-fill" style="width:66%;background:linear-gradient(90deg,#4ade80,#22c55e)"></div>
+                                </div>
                             </div>
-                            <span class="khp-pct" id="king-hp-pct">100%</span>
+                            <span class="top3-status top3-idle">💤</span>
                         </div>
-                        <div class="king-power-row">
-                            <span class="kp-label">POWER</span>
-                            <span class="kp-val">2,450</span>
-                            <div class="king-rune-icons">
-                                <span class="kri">🧪</span>
-                                <span class="kri">🛡️</span>
-                                <span class="kri">🌩️</span>
-                                <span class="kri kri-locked">🔒</span>
-                            </div>
-                        </div>
+
+                        <button class="top3-view-all" onclick="openPage('leaderboard');return false">View Full Leaderboard ›</button>
                     </div>
 
                     <!-- BATTLE FEED -->
