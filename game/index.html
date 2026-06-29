@@ -3291,68 +3291,64 @@
         /* Fighter grid */
         .ag-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 24px 28px 40px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 16px 20px 32px;
+        }
+        @media (max-width: 700px) {
+            .ag-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 10px 12px 24px; }
         }
 
         /* Fighter card */
         .ag-card {
             display: flex;
             flex-direction: column;
-            border-radius: 20px;
+            border-radius: 0;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.09);
             background: rgba(12,12,28,0.95);
-            transition: transform .2s ease, box-shadow .2s ease, border-color .2s;
+            transition: border-color .15s;
             cursor: default;
         }
         .ag-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(139,92,246,0.3);
-            border-color: rgba(139,92,246,0.35);
+            border-color: rgba(139,92,246,0.45);
         }
 
         /* Card image banner */
         .ag-card-header {
             position: relative;
-            height: 160px;
+            height: 130px;
             display: flex;
             align-items: flex-end;
             justify-content: center;
             overflow: hidden;
-            padding-bottom: 8px;
+            padding-bottom: 4px;
         }
         .ag-card-header::after {
             content: '';
             position: absolute;
             bottom: 0; left: 0; right: 0;
-            height: 60px;
+            height: 50px;
             background: linear-gradient(to top, rgba(12,12,28,0.95), transparent);
             z-index: 2;
         }
         .ag-sprite {
-            height: 130px;
+            height: 105px;
             object-fit: contain;
             image-rendering: pixelated;
             position: relative;
             z-index: 3;
-            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6));
-            transition: transform .2s;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
         }
-        .ag-card:hover .ag-sprite { transform: scale(1.06) translateY(-4px); }
         .ag-sprite-fallback {
-            font-size: 72px;
+            font-size: 58px;
             line-height: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 3;
             position: relative;
-            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5));
-            transition: transform .2s;
         }
-        .ag-card:hover .ag-sprite-fallback { transform: scale(1.06) translateY(-4px); }
 
         /* Rank badge — top-left large number */
         .ag-rank {
@@ -3373,12 +3369,12 @@
         /* Status pill — top-right */
         .ag-status-badge {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            font-size: 0.6rem;
+            top: 10px;
+            right: 10px;
+            font-size: 0.58rem;
             font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 99px;
+            padding: 3px 8px;
+            border-radius: 2px;
             letter-spacing: .06em;
             z-index: 4;
             text-transform: uppercase;
@@ -3402,10 +3398,10 @@
 
         /* Card body */
         .ag-card-body {
-            padding: 16px 18px 18px;
+            padding: 10px 12px 12px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 8px;
             flex: 1;
         }
 
@@ -3429,8 +3425,8 @@
         .ag-pwr-chip {
             background: rgba(139,92,246,0.15);
             border: 1px solid rgba(139,92,246,0.3);
-            border-radius: 10px;
-            padding: 4px 10px;
+            border-radius: 2px;
+            padding: 3px 8px;
             text-align: center;
             flex-shrink: 0;
         }
@@ -3452,13 +3448,13 @@
         .ag-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 4px;
         }
         .ag-stat {
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            padding: 10px 12px;
+            border-radius: 0;
+            padding: 6px 8px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -3505,26 +3501,21 @@
         /* Challenge button */
         .ag-challenge-btn {
             width: 100%;
-            padding: 11px;
-            border-radius: 12px;
+            padding: 8px;
+            border-radius: 0;
             border: none;
             background: linear-gradient(135deg, #7c3aed, #2563eb);
             color: #fff;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
             letter-spacing: .05em;
             text-transform: uppercase;
-            transition: opacity .15s, transform .12s, box-shadow .15s;
-            box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+            transition: opacity .15s;
             margin-top: auto;
         }
-        .ag-challenge-btn:hover {
-            opacity: 1;
-            transform: translateY(-1px);
-            box-shadow: 0 8px 28px rgba(124,58,237,0.5);
-        }
-        .ag-challenge-btn:active { transform: scale(0.98); }
+        .ag-challenge-btn:hover { opacity: .82; }
+        .ag-challenge-btn:active { opacity: .65; }
 
         /* ── Challenge modal ── */
         .chall-overlay {
