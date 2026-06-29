@@ -2261,7 +2261,7 @@ body.page-active .page-overlay { bottom: 0; }
     cursor: pointer;
 }
 
-#page-marketplace .pg-body { flex-direction: column; }
+#page-marketplace .pg-body { flex-direction: column; position: relative; }
 
 .mkt-grid {
     display: grid;
@@ -2330,6 +2330,278 @@ body.page-active .page-overlay { bottom: 0; }
     transition: opacity 0.12s;
 }
 .mkt-buy-btn:hover { opacity: 0.85; }
+
+/* ══════════════════════════════════════════
+   MARKETPLACE DETAIL PANEL
+══════════════════════════════════════════ */
+.mkt-detail-panel {
+    position: absolute;
+    inset: 0;
+    background: var(--bb-background);
+    flex-direction: column;
+    overflow: hidden;
+    animation: pgFadeIn 0.15s ease;
+    z-index: 10;
+}
+.mkt-detail-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Back bar */
+.mkt-d-back-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--bb-border);
+    background: var(--bb-card);
+    flex-shrink: 0;
+}
+.mkt-d-back-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid var(--bb-border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--bb-muted-foreground);
+    font-size: 12px; font-weight: 600;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    font-family: inherit;
+}
+.mkt-d-back-btn:hover { background: rgb(var(--bb-primary-rgb)/0.1); color: var(--bb-foreground); }
+.mkt-d-breadcrumb {
+    font-size: 12px;
+    color: var(--bb-muted-foreground);
+}
+.mkt-d-breadcrumb strong { color: var(--bb-foreground); }
+
+/* Hero banner */
+.mkt-d-hero {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    flex-shrink: 0;
+    position: relative;
+}
+.mkt-d-hero-icon {
+    font-size: 64px;
+    line-height: 1;
+    filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4));
+    flex-shrink: 0;
+}
+.mkt-d-hero-info { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.mkt-d-hero-badge {
+    display: inline-block;
+    font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 4px;
+    border: 1px solid rgb(var(--bb-primary-rgb)/0.4);
+    background: rgb(var(--bb-primary-rgb)/0.2);
+    color: hsl(var(--bb-primary));
+    width: fit-content;
+}
+.mkt-d-hero-name {
+    font-size: 26px; font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+.mkt-d-hero-owner { font-size: 12px; color: rgba(255,255,255,0.6); font-family: inherit; }
+.mkt-d-hero-pwr { text-align: center; flex-shrink: 0; }
+.mkt-d-pwr-val { font-size: 28px; font-weight: 900; line-height: 1; font-family: inherit; }
+.mkt-d-pwr-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+/* Body layout */
+.mkt-d-body {
+    flex: 1;
+    display: flex;
+    gap: 0;
+    overflow: hidden;
+}
+.mkt-d-col {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.mkt-d-col-right {
+    flex: 0 0 280px;
+    border-left: 1px solid var(--bb-border);
+    background: var(--bb-card);
+}
+
+/* Sections */
+.mkt-d-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.mkt-d-section-title {
+    font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--bb-muted-foreground);
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--bb-border);
+}
+
+/* Stat bars */
+.mkt-d-stat-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px;
+}
+.mkt-d-stat-label { width: 80px; color: var(--bb-muted-foreground); flex-shrink: 0; }
+.mkt-d-bar-wrap { flex: 1; height: 6px; background: var(--bb-muted); border-radius: 3px; overflow: hidden; }
+.mkt-d-bar { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+.mkt-d-bar-atk { background: linear-gradient(90deg, #ef4444, #f97316); }
+.mkt-d-bar-def { background: linear-gradient(90deg, #3b82f6, #22d3ee); }
+.mkt-d-bar-spd { background: linear-gradient(90deg, #a855f7, #ec4899); }
+.mkt-d-stat-val { width: 28px; text-align: right; font-weight: 700; color: var(--bb-foreground); font-size: 12px; }
+
+/* Record */
+.mkt-d-record-row { display: flex; gap: 0; }
+.mkt-d-record-stat {
+    flex: 1; text-align: center;
+    padding: 12px 8px;
+    background: var(--bb-muted);
+    border-radius: 0;
+}
+.mkt-d-record-stat:first-child { border-radius: 8px 0 0 8px; }
+.mkt-d-record-stat:last-child  { border-radius: 0 8px 8px 0; }
+.mkt-d-record-val { font-size: 20px; font-weight: 800; line-height: 1; margin-bottom: 3px; }
+.mkt-d-record-label { font-size: 9px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--bb-muted-foreground); }
+.mkt-d-record-val.green { color: #22c55e; }
+.mkt-d-record-val.red   { color: #ef4444; }
+.mkt-d-record-val.gold  { color: #fbbf24; }
+
+/* Rune tags */
+.mkt-d-runes { display: flex; flex-wrap: wrap; gap: 8px; }
+.mkt-d-rune-tag {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px; font-weight: 600;
+    background: rgb(var(--bb-secondary-rgb)/0.12);
+    border: 1px solid rgb(var(--bb-secondary-rgb)/0.3);
+    color: var(--bb-secondary);
+}
+.mkt-d-rune-none {
+    background: var(--bb-muted);
+    border-color: var(--bb-border);
+    color: var(--bb-muted-foreground);
+}
+
+/* About / description */
+.mkt-d-desc {
+    font-size: 13px;
+    color: var(--bb-muted-foreground);
+    line-height: 1.65;
+}
+
+/* Battle history */
+.mkt-d-history { display: flex; flex-direction: column; gap: 6px; }
+.mkt-d-hist-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    font-size: 11px;
+    background: var(--bb-muted);
+    border: 1px solid var(--bb-border);
+}
+.mkt-d-hist-result {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.8px;
+    padding: 2px 7px; border-radius: 4px;
+    flex-shrink: 0;
+}
+.mkt-d-hist-result.win  { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+.mkt-d-hist-result.loss { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+.mkt-d-hist-vs  { flex: 1; color: var(--bb-foreground); font-weight: 600; }
+.mkt-d-hist-bc  { font-weight: 700; white-space: nowrap; }
+.mkt-d-hist-time { color: var(--bb-muted-foreground); white-space: nowrap; font-size: 10px; }
+.mkt-d-muted { color: var(--bb-muted-foreground); }
+
+/* Buy panel */
+.mkt-d-buy-panel {
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 20px;
+    border-bottom: 1px solid var(--bb-border);
+}
+.mkt-d-buy-label { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--bb-muted-foreground); }
+.mkt-d-buy-price { font-size: 24px; font-weight: 900; }
+.mkt-d-buy-btn {
+    padding: 11px;
+    background: hsl(var(--bb-primary));
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px; font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.12s;
+    font-family: inherit;
+}
+.mkt-d-buy-btn:hover { opacity: 0.88; }
+.mkt-d-offer-btn {
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--bb-border);
+    border-radius: 8px;
+    color: var(--bb-muted-foreground);
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+    font-family: inherit;
+}
+.mkt-d-offer-btn:hover { background: rgb(var(--bb-primary-rgb)/0.1); border-color: hsl(var(--bb-primary)); color: var(--bb-foreground); }
+.mkt-d-buy-note { font-size: 10px; color: var(--bb-muted-foreground); text-align: center; }
+
+/* Info rows (rune detail) */
+.mkt-d-info-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--bb-border);
+    font-size: 12px;
+    color: var(--bb-foreground);
+}
+.mkt-d-info-row:last-child { border-bottom: none; }
+
+/* Effect box (rune detail) */
+.mkt-d-effect-box {
+    padding: 14px 16px;
+    background: rgb(var(--bb-secondary-rgb)/0.08);
+    border: 1px solid rgb(var(--bb-secondary-rgb)/0.25);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--bb-foreground);
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+/* Mechanics list (rune detail) */
+.mkt-d-mechs { display: flex; flex-direction: column; gap: 8px; }
+.mkt-d-mech-item {
+    font-size: 12px;
+    color: var(--bb-muted-foreground);
+    line-height: 1.5;
+    padding: 7px 10px;
+    background: var(--bb-muted);
+    border-radius: 6px;
+    border-left: 3px solid hsl(var(--bb-primary));
+}
+
+/* Light mode overrides */
+html.light .mkt-d-col-right { background: rgba(0,0,0,0.02); }
+html.light .mkt-d-hist-row { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); }
+html.light .mkt-d-record-stat { background: rgba(0,0,0,0.04); }
+html.light .mkt-d-back-btn { border-color: rgba(0,0,0,0.12); color: var(--text-secondary); }
+html.light .mkt-d-back-btn:hover { background: rgba(124,58,237,0.08); color: var(--text-primary); }
+html.light .mkt-d-mech-item { background: rgba(0,0,0,0.03); }
+html.light .mkt-d-effect-box { background: rgba(22,163,74,0.06); border-color: rgba(22,163,74,0.2); }
 
 /* ══════════════════════════════════════════
    CREATE PAGE

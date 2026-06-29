@@ -1431,9 +1431,9 @@
                         </select>
                     </div>
                 </div>
-                <div class="mkt-grid">
+                <div class="mkt-grid" id="mkt-grid">
                     <!-- Fighter cards -->
-                    <div class="mkt-card" data-type="fighters">
+                    <div class="mkt-card" data-type="fighters" onclick="openMktDetail('robot-v1')">
                         <div class="mkt-card-badge">FIGHTER</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#1a0a2e,#2d1b4e)">
                             <span style="font-size:52px;line-height:1">🤖</span>
@@ -1447,11 +1447,11 @@
                             <div class="mkt-card-power">PWR <strong class="gold">2,450</strong></div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">12,000 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
-                    <div class="mkt-card" data-type="fighters">
+                    <div class="mkt-card" data-type="fighters" onclick="openMktDetail('floatrobo')">
                         <div class="mkt-card-badge mkt-badge-hot">🔥 HOT</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a1a2e,#1b3d4e)">
                             <span style="font-size:52px;line-height:1">🦾</span>
@@ -1465,11 +1465,11 @@
                             <div class="mkt-card-power">PWR <strong class="gold">2,310</strong></div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">9,500 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
-                    <div class="mkt-card" data-type="fighters">
+                    <div class="mkt-card" data-type="fighters" onclick="openMktDetail('robo-pepe')">
                         <div class="mkt-card-badge mkt-badge-rare">💎 RARE</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#1a2e0a,#2e4e1b)">
                             <span style="font-size:52px;line-height:1">🐸</span>
@@ -1483,16 +1483,16 @@
                             <div class="mkt-card-power">PWR <strong class="gold">2,180</strong></div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">22,000 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
-                    <div class="mkt-card" data-type="fighters">
+                    <div class="mkt-card" data-type="fighters" onclick="openMktDetail('crimsonbot')">
+                        <div class="mkt-card-badge">FIGHTER</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#2e0a0a,#4e1b1b)">
                             <span style="font-size:52px;line-height:1">🦀</span>
                         </div>
                         <div class="mkt-card-body">
-                            <div class="mkt-card-badge mkt-badge-inline">FIGHTER</div>
                             <div class="mkt-card-name">Crimsonbot</div>
                             <div class="mkt-card-owner">0xD78F…E3F5</div>
                             <div class="mkt-card-stats">
@@ -1501,7 +1501,7 @@
                             <div class="mkt-card-power">PWR <strong class="gold">2,050</strong></div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">7,800 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
@@ -1520,7 +1520,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mkt-card" data-type="runes">
+                    <div class="mkt-card" data-type="runes" onclick="openMktDetail('thunder-rune')">
                         <div class="mkt-card-badge mkt-badge-rune">RUNE</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a102e,#1b2560)">
                             <span style="font-size:52px;line-height:1">⚡</span>
@@ -1530,7 +1530,7 @@
                             <div class="mkt-card-owner">Steal 10–35 BC on hit</div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">3,200 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
@@ -1548,7 +1548,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mkt-card" data-type="runes">
+                    <div class="mkt-card" data-type="runes" onclick="openMktDetail('iron-shield-rune')">
                         <div class="mkt-card-badge mkt-badge-rune">RUNE</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a2e1a,#1b6035)">
                             <span style="font-size:52px;line-height:1">🛡</span>
@@ -1558,10 +1558,15 @@
                             <div class="mkt-card-owner">Absorbs next incoming hit</div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">2,600 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- DETAIL PANEL (rendered by JS) -->
+                <div class="mkt-detail-panel" id="mkt-detail" style="display:none">
+                    <div class="mkt-detail-inner" id="mkt-detail-inner"></div>
                 </div>
             </div>
         </div>
@@ -3195,6 +3200,231 @@
             document.querySelectorAll('.mkt-card').forEach(function(c) {
                 c.style.display = (type === 'all' || c.dataset.type === type) ? 'flex' : 'none';
             });
+        }
+
+        /* ── Marketplace detail data ── */
+        var MKT_DATA = {
+            'robot-v1': {
+                type: 'fighter',
+                badge: 'FIGHTER', badgeClass: '',
+                icon: '🤖', bg: 'linear-gradient(135deg,#1a0a2e,#3d1b7e)',
+                name: 'Robot V1', owner: '0xA12F…B7C9',
+                atk: 480, def: 310, spd: 128, pwr: 2450,
+                wins: 247, losses: 38,
+                price: '12,000 BC',
+                runes: ['⚡ Thunder Rune', '🛡 Iron Shield Rune'],
+                history: [
+                    { result: 'WIN',  vs: 'Floatrobo',    time: '34 min ago', bc: '+4,200 BC' },
+                    { result: 'WIN',  vs: 'Toxicbot',     time: '1 hr ago',   bc: '+3,800 BC' },
+                    { result: 'LOSS', vs: 'Robo Pepe',    time: '3 hr ago',   bc: '—' },
+                    { result: 'WIN',  vs: 'Crimsonbot',   time: '5 hr ago',   bc: '+2,950 BC' }
+                ],
+                desc: 'The arena\'s reigning champion. Built for sustained combat with balanced offense and a near-impenetrable shield rune setup. Robot V1 has held the King crown for 4 consecutive defenses.'
+            },
+            'floatrobo': {
+                type: 'fighter',
+                badge: '🔥 HOT', badgeClass: 'mkt-badge-hot',
+                icon: '🦾', bg: 'linear-gradient(135deg,#0a1a2e,#1b4e7e)',
+                name: 'Floatrobo', owner: '0xB34E…C8D1',
+                atk: 390, def: 420, spd: 155, pwr: 2310,
+                wins: 198, losses: 52,
+                price: '9,500 BC',
+                runes: ['🛡 Iron Shield Rune'],
+                history: [
+                    { result: 'LOSS', vs: 'Robot V1',   time: '34 min ago', bc: '—' },
+                    { result: 'WIN',  vs: 'Robo Pepe',  time: '2 hr ago',   bc: '+3,100 BC' },
+                    { result: 'WIN',  vs: 'Toxicbot',   time: '4 hr ago',   bc: '+2,700 BC' },
+                    { result: 'WIN',  vs: 'Crimsonbot', time: '6 hr ago',   bc: '+2,500 BC' }
+                ],
+                desc: 'High-defence specialist with exceptional speed. Floatrobo\'s shield loadout makes it nearly impossible to burst down. Currently the #2 ranked fighter and trending on the marketplace.'
+            },
+            'robo-pepe': {
+                type: 'fighter',
+                badge: '💎 RARE', badgeClass: 'mkt-badge-rare',
+                icon: '🐸', bg: 'linear-gradient(135deg,#1a2e0a,#2e7e1b)',
+                name: 'Robo Pepe', owner: '0xC56D…D2E4',
+                atk: 510, def: 280, spd: 200, pwr: 2180,
+                wins: 162, losses: 61,
+                price: '22,000 BC',
+                runes: ['⚡ Thunder Rune'],
+                history: [
+                    { result: 'WIN',  vs: 'Robot V1',    time: '3 hr ago',  bc: '+6,400 BC' },
+                    { result: 'LOSS', vs: 'Floatrobo',   time: '5 hr ago',  bc: '—' },
+                    { result: 'WIN',  vs: 'Crimsonbot',  time: '7 hr ago',  bc: '+3,200 BC' },
+                    { result: 'WIN',  vs: 'Toxicbot',    time: '10 hr ago', bc: '+2,800 BC' }
+                ],
+                desc: 'Rare glass cannon with the highest ATK and SPD in the arena. Robo Pepe\'s Thunder Rune turns every hit into a BC drain, making it lethal in short matches. Rare listing — only 1 available.'
+            },
+            'crimsonbot': {
+                type: 'fighter',
+                badge: 'FIGHTER', badgeClass: '',
+                icon: '🦀', bg: 'linear-gradient(135deg,#2e0a0a,#7e1b1b)',
+                name: 'Crimsonbot', owner: '0xD78F…E3F5',
+                atk: 460, def: 340, spd: 140, pwr: 2050,
+                wins: 114, losses: 79,
+                price: '7,800 BC',
+                runes: [],
+                history: [
+                    { result: 'LOSS', vs: 'Robo Pepe',  time: '7 hr ago',   bc: '—' },
+                    { result: 'WIN',  vs: 'Toxicbot',   time: '9 hr ago',   bc: '+2,200 BC' },
+                    { result: 'LOSS', vs: 'Robot V1',   time: '12 hr ago',  bc: '—' },
+                    { result: 'WIN',  vs: 'Floatrobo',  time: '15 hr ago',  bc: '+2,600 BC' }
+                ],
+                desc: 'A solid mid-tier fighter with no runes equipped — making it great value for buyers who want to equip their own loadout. Strong ATK with decent DEF. No active rune slot overhead.'
+            },
+            'thunder-rune': {
+                type: 'rune',
+                badge: 'RUNE', badgeClass: 'mkt-badge-rune',
+                icon: '⚡', bg: 'linear-gradient(135deg,#0a102e,#1b2560)',
+                name: 'Thunder Rune',
+                price: '3,200 BC',
+                runeType: 'Offense + BC Steal',
+                tier: 'Rare',
+                effect: 'On every successful hit, drains 10–35 BC directly from the opponent\'s treasury and adds it to yours.',
+                mechanics: [
+                    'Activates on each landed hit (including normal attacks)',
+                    'Steal amount scales with the attacker\'s current ATK stat',
+                    'Does not trigger on blocked or shielded hits',
+                    'Stacks additively with other BC drain effects',
+                    'Lasts the full match duration — no charge or cooldown'
+                ],
+                compatible: 'All fighters',
+                equipped: 12,
+                owned: 3,
+                desc: 'The most popular offensive rune in the arena. Thunder Rune turns sustained fighters into economic weapons — every hit chips away at the opponent\'s BC while padding your own. Pairs especially well with high-ATK fighters like Robo Pepe.'
+            },
+            'iron-shield-rune': {
+                type: 'rune',
+                badge: 'RUNE', badgeClass: 'mkt-badge-rune',
+                icon: '🛡', bg: 'linear-gradient(135deg,#0a2e1a,#1b6035)',
+                name: 'Iron Shield Rune',
+                price: '2,600 BC',
+                runeType: 'Defense',
+                tier: 'Uncommon',
+                effect: 'Creates a gold barrier that absorbs the next incoming hit entirely. Lasts 5 seconds from activation.',
+                mechanics: [
+                    'Automatically activates when fighter\'s HP drops below 40%',
+                    'Absorbs one hit completely — no HP damage taken',
+                    'Shield lasts 5 seconds then expires if unused',
+                    'One-use per battle — cannot reactivate',
+                    'Works against all damage types including crits'
+                ],
+                compatible: 'All fighters',
+                equipped: 18,
+                owned: 5,
+                desc: 'The most reliable survival rune. Iron Shield turns a near-death moment into a second wind — one absorbed hit can mean the difference between a comeback win and a loss. Standard equipment for any defensive loadout.'
+            }
+        };
+
+        function openMktDetail(id) {
+            var d = MKT_DATA[id];
+            if (!d) return;
+            var html = '';
+            if (d.type === 'fighter') {
+                var winPct = Math.round(d.wins / (d.wins + d.losses) * 100);
+                var atkPct = Math.round(d.atk / 600 * 100);
+                var defPct = Math.round(d.def / 600 * 100);
+                var spdPct = Math.round(d.spd / 250 * 100);
+                var runesHtml = d.runes.length
+                    ? d.runes.map(function(r){ return '<span class="mkt-d-rune-tag">' + r + '</span>'; }).join('')
+                    : '<span class="mkt-d-rune-tag mkt-d-rune-none">No runes equipped</span>';
+                var histHtml = d.history.map(function(h) {
+                    var win = h.result === 'WIN';
+                    return '<div class="mkt-d-hist-row">' +
+                        '<span class="mkt-d-hist-result ' + (win ? 'win' : 'loss') + '">' + h.result + '</span>' +
+                        '<span class="mkt-d-hist-vs">vs ' + h.vs + '</span>' +
+                        '<span class="mkt-d-hist-bc ' + (win ? 'gold' : 'mkt-d-muted') + '">' + h.bc + '</span>' +
+                        '<span class="mkt-d-hist-time mkt-d-muted">' + h.time + '</span>' +
+                        '</div>';
+                }).join('');
+                html = '<div class="mkt-d-hero" style="background:' + d.bg + '">' +
+                    '<div class="mkt-d-hero-icon">' + d.icon + '</div>' +
+                    '<div class="mkt-d-hero-info">' +
+                        '<div class="mkt-d-hero-badge' + (d.badgeClass ? ' ' + d.badgeClass : '') + '">' + d.badge + '</div>' +
+                        '<div class="mkt-d-hero-name">' + d.name + '</div>' +
+                        '<div class="mkt-d-hero-owner">Owner: ' + d.owner + '</div>' +
+                    '</div>' +
+                    '<div class="mkt-d-hero-pwr"><div class="mkt-d-pwr-val gold">' + d.pwr.toLocaleString() + '</div><div class="mkt-d-pwr-label">PWR</div></div>' +
+                '</div>' +
+                '<div class="mkt-d-body">' +
+                    '<div class="mkt-d-col">' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">Stats</div>' +
+                            '<div class="mkt-d-stat-row"><span class="mkt-d-stat-label">⚡ Attack</span><div class="mkt-d-bar-wrap"><div class="mkt-d-bar mkt-d-bar-atk" style="width:' + atkPct + '%"></div></div><span class="mkt-d-stat-val">' + d.atk + '</span></div>' +
+                            '<div class="mkt-d-stat-row"><span class="mkt-d-stat-label">🛡 Defence</span><div class="mkt-d-bar-wrap"><div class="mkt-d-bar mkt-d-bar-def" style="width:' + defPct + '%"></div></div><span class="mkt-d-stat-val">' + d.def + '</span></div>' +
+                            '<div class="mkt-d-stat-row"><span class="mkt-d-stat-label">💨 Speed</span><div class="mkt-d-bar-wrap"><div class="mkt-d-bar mkt-d-bar-spd" style="width:' + spdPct + '%"></div></div><span class="mkt-d-stat-val">' + d.spd + '</span></div>' +
+                        '</div>' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">Record</div>' +
+                            '<div class="mkt-d-record-row">' +
+                                '<div class="mkt-d-record-stat"><div class="mkt-d-record-val green">' + d.wins + '</div><div class="mkt-d-record-label">Wins</div></div>' +
+                                '<div class="mkt-d-record-stat"><div class="mkt-d-record-val red">' + d.losses + '</div><div class="mkt-d-record-label">Losses</div></div>' +
+                                '<div class="mkt-d-record-stat"><div class="mkt-d-record-val gold">' + winPct + '%</div><div class="mkt-d-record-label">Win Rate</div></div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">Equipped Runes</div><div class="mkt-d-runes">' + runesHtml + '</div></div>' +
+                        '<div class="mkt-d-section mkt-d-desc-section"><div class="mkt-d-section-title">About</div><div class="mkt-d-desc">' + d.desc + '</div></div>' +
+                    '</div>' +
+                    '<div class="mkt-d-col mkt-d-col-right">' +
+                        '<div class="mkt-d-buy-panel">' +
+                            '<div class="mkt-d-buy-label">Listed Price</div>' +
+                            '<div class="mkt-d-buy-price gold">' + d.price + '</div>' +
+                            '<button class="mkt-d-buy-btn">⚔ Buy Now</button>' +
+                            '<button class="mkt-d-offer-btn">Make Offer</button>' +
+                            '<div class="mkt-d-buy-note">Gas-free on Base · Instant transfer</div>' +
+                        '</div>' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">Recent Battles</div><div class="mkt-d-history">' + histHtml + '</div></div>' +
+                    '</div>' +
+                '</div>';
+            } else if (d.type === 'rune') {
+                var mechHtml = d.mechanics.map(function(m){ return '<div class="mkt-d-mech-item">▸ ' + m + '</div>'; }).join('');
+                html = '<div class="mkt-d-hero" style="background:' + d.bg + '">' +
+                    '<div class="mkt-d-hero-icon">' + d.icon + '</div>' +
+                    '<div class="mkt-d-hero-info">' +
+                        '<div class="mkt-d-hero-badge mkt-badge-rune">RUNE</div>' +
+                        '<div class="mkt-d-hero-name">' + d.name + '</div>' +
+                        '<div class="mkt-d-hero-owner">' + d.runeType + ' · ' + d.tier + '</div>' +
+                    '</div>' +
+                    '<div class="mkt-d-hero-pwr"><div class="mkt-d-pwr-val" style="color:#13c66b">' + d.tier + '</div><div class="mkt-d-pwr-label">Tier</div></div>' +
+                '</div>' +
+                '<div class="mkt-d-body">' +
+                    '<div class="mkt-d-col">' +
+                        '<div class="mkt-d-section mkt-d-effect-section">' +
+                            '<div class="mkt-d-section-title">Effect</div>' +
+                            '<div class="mkt-d-effect-box">' + d.icon + ' ' + d.effect + '</div>' +
+                        '</div>' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">Mechanics</div><div class="mkt-d-mechs">' + mechHtml + '</div></div>' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">About</div><div class="mkt-d-desc">' + d.desc + '</div></div>' +
+                    '</div>' +
+                    '<div class="mkt-d-col mkt-d-col-right">' +
+                        '<div class="mkt-d-buy-panel">' +
+                            '<div class="mkt-d-buy-label">Listed Price</div>' +
+                            '<div class="mkt-d-buy-price gold">' + d.price + '</div>' +
+                            '<button class="mkt-d-buy-btn">⚡ Buy Now</button>' +
+                            '<div class="mkt-d-buy-note">Gas-free on Base · Instant transfer</div>' +
+                        '</div>' +
+                        '<div class="mkt-d-section">' +
+                            '<div class="mkt-d-section-title">Details</div>' +
+                            '<div class="mkt-d-info-row"><span class="mkt-d-muted">Compatible with</span><span>' + d.compatible + '</span></div>' +
+                            '<div class="mkt-d-info-row"><span class="mkt-d-muted">Currently equipped by</span><span>' + d.equipped + ' fighters</span></div>' +
+                            '<div class="mkt-d-info-row"><span class="mkt-d-muted">Available in market</span><span>' + d.owned + ' listings</span></div>' +
+                            '<div class="mkt-d-info-row"><span class="mkt-d-muted">Type</span><span>' + d.runeType + '</span></div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }
+            var backBar = '<div class="mkt-d-back-bar">' +
+                '<button class="mkt-d-back-btn" onclick="closeMktDetail()">← Back</button>' +
+                '<span class="mkt-d-breadcrumb">Marketplace → <strong>' + d.name + '</strong></span>' +
+                '</div>';
+            document.getElementById('mkt-detail-inner').innerHTML = backBar + html;
+            document.getElementById('mkt-grid').style.display = 'none';
+            document.getElementById('mkt-detail').style.display = 'flex';
+            document.querySelector('.mkt-filters').style.display = 'none';
+        }
+
+        function closeMktDetail() {
+            document.getElementById('mkt-detail').style.display = 'none';
+            document.getElementById('mkt-grid').style.display = 'grid';
+            document.querySelector('.mkt-filters').style.display = 'flex';
         }
 
         /* ── Create fighter ── */
