@@ -1232,29 +1232,38 @@ canvas { display: block; background: transparent; }
 
 .page-overlay {
     position: fixed;
-    inset: var(--top-h) 0 0 0;
+    top: var(--top-h);
+    bottom: var(--bottom-h);
+    left: var(--left-w);
+    right: var(--right-w);
     z-index: 200;
     background: var(--bb-background);
     color: var(--bb-foreground);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    animation: pgFadeIn 0.18s ease;
+    animation: pgFadeIn 0.15s ease;
 }
 @keyframes pgFadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+/* Mobile: panels hidden so overlay fills full width */
+@media (max-width: 800px) {
+    .page-overlay {
+        left: 0; right: 0; bottom: 0;
+    }
 }
 
 .pg-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 32px;
+    padding: 10px 18px;
     background: var(--bb-card);
     border-bottom: 1px solid var(--bb-border);
     flex-shrink: 0;
-    gap: 16px;
+    gap: 12px;
 }
 .pg-header-inner { display: flex; flex-direction: column; gap: 4px; }
 .pg-title {
