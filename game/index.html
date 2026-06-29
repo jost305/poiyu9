@@ -1,799 +1,2203 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MK Arena</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.86.0/dist/phaser.min.js"></script>
-    <script src="src/Fighter.js?v=42"></script>
-    <script src="src/BattleScene.js?v=43"></script>
-    <script src="src/game.js?v=42"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link rel="stylesheet" href="styles/styles.css?v=40" />
-    <link rel="stylesheet" href="styles/mobile.css?v=30" />
-</head>
-<body>
+    <head>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <title>MK Arena</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/phaser@3.86.0/dist/phaser.min.js"></script>
+        <script src="src/Fighter.js?v=42"></script>
+        <script src="src/BattleScene.js?v=43"></script>
+        <script src="src/game.js?v=42"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <link rel="stylesheet" href="styles/styles.css?v=40" />
+        <link rel="stylesheet" href="styles/mobile.css?v=30" />
+        <link rel="stylesheet" href="styles/bantahbro-import.css" />
+    </head>
+    <body>
+        <audio id="bgm" loop preload="auto">
+            <source
+                src="JDSherbert%20-%20Nostalgia%20Music%20Pack%20%5BFREE%5D/Nostalgia%20Music%20Pack/Stereo/JDSherbert%20-%20Nostalgia%20Music%20Pack%20-%20VCR%20Jungle.ogg"
+                type="audio/ogg"
+            />
+        </audio>
+        <script>
+            (function () {
+                var bgm = document.getElementById("bgm");
+                bgm.volume = 0.26;
+                function tryPlay() {
+                    bgm.play().catch(function () {});
+                }
+                document.addEventListener("click", function handler() {
+                    tryPlay();
+                    document.removeEventListener("click", handler);
+                });
+                document.addEventListener("keydown", function handler() {
+                    tryPlay();
+                    document.removeEventListener("keydown", handler);
+                });
+                tryPlay();
+            })();
+        </script>
 
-<audio id="bgm" loop preload="auto">
-    <source src="JDSherbert%20-%20Nostalgia%20Music%20Pack%20%5BFREE%5D/Nostalgia%20Music%20Pack/Stereo/JDSherbert%20-%20Nostalgia%20Music%20Pack%20-%20VCR%20Jungle.ogg" type="audio/ogg">
-</audio>
-<script>
-(function() {
-    var bgm = document.getElementById('bgm');
-    bgm.volume = 0.26;
-    function tryPlay() { bgm.play().catch(function(){}); }
-    document.addEventListener('click', function handler() { tryPlay(); document.removeEventListener('click', handler); });
-    document.addEventListener('keydown', function handler() { tryPlay(); document.removeEventListener('keydown', handler); });
-    tryPlay();
-})();
-</script>
-
-<div id="hud-root">
-
-<!-- ══════════════════════════════════════════
+        <div id="hud-root">
+            <!-- ══════════════════════════════════════════
      TOP BAR
 ══════════════════════════════════════════ -->
-<div id="top-bar">
-    <div class="tb-left">
-        <div class="tb-logo">
-            <div class="logo-shield">⚔</div>
-            <div class="logo-text">
-                <span class="logo-main">MK</span>
-                <span class="logo-sub">ARENA</span>
+            <div id="top-bar">
+                <div class="tb-left">
+                    <div class="tb-logo">
+                        <div class="logo-shield">⚔</div>
+                        <div class="logo-text">
+                            <span class="logo-main">MK</span>
+                            <span class="logo-sub">ARENA</span>
+                        </div>
+                    </div>
+                    <div class="tb-divider"></div>
+                    <div class="tb-king-title">
+                        <span class="tb-crown">♛</span>
+                        <div>
+                            <div class="tb-koth">KING OF THE HILL</div>
+                            <div class="tb-koth-sub">The Throne Awaits</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tb-center">
+                    <button class="tb-search-btn" onclick="openSearch()" title="Search">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </button>
+                    <div class="tb-stat-block">
+                        <div class="tb-stat-label">BC Earned</div>
+                        <div class="tb-stat-val gold" id="tb-treasury">
+                            450,000 BC <span class="tb-chest">🗃</span>
+                        </div>
+                    </div>
+                    <div class="tb-vdivider"></div>
+                    <div class="tb-stat-block">
+                        <div class="tb-stat-label">FIGHTERS</div>
+                        <div class="tb-stat-val">
+                            12,842 <span class="live-badge">LIVE</span>
+                        </div>
+                    </div>
+                    <div class="tb-vdivider"></div>
+                    <nav class="tb-nav" id="tb-nav">
+                        <a href="#" class="tb-nav-item" data-page="docs" onclick="openPage('docs');return false">Docs</a>
+                        <a href="#" class="tb-nav-item" data-page="marketplace" onclick="openPage('marketplace');return false">Marketplace</a>
+                        <a href="#" class="tb-nav-item" data-page="leaderboard" onclick="openPage('leaderboard');return false">Leaderboard</a>
+                        <a href="#" class="tb-nav-item tb-nav-create" data-page="create" onclick="openPage('create');return false">Create</a>
+                    </nav>
+                </div>
+                <div class="tb-right">
+                    <div class="tb-mini-stat">
+                        <span class="tb-mini-label">DMG</span>
+                        <span class="tb-mini-val" id="total-damage">0</span>
+                    </div>
+                    <button class="tb-notif-btn" onclick="openPage('notifications');return false" title="Notifications" data-page="notifications">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="tb-notif-badge">3</span>
+                    </button>
+                    <button class="tb-pick-btn" onclick="openCpModal()">
+                        ⚔ PICK FIGHTERS
+                    </button>
+                    <button
+                        class="tb-icon-btn"
+                        title="Fullscreen"
+                        onclick="toggleFullscreen()"
+                    >
+                        ⛶
+                    </button>
+                    <button
+                        class="tb-icon-btn"
+                        title="Sound"
+                        onclick="toggleSound()"
+                    >
+                        🔊
+                    </button>
+                    <button class="tb-icon-btn" title="Settings">⚙</button>
+                </div>
             </div>
-        </div>
-        <div class="tb-divider"></div>
-        <div class="tb-king-title">
-            <span class="tb-crown">♛</span>
-            <div>
-                <div class="tb-koth">KING OF THE HILL</div>
-                <div class="tb-koth-sub">The Throne Awaits</div>
-            </div>
-        </div>
-    </div>
-    <div class="tb-center">
-        <div class="tb-stat-block">
-            <div class="tb-stat-label">ARENA TREASURY</div>
-            <div class="tb-stat-val gold" id="tb-treasury">450,000 BC <span class="tb-chest">🗃</span></div>
-        </div>
-        <div class="tb-vdivider"></div>
-        <div class="tb-stat-block">
-            <div class="tb-stat-label">VIEWERS</div>
-            <div class="tb-stat-val">12,842 <span class="live-badge">LIVE</span></div>
-        </div>
-    </div>
-    <div class="tb-right">
-        <div class="tb-mini-stat">
-            <span class="tb-mini-label">DMG</span>
-            <span class="tb-mini-val" id="total-damage">0</span>
-        </div>
-        <div class="tb-mini-stat">
-            <span class="tb-mini-label">HITS</span>
-            <span class="tb-mini-val" id="tb-hits">0</span>
-        </div>
-        <button class="tb-pick-btn" onclick="openCpModal()">⚔ PICK FIGHTERS</button>
-        <button class="tb-icon-btn" title="Fullscreen" onclick="toggleFullscreen()">⛶</button>
-        <button class="tb-icon-btn" title="Sound" onclick="toggleSound()">🔊</button>
-        <button class="tb-icon-btn" title="Settings">⚙</button>
-    </div>
-</div>
 
-<!-- ══════════════════════════════════════════
+            <!-- ══════════════════════════════════════════
      MAIN AREA (display:contents for grid)
 ══════════════════════════════════════════ -->
-<div id="main-area">
+            <div id="main-area">
+                <!-- LEFT PANEL -->
+                <div id="left-panel">
+                    <!-- CHALLENGER QUEUE -->
+                    <div class="panel-section">
+                        <div class="panel-hdr">
+                            <span class="panel-hdr-icon">🏆</span>
+                            <div>
+                                <div class="panel-hdr-title">
+                                    CHALLENGER QUEUE
+                                </div>
+                                <div class="panel-hdr-sub">NEXT TO FIGHT</div>
+                            </div>
+                        </div>
+                        <div class="queue-list">
+                            <div class="queue-item queue-active" id="q-p1">
+                                <div class="qi-num">1</div>
+                                <div class="qi-portrait qi-p1">
+                                    <img
+                                        src="images/fighters/char04/left/stand/0.png"
+                                        alt="P1"
+                                        style="
+                                            width: 100%;
+                                            height: 100%;
+                                            object-fit: contain;
+                                            image-rendering: pixelated;
+                                        "
+                                    />
+                                </div>
+                                <div class="qi-info">
+                                    <div class="qi-addr" id="qi-p1-addr">
+                                        0xA12F...B7C9
+                                    </div>
+                                    <div class="qi-name" id="qi-p1-name">
+                                        Robot V1
+                                    </div>
+                                    <div class="qi-power">2,450 Power</div>
+                                </div>
+                                <div class="qi-hp-pill" id="qi-p1-hp">100%</div>
+                            </div>
+                            <div class="queue-item queue-active" id="q-p2">
+                                <div class="qi-num">2</div>
+                                <div class="qi-portrait qi-p2">
+                                    <img
+                                        src="images/fighters/floatrobo/left/stand/0.png"
+                                        alt="P2"
+                                        style="
+                                            width: 100%;
+                                            height: 100%;
+                                            object-fit: contain;
+                                            image-rendering: pixelated;
+                                        "
+                                    />
+                                </div>
+                                <div class="qi-info">
+                                    <div class="qi-addr" id="qi-p2-addr">
+                                        0xB34E...C8D1
+                                    </div>
+                                    <div class="qi-name" id="qi-p2-name">
+                                        Floatrobo
+                                    </div>
+                                    <div class="qi-power">2,310 Power</div>
+                                </div>
+                                <div class="qi-hp-pill" id="qi-p2-hp">100%</div>
+                            </div>
+                            <div class="queue-item queue-waiting">
+                                <div class="qi-num dim">3</div>
+                                <div class="qi-portrait qi-neutral">??</div>
+                                <div class="qi-info">
+                                    <div class="qi-addr">0xC56D...D2E4</div>
+                                    <div class="qi-name">Robo Pepe</div>
+                                    <div class="qi-power">2,180 Power</div>
+                                </div>
+                            </div>
+                            <div class="queue-item queue-waiting">
+                                <div class="qi-num dim">4</div>
+                                <div class="qi-portrait qi-neutral">??</div>
+                                <div class="qi-info">
+                                    <div class="qi-addr">0xD78F...E3F5</div>
+                                    <div class="qi-name">Crimsonbot</div>
+                                    <div class="qi-power">2,050 Power</div>
+                                </div>
+                            </div>
+                            <div class="queue-item queue-waiting">
+                                <div class="qi-num dim">5</div>
+                                <div class="qi-portrait qi-neutral">??</div>
+                                <div class="qi-info">
+                                    <div class="qi-addr">0xE91A...F4G6</div>
+                                    <div class="qi-name">Toxicbot</div>
+                                    <div class="qi-power">1,980 Power</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="view-queue-btn">
+                            VIEW FULL QUEUE ›
+                        </button>
+                    </div>
 
-    <!-- LEFT PANEL -->
-    <div id="left-panel">
+                    <!-- LIVE PREDICTIONS -->
+                    <div class="panel-section">
+                        <div class="panel-hdr">
+                            <span class="panel-hdr-icon pred-icon">▲</span>
+                            <div>
+                                <div class="panel-hdr-title">
+                                    LIVE PREDICTIONS
+                                </div>
+                                <div class="panel-hdr-sub">
+                                    WHO WILL BE THE NEXT KING?
+                                </div>
+                            </div>
+                            <div class="pred-timer" id="pred-timer">00:45</div>
+                        </div>
+                        <div class="pred-list">
+                            <div class="pred-row">
+                                <div class="pred-avatar pred-av-p1">P1</div>
+                                <div class="pred-name" id="pred-name-p1">
+                                    Robot V1
+                                </div>
+                                <div class="pred-bar-wrap">
+                                    <div
+                                        class="pred-bar pred-bar-p1"
+                                        id="pred-bar-p1"
+                                        style="width: 52%"
+                                    ></div>
+                                </div>
+                                <div class="pred-pct" id="pred-pct-p1">52%</div>
+                                <div class="pred-mult">6.2x</div>
+                            </div>
+                            <div class="pred-row">
+                                <div class="pred-avatar pred-av-p2">P2</div>
+                                <div class="pred-name" id="pred-name-p2">
+                                    Floatrobo
+                                </div>
+                                <div class="pred-bar-wrap">
+                                    <div
+                                        class="pred-bar pred-bar-p2"
+                                        id="pred-bar-p2"
+                                        style="width: 48%"
+                                    ></div>
+                                </div>
+                                <div class="pred-pct" id="pred-pct-p2">48%</div>
+                                <div class="pred-mult">3.1x</div>
+                            </div>
+                            <div class="pred-row pred-row-sm">
+                                <div class="pred-avatar pred-av-neut">A3</div>
+                                <div class="pred-name">Robo Pepe</div>
+                                <div class="pred-bar-wrap">
+                                    <div
+                                        class="pred-bar pred-bar-neut"
+                                        style="width: 15%"
+                                    ></div>
+                                </div>
+                                <div class="pred-pct">15%</div>
+                                <div class="pred-mult">4.8x</div>
+                            </div>
+                            <div class="pred-row pred-row-sm">
+                                <div class="pred-avatar pred-av-neut">A4</div>
+                                <div class="pred-name">Crimsonbot</div>
+                                <div class="pred-bar-wrap">
+                                    <div
+                                        class="pred-bar pred-bar-neut"
+                                        style="width: 10%"
+                                    ></div>
+                                </div>
+                                <div class="pred-pct">10%</div>
+                                <div class="pred-mult">7.2x</div>
+                            </div>
+                        </div>
+                        <div class="total-pool">
+                            TOTAL POOL: <span class="gold">128,450 BC</span>
+                        </div>
+                        <button class="place-bet-btn">PLACE BET</button>
+                    </div>
+                </div>
+                <!-- /left-panel -->
 
-        <!-- CHALLENGER QUEUE -->
-        <div class="panel-section">
-            <div class="panel-hdr">
-                <span class="panel-hdr-icon">🏆</span>
-                <div>
-                    <div class="panel-hdr-title">CHALLENGER QUEUE</div>
-                    <div class="panel-hdr-sub">NEXT TO FIGHT</div>
-                </div>
-            </div>
-            <div class="queue-list">
-                <div class="queue-item queue-active" id="q-p1">
-                    <div class="qi-num">1</div>
-                    <div class="qi-portrait qi-p1">
-                        <img src="images/fighters/char04/left/stand/0.png" alt="P1" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;">
+                <!-- ARENA -->
+                <div id="arena-wrapper">
+                    <div id="parent">
+                        <div id="arena-bg"></div>
+                        <div id="arena"></div>
+                        <div id="fx-layer"></div>
+                        <div id="loading">
+                            <div class="loading-inner">
+                                <div class="loading-logo">
+                                    MK<span>.JS</span>
+                                </div>
+                                <div class="loading-bar-wrap">
+                                    <div class="loading-bar-fill"></div>
+                                </div>
+                                <div class="loading-label">
+                                    LOADING FIGHTERS...
+                                </div>
+                            </div>
+                        </div>
+                        <div id="win-modal" class="win-modal">
+                            <div
+                                class="win-banner"
+                                role="dialog"
+                                aria-live="polite"
+                            >
+                                <h2 id="win-title" class="win-title">
+                                    ROBOT WINS!
+                                </h2>
+                                <div id="win-level" class="win-level">
+                                    Level 13
+                                </div>
+                                <div id="win-reward" class="win-reward">
+                                    +2800
+                                </div>
+                            </div>
+                        </div>
+                        <div id="vs-overlay">VS</div>
                     </div>
-                    <div class="qi-info">
-                        <div class="qi-addr" id="qi-p1-addr">0xA12F...B7C9</div>
-                        <div class="qi-name" id="qi-p1-name">Robot V1</div>
-                        <div class="qi-power">2,450 Power</div>
-                    </div>
-                    <div class="qi-hp-pill" id="qi-p1-hp">100%</div>
-                </div>
-                <div class="queue-item queue-active" id="q-p2">
-                    <div class="qi-num">2</div>
-                    <div class="qi-portrait qi-p2">
-                        <img src="images/fighters/floatrobo/left/stand/0.png" alt="P2" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;">
-                    </div>
-                    <div class="qi-info">
-                        <div class="qi-addr" id="qi-p2-addr">0xB34E...C8D1</div>
-                        <div class="qi-name" id="qi-p2-name">Floatrobo</div>
-                        <div class="qi-power">2,310 Power</div>
-                    </div>
-                    <div class="qi-hp-pill" id="qi-p2-hp">100%</div>
-                </div>
-                <div class="queue-item queue-waiting">
-                    <div class="qi-num dim">3</div>
-                    <div class="qi-portrait qi-neutral">??</div>
-                    <div class="qi-info">
-                        <div class="qi-addr">0xC56D...D2E4</div>
-                        <div class="qi-name">Robo Pepe</div>
-                        <div class="qi-power">2,180 Power</div>
-                    </div>
-                </div>
-                <div class="queue-item queue-waiting">
-                    <div class="qi-num dim">4</div>
-                    <div class="qi-portrait qi-neutral">??</div>
-                    <div class="qi-info">
-                        <div class="qi-addr">0xD78F...E3F5</div>
-                        <div class="qi-name">Crimsonbot</div>
-                        <div class="qi-power">2,050 Power</div>
-                    </div>
-                </div>
-                <div class="queue-item queue-waiting">
-                    <div class="qi-num dim">5</div>
-                    <div class="qi-portrait qi-neutral">??</div>
-                    <div class="qi-info">
-                        <div class="qi-addr">0xE91A...F4G6</div>
-                        <div class="qi-name">Toxicbot</div>
-                        <div class="qi-power">1,980 Power</div>
-                    </div>
-                </div>
-            </div>
-            <button class="view-queue-btn">VIEW FULL QUEUE ›</button>
-        </div>
 
-        <!-- LIVE PREDICTIONS -->
-        <div class="panel-section">
-            <div class="panel-hdr">
-                <span class="panel-hdr-icon pred-icon">▲</span>
-                <div>
-                    <div class="panel-hdr-title">LIVE PREDICTIONS</div>
-                    <div class="panel-hdr-sub">WHO WILL BE THE NEXT KING?</div>
-                </div>
-                <div class="pred-timer" id="pred-timer">00:45</div>
-            </div>
-            <div class="pred-list">
-                <div class="pred-row">
-                    <div class="pred-avatar pred-av-p1">P1</div>
-                    <div class="pred-name" id="pred-name-p1">Robot V1</div>
-                    <div class="pred-bar-wrap">
-                        <div class="pred-bar pred-bar-p1" id="pred-bar-p1" style="width:52%"></div>
+                    <!-- HUD overlaid on arena -->
+                    <div id="utils">
+                        <div class="hud-block hud-p1">
+                            <div class="hud-avatar" id="hud-avatar-p1">
+                                <img
+                                    id="hud-img-p1"
+                                    src="images/fighters/char04/left/stand/0.png"
+                                    alt="P1"
+                                />
+                            </div>
+                            <div class="hud-info">
+                                <div class="rune-row" id="runes-p1">
+                                    <span
+                                        class="rune"
+                                        data-rune="🧪"
+                                        title="Potion"
+                                    ></span>
+                                    <span
+                                        class="rune"
+                                        data-rune="🛡️"
+                                        title="Shield"
+                                    ></span>
+                                    <span
+                                        class="rune"
+                                        data-rune="🌩️"
+                                        title="Thunder"
+                                    ></span>
+                                    <span
+                                        class="rune"
+                                        data-rune="🔒"
+                                        title="Empty"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hud-block hud-p2">
+                            <div class="hud-info hud-info-right">
+                                <div
+                                    class="rune-row rune-row-right"
+                                    id="runes-p2"
+                                >
+                                    <span
+                                        class="rune"
+                                        data-rune="🔒"
+                                        title="Empty"
+                                    ></span>
+                                    <span
+                                        class="rune"
+                                        data-rune="🌩️"
+                                        title="Thunder"
+                                    ></span>
+                                    <span
+                                        class="rune"
+                                        data-rune="🛡️"
+                                        title="Shield"
+                                    ></span>
+                                    <span
+                                        class="rune"
+                                        data-rune="🧪"
+                                        title="Potion"
+                                    ></span>
+                                </div>
+                            </div>
+                            <div class="hud-avatar" id="hud-avatar-p2">
+                                <img
+                                    id="hud-img-p2"
+                                    src="images/fighters/floatrobo/left/stand/0.png"
+                                    alt="P2"
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <div class="pred-pct" id="pred-pct-p1">52%</div>
-                    <div class="pred-mult">6.2x</div>
+
+                    <!-- rune-card-hand moved to bottom-panel -->
                 </div>
-                <div class="pred-row">
-                    <div class="pred-avatar pred-av-p2">P2</div>
-                    <div class="pred-name" id="pred-name-p2">Floatrobo</div>
-                    <div class="pred-bar-wrap">
-                        <div class="pred-bar pred-bar-p2" id="pred-bar-p2" style="width:48%"></div>
+                <!-- /arena-wrapper -->
+
+                <!-- RIGHT PANEL -->
+                <div id="right-panel">
+                    <!-- TOP 3 BY WINS -->
+                    <div class="panel-section rp-top3-section">
+                        <div class="rp-section-hdr">TOP FIGHTERS <span class="rp-hdr-sub">BY WINS</span></div>
+
+                        <!-- #1 -->
+                        <div class="top3-row top3-gold">
+                            <div class="top3-medal">🥇</div>
+                            <div class="top3-avatar" style="background:linear-gradient(135deg,#1a0a2e,#3d1b7e)">🤖</div>
+                            <div class="top3-info">
+                                <div class="top3-name">Robot V1</div>
+                                <div class="top3-meta">
+                                    <span class="top3-wins">247 W</span>
+                                    <span class="top3-dot">·</span>
+                                    <span class="top3-pwr">2,450 PWR</span>
+                                </div>
+                                <div class="top3-bar-wrap">
+                                    <div class="top3-bar-fill" style="width:100%;background:linear-gradient(90deg,#facc15,#f59e0b)"></div>
+                                </div>
+                            </div>
+                            <span class="top3-status top3-king">👑</span>
+                        </div>
+
+                        <!-- #2 -->
+                        <div class="top3-row top3-silver">
+                            <div class="top3-medal">🥈</div>
+                            <div class="top3-avatar" style="background:linear-gradient(135deg,#0a1a2e,#1b3d7e)">🦾</div>
+                            <div class="top3-info">
+                                <div class="top3-name">Floatrobo</div>
+                                <div class="top3-meta">
+                                    <span class="top3-wins">198 W</span>
+                                    <span class="top3-dot">·</span>
+                                    <span class="top3-pwr">2,310 PWR</span>
+                                </div>
+                                <div class="top3-bar-wrap">
+                                    <div class="top3-bar-fill" style="width:80%;background:linear-gradient(90deg,#60a5fa,#3b82f6)"></div>
+                                </div>
+                            </div>
+                            <span class="top3-status top3-queue">⏳</span>
+                        </div>
+
+                        <!-- #3 -->
+                        <div class="top3-row top3-bronze">
+                            <div class="top3-medal">🥉</div>
+                            <div class="top3-avatar" style="background:linear-gradient(135deg,#1a2e0a,#2e7e1b)">🐸</div>
+                            <div class="top3-info">
+                                <div class="top3-name">Robo Pepe</div>
+                                <div class="top3-meta">
+                                    <span class="top3-wins">162 W</span>
+                                    <span class="top3-dot">·</span>
+                                    <span class="top3-pwr">2,180 PWR</span>
+                                </div>
+                                <div class="top3-bar-wrap">
+                                    <div class="top3-bar-fill" style="width:66%;background:linear-gradient(90deg,#4ade80,#22c55e)"></div>
+                                </div>
+                            </div>
+                            <span class="top3-status top3-idle">💤</span>
+                        </div>
+
+                        <button class="top3-view-all" onclick="openPage('leaderboard');return false">View Full Leaderboard ›</button>
                     </div>
-                    <div class="pred-pct" id="pred-pct-p2">48%</div>
-                    <div class="pred-mult">3.1x</div>
-                </div>
-                <div class="pred-row pred-row-sm">
-                    <div class="pred-avatar pred-av-neut">A3</div>
-                    <div class="pred-name">Robo Pepe</div>
-                    <div class="pred-bar-wrap">
-                        <div class="pred-bar pred-bar-neut" style="width:15%"></div>
+
+                    <!-- BATTLE FEED -->
+                    <div class="panel-section rp-feed-section">
+                        <div class="rp-section-hdr">
+                            BATTLE FEED <span class="live-badge">LIVE</span>
+                        </div>
+                        <div id="battle-feed"></div>
                     </div>
-                    <div class="pred-pct">15%</div>
-                    <div class="pred-mult">4.8x</div>
-                </div>
-                <div class="pred-row pred-row-sm">
-                    <div class="pred-avatar pred-av-neut">A4</div>
-                    <div class="pred-name">Crimsonbot</div>
-                    <div class="pred-bar-wrap">
-                        <div class="pred-bar pred-bar-neut" style="width:10%"></div>
-                    </div>
-                    <div class="pred-pct">10%</div>
-                    <div class="pred-mult">7.2x</div>
-                </div>
-            </div>
-            <div class="total-pool">TOTAL POOL: <span class="gold">128,450 BC</span></div>
-            <button class="place-bet-btn">PLACE BET</button>
-        </div>
 
-    </div><!-- /left-panel -->
-
-    <!-- ARENA -->
-    <div id="arena-wrapper">
-        <div id="parent">
-            <div id="arena-bg"></div>
-            <div id="arena"></div>
-            <div id="fx-layer"></div>
-            <div id="loading">
-                <div class="loading-inner">
-                    <div class="loading-logo">MK<span>.JS</span></div>
-                    <div class="loading-bar-wrap"><div class="loading-bar-fill"></div></div>
-                    <div class="loading-label">LOADING FIGHTERS...</div>
-                </div>
-            </div>
-            <div id="win-modal" class="win-modal">
-                <div class="win-banner" role="dialog" aria-live="polite">
-                    <h2 id="win-title" class="win-title">ROBOT WINS!</h2>
-                    <div id="win-level" class="win-level">Level 13</div>
-                    <div id="win-reward" class="win-reward">+2800</div>
-                </div>
-            </div>
-            <div id="vs-overlay">VS</div>
-        </div>
-
-        <!-- HUD overlaid on arena -->
-        <div id="utils">
-            <div class="hud-block hud-p1">
-                <div class="hud-avatar" id="hud-avatar-p1">
-                    <img id="hud-img-p1" src="images/fighters/char04/left/stand/0.png" alt="P1">
-                </div>
-                <div class="hud-info">
-                    <div class="rune-row" id="runes-p1">
-                        <span class="rune" data-rune="🧪" title="Potion"></span>
-                        <span class="rune" data-rune="🛡️" title="Shield"></span>
-                        <span class="rune" data-rune="🌩️" title="Thunder"></span>
-                        <span class="rune" data-rune="🔒" title="Empty"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="hud-block hud-p2">
-                <div class="hud-info hud-info-right">
-                    <div class="rune-row rune-row-right" id="runes-p2">
-                        <span class="rune" data-rune="🔒" title="Empty"></span>
-                        <span class="rune" data-rune="🌩️" title="Thunder"></span>
-                        <span class="rune" data-rune="🛡️" title="Shield"></span>
-                        <span class="rune" data-rune="🧪" title="Potion"></span>
-                    </div>
-                </div>
-                <div class="hud-avatar" id="hud-avatar-p2">
-                    <img id="hud-img-p2" src="images/fighters/floatrobo/left/stand/0.png" alt="P2">
-                </div>
-            </div>
-        </div>
-
-        <!-- RUNE CARD HAND -->
-        <div id="rune-card-hand" aria-label="Rune cards">
-            <div class="rune-card" id="rune-card-potion" data-rune="potion" data-status="READY" role="button" tabindex="0">
-                <div class="rune-card-cost">1</div>
-                <div class="rune-card-icon potion-icon">🧪</div>
-                <div class="rune-card-body">
-                    <div class="rune-card-name">BANTAH POTION</div>
-                    <div class="rune-card-type">Restoration</div>
-                    <div class="rune-card-desc">Instantly restores <strong>+30 HP</strong>. Auto-triggers when HP falls below 35%. One use per battle.</div>
-                </div>
-                <div class="rune-card-meter"><span></span></div>
-            </div>
-            <div class="rune-card" id="rune-card-shield" data-rune="shield" data-status="READY" role="button" tabindex="0">
-                <div class="rune-card-cost">2</div>
-                <div class="rune-card-icon shield-icon">🛡️</div>
-                <div class="rune-card-body">
-                    <div class="rune-card-name">SHIELD</div>
-                    <div class="rune-card-type">Defense</div>
-                    <div class="rune-card-desc">Creates a <strong>gold barrier</strong> that absorbs the next incoming hit. Lasts 5 seconds.</div>
-                </div>
-                <div class="rune-card-meter"><span></span></div>
-            </div>
-            <div class="rune-card" id="rune-card-thunder" data-rune="thunder" data-status="READY" role="button" tabindex="0">
-                <div class="rune-card-cost">3</div>
-                <div class="rune-card-icon thunder-icon">🌩️</div>
-                <div class="rune-card-body">
-                    <div class="rune-card-name">THUNDER</div>
-                    <div class="rune-card-type">Offense · BC Steal</div>
-                    <div class="rune-card-desc">Summons <strong>massive lightning</strong>. Steals 10–35 BC from opponent on hit.</div>
-                </div>
-                <div class="rune-card-meter"><span></span></div>
-            </div>
-            <div class="rune-card rune-card-locked" id="rune-card-empty" data-rune="empty" data-status="LOCKED">
-                <div class="rune-card-cost locked-cost">?</div>
-                <div class="rune-card-icon locked-icon">🔒</div>
-                <div class="rune-card-body">
-                    <div class="rune-card-name">LOCKED</div>
-                    <div class="rune-card-type">Earn to Unlock</div>
-                    <div class="rune-card-desc">Reach <strong>20 Wins</strong> and collect 500 BC to unlock.</div>
-                </div>
-                <div class="rune-card-meter"><span></span></div>
-            </div>
-        </div>
-    </div><!-- /arena-wrapper -->
-
-    <!-- RIGHT PANEL -->
-    <div id="right-panel">
-
-        <!-- CURRENT KING -->
-        <div class="panel-section rp-king-section">
-            <div class="rp-section-hdr">CURRENT KING</div>
-            <div class="current-king-card" id="king-card">
-                <div class="ck-portrait" id="ck-portrait">SZ</div>
-                <div class="ck-info">
-                    <div class="ck-name" id="ck-name">Sub-Zero</div>
-                    <div class="ck-row-badges">
-                        <div class="ck-title">KING OF THE HILL</div>
-                        <span class="ck-crown">♛</span>
-                    </div>
-                    <div class="ck-streak" id="ks-streak">0 WINS</div>
-                </div>
-            </div>
-            <div class="king-stats">
-                <div class="ks-row">
-                    <span class="ks-label">DEFENDED</span>
-                    <span class="ks-val" id="ks-defended">0 TIMES</span>
-                </div>
-                <div class="ks-row">
-                    <span class="ks-label">EARNED</span>
-                    <span class="ks-val green" id="ks-earned">+0 BC</span>
-                </div>
-            </div>
-            <div class="king-hp-row">
-                <span class="khp-label">HEALTH</span>
-                <div class="khp-bar"><div class="khp-fill" id="king-hp-fill"></div></div>
-                <span class="khp-pct" id="king-hp-pct">100%</span>
-            </div>
-            <div class="king-power-row">
-                <span class="kp-label">POWER</span>
-                <span class="kp-val">2,450</span>
-                <div class="king-rune-icons">
-                    <span class="kri">🧪</span>
-                    <span class="kri">🛡️</span>
-                    <span class="kri">🌩️</span>
-                    <span class="kri kri-locked">🔒</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- BATTLE FEED -->
-        <div class="panel-section rp-feed-section">
-            <div class="rp-section-hdr">BATTLE FEED <span class="live-badge">LIVE</span></div>
-            <div id="battle-feed"></div>
-        </div>
-
-        <!-- ARENA MAP + SHRINE -->
-        <div class="panel-section rp-bottom-section">
-            <div class="rp-two-col">
-                <div class="rp-map-block">
-                    <div class="rp-sub-hdr">ARENA MAP</div>
-                    <div class="arena-map">
-                        <div class="am-ring am-ring-1"></div>
-                        <div class="am-ring am-ring-2"></div>
-                        <div class="am-ring am-ring-3"></div>
-                        <div class="am-dot am-p1" id="am-p1"></div>
-                        <div class="am-dot am-p2" id="am-p2"></div>
-                        <div class="am-center">♛</div>
+                    <!-- ARENA MAP + SHRINE -->
+                    <div class="panel-section rp-bottom-section">
+                        <div class="rp-two-col">
+                            <div class="rp-map-block">
+                                <div class="rp-sub-hdr">ARENA MAP</div>
+                                <div class="arena-map">
+                                    <div class="am-ring am-ring-1"></div>
+                                    <div class="am-ring am-ring-2"></div>
+                                    <div class="am-ring am-ring-3"></div>
+                                    <div class="am-dot am-p1" id="am-p1"></div>
+                                    <div class="am-dot am-p2" id="am-p2"></div>
+                                    <div class="am-center">♛</div>
+                                </div>
+                            </div>
+                            <div class="shrine-block">
+                                <div class="rp-sub-hdr">SHRINE STATUS</div>
+                                <div class="shrine-list">
+                                    <div class="shrine-row">
+                                        <span class="shrine-gem gem-p">✦</span
+                                        ><span class="shrine-time">00:45</span>
+                                    </div>
+                                    <div class="shrine-row">
+                                        <span class="shrine-gem gem-b">✦</span
+                                        ><span class="shrine-time">01:12</span>
+                                    </div>
+                                    <div class="shrine-row">
+                                        <span class="shrine-gem gem-r">✦</span
+                                        ><span class="shrine-time">00:30</span>
+                                    </div>
+                                    <div class="shrine-row">
+                                        <span class="shrine-gem gem-g">✦</span
+                                        ><span class="shrine-time">01:05</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="shrine-block">
-                    <div class="rp-sub-hdr">SHRINE STATUS</div>
-                    <div class="shrine-list">
-                        <div class="shrine-row"><span class="shrine-gem gem-p">✦</span><span class="shrine-time">00:45</span></div>
-                        <div class="shrine-row"><span class="shrine-gem gem-b">✦</span><span class="shrine-time">01:12</span></div>
-                        <div class="shrine-row"><span class="shrine-gem gem-r">✦</span><span class="shrine-time">00:30</span></div>
-                        <div class="shrine-row"><span class="shrine-gem gem-g">✦</span><span class="shrine-time">01:05</span></div>
-                    </div>
-                </div>
+                <!-- /right-panel -->
             </div>
-        </div>
+            <!-- /main-area -->
 
-    </div><!-- /right-panel -->
-
-</div><!-- /main-area -->
-
-<!-- ══════════════════════════════════════════
+            <!-- ══════════════════════════════════════════
      BOTTOM FIGHTER PANEL
 ══════════════════════════════════════════ -->
-<div id="bottom-panel">
-    <div class="bp-fighter" id="bp-fighter">
-        <div class="bp-portrait">
-            <img id="bp-portrait-img" src="images/fighters/floatrobo/left/stand/0.png" alt="Challenger">
-        </div>
-        <div class="bp-identity">
-            <div class="bp-name" id="bp-name">challenger.sol</div>
-            <div class="bp-level"><span class="bp-level-badge">Lv 68</span></div>
-            <div class="bp-bars">
-                <div class="bp-bar-row">
-                    <span class="bp-bar-label">HP</span>
-                    <div class="bp-bar-wrap">
-                        <div class="bp-bar-fill bp-bar-hp" id="bp-hp-fill" style="width:86%"></div>
+            <div id="bottom-panel">
+                <div class="bp-fighter" id="bp-fighter">
+                    <div class="bp-portrait">
+                        <img
+                            id="bp-portrait-img"
+                            src="images/fighters/floatrobo/left/stand/0.png"
+                            alt="Challenger"
+                        />
                     </div>
-                    <span class="bp-bar-val" id="bp-hp-val">6,780 / 8,200</span>
-                    <span class="bp-bar-pct">86%</span>
-                </div>
-                <div class="bp-bar-row">
-                    <span class="bp-bar-label">ENERGY</span>
-                    <div class="bp-bar-wrap">
-                        <div class="bp-bar-fill bp-bar-energy" style="width:60%"></div>
+                    <div class="bp-identity">
+                        <div class="bp-name" id="bp-name">challenger.sol</div>
+                        <div class="bp-level">
+                            <span class="bp-level-badge">Lv 68</span>
+                        </div>
+                        <div class="bp-bars">
+                            <div class="bp-bar-row">
+                                <span class="bp-bar-label">HP</span>
+                                <div class="bp-bar-wrap">
+                                    <div
+                                        class="bp-bar-fill bp-bar-hp"
+                                        id="bp-hp-fill"
+                                        style="width: 86%"
+                                    ></div>
+                                </div>
+                                <span class="bp-bar-val" id="bp-hp-val"
+                                    >6,780 / 8,200</span
+                                >
+                                <span class="bp-bar-pct">86%</span>
+                            </div>
+                            <div class="bp-bar-row">
+                                <span class="bp-bar-label">ENERGY</span>
+                                <div class="bp-bar-wrap">
+                                    <div
+                                        class="bp-bar-fill bp-bar-energy"
+                                        style="width: 60%"
+                                    ></div>
+                                </div>
+                                <span class="bp-bar-val">120 / 200</span>
+                                <span class="bp-bar-pct">60%</span>
+                            </div>
+                        </div>
                     </div>
-                    <span class="bp-bar-val">120 / 200</span>
-                    <span class="bp-bar-pct">60%</span>
+                    <div class="bp-stats">
+                        <div class="bp-stat">
+                            <span class="bp-stat-label">ATK</span
+                            ><span class="bp-stat-val" id="bp-atk">480</span>
+                        </div>
+                        <div class="bp-stat">
+                            <span class="bp-stat-label">DEF</span
+                            ><span class="bp-stat-val" id="bp-def">310</span>
+                        </div>
+                        <div class="bp-stat">
+                            <span class="bp-stat-label">SPD</span
+                            ><span class="bp-stat-val" id="bp-spd">128</span>
+                        </div>
+                        <div class="bp-stat">
+                            <span class="bp-stat-label">CRIT</span
+                            ><span class="bp-stat-val" id="bp-crit">35%</span>
+                        </div>
+                        <div class="bp-stat">
+                            <span class="bp-stat-label">EVA</span
+                            ><span class="bp-stat-val" id="bp-eva">22%</span>
+                        </div>
+                    </div>
+                    <!-- RUNE CARD HAND (desktop bottom bar) -->
+                    <div id="rune-card-hand" aria-label="Rune cards">
+                        <div
+                            class="rune-card"
+                            id="rune-card-potion"
+                            data-rune="potion"
+                            data-status="READY"
+                            role="button"
+                            tabindex="0"
+                        >
+                            <div class="rune-card-cost">1</div>
+                            <div class="rune-card-icon potion-icon">🧪</div>
+                            <div class="rune-card-body">
+                                <div class="rune-card-name">BANTAH POTION</div>
+                                <div class="rune-card-type">Restoration</div>
+                                <div class="rune-card-desc">
+                                    Instantly restores <strong>+30 HP</strong>.
+                                    Auto-triggers when HP falls below 35%. One
+                                    use per battle.
+                                </div>
+                            </div>
+                            <div class="rune-card-meter"><span></span></div>
+                        </div>
+                        <div
+                            class="rune-card"
+                            id="rune-card-shield"
+                            data-rune="shield"
+                            data-status="READY"
+                            role="button"
+                            tabindex="0"
+                        >
+                            <div class="rune-card-cost">2</div>
+                            <div class="rune-card-icon shield-icon">🛡️</div>
+                            <div class="rune-card-body">
+                                <div class="rune-card-name">SHIELD</div>
+                                <div class="rune-card-type">Defense</div>
+                                <div class="rune-card-desc">
+                                    Creates a <strong>gold barrier</strong> that
+                                    absorbs the next incoming hit. Lasts 5
+                                    seconds.
+                                </div>
+                            </div>
+                            <div class="rune-card-meter"><span></span></div>
+                        </div>
+                        <div
+                            class="rune-card"
+                            id="rune-card-thunder"
+                            data-rune="thunder"
+                            data-status="READY"
+                            role="button"
+                            tabindex="0"
+                        >
+                            <div class="rune-card-cost">3</div>
+                            <div class="rune-card-icon thunder-icon">🌩️</div>
+                            <div class="rune-card-body">
+                                <div class="rune-card-name">THUNDER</div>
+                                <div class="rune-card-type">
+                                    Offense · BC Steal
+                                </div>
+                                <div class="rune-card-desc">
+                                    Summons <strong>massive lightning</strong>.
+                                    Steals 10–35 BC from opponent on hit.
+                                </div>
+                            </div>
+                            <div class="rune-card-meter"><span></span></div>
+                        </div>
+                        <div
+                            class="rune-card rune-card-locked"
+                            id="rune-card-empty"
+                            data-rune="empty"
+                            data-status="LOCKED"
+                        >
+                            <div class="rune-card-cost locked-cost">?</div>
+                            <div class="rune-card-icon locked-icon">🔒</div>
+                            <div class="rune-card-body">
+                                <div class="rune-card-name">LOCKED</div>
+                                <div class="rune-card-type">Earn to Unlock</div>
+                                <div class="rune-card-desc">
+                                    Reach <strong>20 Wins</strong> and collect
+                                    500 BC to unlock.
+                                </div>
+                            </div>
+                            <div class="rune-card-meter"><span></span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="bp-stats">
-            <div class="bp-stat"><span class="bp-stat-label">ATK</span><span class="bp-stat-val" id="bp-atk">480</span></div>
-            <div class="bp-stat"><span class="bp-stat-label">DEF</span><span class="bp-stat-val" id="bp-def">310</span></div>
-            <div class="bp-stat"><span class="bp-stat-label">SPD</span><span class="bp-stat-val" id="bp-spd">128</span></div>
-            <div class="bp-stat"><span class="bp-stat-label">CRIT</span><span class="bp-stat-val" id="bp-crit">35%</span></div>
-            <div class="bp-stat"><span class="bp-stat-label">EVA</span><span class="bp-stat-val" id="bp-eva">22%</span></div>
-        </div>
-        <div class="bp-abilities">
-            <div class="bp-ab-row-label">ABILITIES</div>
-            <div class="bp-ab-row">
-                <div class="bp-ability bp-ab-q"><span class="bp-ab-key">Q</span><span class="bp-ab-icon">⚡</span></div>
-                <div class="bp-ability bp-ab-w"><span class="bp-ab-key">W</span><span class="bp-ab-cd">12</span></div>
-                <div class="bp-ability bp-ab-e"><span class="bp-ab-key">E</span><span class="bp-ab-cd">18</span></div>
-                <div class="bp-ability bp-ab-r"><span class="bp-ab-key">R</span><span class="bp-ab-icon">🌀</span></div>
-            </div>
-        </div>
-        <div class="bp-items">
-            <div class="bp-items-label">ITEMS</div>
-            <div class="bp-items-row">
-                <div class="bp-item bp-item-filled">🧪</div>
-                <div class="bp-item bp-item-filled">🛡️</div>
-                <div class="bp-item bp-item-filled">🌩️</div>
-                <div class="bp-item">·</div>
-                <div class="bp-item">·</div>
-                <div class="bp-item-more">···</div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- ══════════════════════════════════════════
+            <!-- ══════════════════════════════════════════
      CHARACTER PICKER MODAL
 ══════════════════════════════════════════ -->
-<div id="cp-modal" class="cp-modal-overlay" style="display:none" onclick="closeCpModal(event)">
-    <div class="cp-modal-box">
-        <div class="cp-modal-hdr">
-            <span>PICK FIGHTERS</span>
-            <button class="cp-modal-close" onclick="closeCpModalDirect()">✕</button>
+            <div
+                id="cp-modal"
+                class="cp-modal-overlay"
+                style="display: none"
+                onclick="closeCpModal(event)"
+            >
+                <div class="cp-modal-box">
+                    <div class="cp-modal-hdr">
+                        <span>PICK FIGHTERS</span>
+                        <button
+                            class="cp-modal-close"
+                            onclick="closeCpModalDirect()"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                    <div class="cp-slots">
+                        <button
+                            class="cp-slot cp-slot-active"
+                            id="cp-slot-0"
+                            onclick="cpSelectSlot(0)"
+                        >
+                            <span class="cp-slot-lbl">P1</span>
+                            <img
+                                class="cp-slot-img"
+                                id="cp-slot-img-0"
+                                src="images/fighters/char04/left/stand/0.png"
+                                alt="P1"
+                            />
+                            <span class="cp-slot-name" id="cp-slot-name-0"
+                                >ROBOT V1</span
+                            >
+                        </button>
+                        <div class="cp-vs">VS</div>
+                        <button
+                            class="cp-slot"
+                            id="cp-slot-1"
+                            onclick="cpSelectSlot(1)"
+                        >
+                            <span class="cp-slot-lbl">P2</span>
+                            <img
+                                class="cp-slot-img"
+                                id="cp-slot-img-1"
+                                src="images/fighters/floatrobo/left/stand/0.png"
+                                alt="P2"
+                            />
+                            <span class="cp-slot-name" id="cp-slot-name-1"
+                                >FLOATROBO</span
+                            >
+                        </button>
+                    </div>
+                    <div class="cp-hint" id="cp-hint">
+                        Click P1 or P2, then pick below
+                    </div>
+                    <div class="cp-roster">
+                        <button
+                            class="cp-card cp-card-char04"
+                            onclick="cpPickFighter('char04')"
+                        >
+                            <img
+                                src="images/fighters/char04/left/stand/0.png"
+                                alt="Char04"
+                            />
+                            <span>ROBOT V1</span>
+                        </button>
+                        <button
+                            class="cp-card cp-card-robopepe"
+                            onclick="cpPickFighter('robopepe')"
+                        >
+                            <img
+                                src="images/fighters/robopepe/left/stand/0.png"
+                                alt="RoboPepe"
+                            />
+                            <span>ROBO PEPE</span>
+                        </button>
+                        <button
+                            class="cp-card cp-card-floatrobo"
+                            onclick="cpPickFighter('floatrobo')"
+                        >
+                            <img
+                                src="images/fighters/floatrobo/left/stand/0.png"
+                                alt="Floatrobo"
+                            />
+                            <span>FLOATROBO</span>
+                        </button>
+                        <button
+                            class="cp-card cp-card-crimsonbot"
+                            onclick="cpPickFighter('crimsonbot')"
+                        >
+                            <img
+                                src="images/fighters/crimsonbot/left/stand/0.png"
+                                alt="Crimsonbot"
+                            />
+                            <span>CRIMSONBOT</span>
+                        </button>
+                        <button
+                            class="cp-card cp-card-toxicbot"
+                            onclick="cpPickFighter('toxicbot')"
+                        >
+                            <img
+                                src="images/fighters/toxicbot/left/stand/0.png"
+                                alt="Toxicbot"
+                            />
+                            <span>TOXICBOT</span>
+                        </button>
+                        <button
+                            class="cp-card cp-card-voidbot"
+                            onclick="cpPickFighter('voidbot')"
+                        >
+                            <img
+                                src="images/fighters/voidbot/left/stand/0.png"
+                                alt="Voidbot"
+                            />
+                            <span>VOIDBOT</span>
+                        </button>
+                        <button
+                            class="cp-card cp-card-furyman"
+                            onclick="cpPickFighter('furyman')"
+                        >
+                            <img
+                                src="images/fighters/furyman/left/stand/0.png"
+                                alt="Furyman"
+                            />
+                            <span>FURY</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOBILE BOTTOM PANEL -->
+            <div id="mobile-bottom">
+                <div id="mobile-stats-bar">
+                    <div class="mb-stat">
+                        <span class="mb-label">DAMAGE</span
+                        ><span class="mb-val gold" id="mb-damage">0</span>
+                    </div>
+                    <div class="mb-divider"></div>
+                    <div class="mb-stat">
+                        <span class="mb-label">HITS</span
+                        ><span class="mb-val" id="mb-hits"
+                            >0 <span class="live-badge">LIVE</span></span
+                        >
+                    </div>
+                    <div class="mb-divider"></div>
+                    <div class="mb-stat">
+                        <span class="mb-label">KING</span
+                        ><span class="mb-val" id="mb-king">Sub-Zero</span>
+                    </div>
+                </div>
+                <div id="mobile-feed-wrap">
+                    <div id="battle-feed-mobile"></div>
+                </div>
+            </div>
+
+            <!-- MOBILE NAV FOOTER -->
+            <div id="mobile-nav-footer">
+                <div class="nav-item active">
+                    <div class="nav-icon">⚔</div>
+                    <div class="nav-label">ARENA</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🤖</div>
+                    <div class="nav-label">ROSTER</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🎁</div>
+                    <div class="nav-label">LOOT</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🛒</div>
+                    <div class="nav-label">SHOP</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">⚙</div>
+                    <div class="nav-label">SETTINGS</div>
+                </div>
+            </div>
         </div>
-        <div class="cp-slots">
-            <button class="cp-slot cp-slot-active" id="cp-slot-0" onclick="cpSelectSlot(0)">
-                <span class="cp-slot-lbl">P1</span>
-                <img class="cp-slot-img" id="cp-slot-img-0" src="images/fighters/char04/left/stand/0.png" alt="P1">
-                <span class="cp-slot-name" id="cp-slot-name-0">ROBOT V1</span>
-            </button>
-            <div class="cp-vs">VS</div>
-            <button class="cp-slot" id="cp-slot-1" onclick="cpSelectSlot(1)">
-                <span class="cp-slot-lbl">P2</span>
-                <img class="cp-slot-img" id="cp-slot-img-1" src="images/fighters/floatrobo/left/stand/0.png" alt="P2">
-                <span class="cp-slot-name" id="cp-slot-name-1">FLOATROBO</span>
-            </button>
+        <!-- /hud-root -->
+
+        <!-- ══════════════════════════════════════════
+             PAGE OVERLAYS (Docs / Marketplace / Create)
+        ══════════════════════════════════════════ -->
+
+        <!-- DOCS SECTION -->
+        <div id="page-docs" class="page-overlay bantahbro-next-ui dark" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">📖 Documentation</h1>
+                    <p class="pg-subtitle">Everything you need to master MK Arena</p>
+                </div>
+                <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+            </div>
+            <div class="pg-body">
+                <aside class="docs-sidebar">
+                    <nav class="docs-nav">
+                        <div class="docs-nav-group">
+                            <div class="docs-nav-label">Getting Started</div>
+                            <a class="docs-nav-link active" href="#" onclick="showDoc('intro')">Introduction</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('quickstart')">Quick Start</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('wallet')">Connect Wallet</a>
+                        </div>
+                        <div class="docs-nav-group">
+                            <div class="docs-nav-label">Game Mechanics</div>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('fighters')">Fighters & Stats</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('koth')">King of the Hill</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('runes')">Rune Abilities</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('betting')">Betting System</a>
+                        </div>
+                        <div class="docs-nav-group">
+                            <div class="docs-nav-label">Economy</div>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('bc')">Battle Coins (BC)</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('rewards')">Rewards & Treasury</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('nft')">NFT Fighters</a>
+                        </div>
+                        <div class="docs-nav-group">
+                            <div class="docs-nav-label">Reference</div>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('api')">API Reference</a>
+                            <a class="docs-nav-link" href="#" onclick="showDoc('faq')">FAQ</a>
+                        </div>
+                    </nav>
+                </aside>
+                <article class="docs-content">
+                    <div class="doc-page" id="doc-intro">
+                        <div class="doc-hero">
+                            <span class="doc-hero-icon">⚔</span>
+                            <div>
+                                <h2 class="doc-h1">Welcome to MK Arena</h2>
+                                <p class="doc-lead">MK Arena is a fully on-chain autonomous fighting game where AI-powered fighters battle for the throne in real time.</p>
+                            </div>
+                        </div>
+                        <div class="doc-cards">
+                            <div class="doc-card">
+                                <div class="doc-card-icon">👾</div>
+                                <h3 class="doc-card-title">Autonomous Fighters</h3>
+                                <p class="doc-card-desc">Each fighter is an on-chain agent with unique stats, abilities, and AI that evolves through every match.</p>
+                            </div>
+                            <div class="doc-card">
+                                <div class="doc-card-icon">♛</div>
+                                <h3 class="doc-card-title">King of the Hill</h3>
+                                <p class="doc-card-desc">Challengers queue up to dethrone the reigning King. The longer a King holds the throne, the greater the treasury reward.</p>
+                            </div>
+                            <div class="doc-card">
+                                <div class="doc-card-icon">💰</div>
+                                <h3 class="doc-card-title">Live Betting</h3>
+                                <p class="doc-card-desc">Wager Battle Coins on any active match. Correct predictions earn proportional payouts from the live pool.</p>
+                            </div>
+                            <div class="doc-card">
+                                <div class="doc-card-icon">🛠</div>
+                                <h3 class="doc-card-title">Build Your Fighter</h3>
+                                <p class="doc-card-desc">Design a fighter, set its strategy, mint it as an NFT, and send it into the arena to battle autonomously.</p>
+                            </div>
+                        </div>
+                        <div class="doc-section">
+                            <h2 class="doc-h2">How It Works</h2>
+                            <ol class="doc-steps">
+                                <li class="doc-step"><span class="doc-step-num">1</span><div><strong>Connect</strong> your wallet to register your identity and access your fighters.</div></li>
+                                <li class="doc-step"><span class="doc-step-num">2</span><div><strong>Create or acquire</strong> a fighter from the Marketplace — each has unique Power, Speed, Defense, and special Rune abilities.</div></li>
+                                <li class="doc-step"><span class="doc-step-num">3</span><div><strong>Enter the queue</strong> — your fighter joins the challenger line and waits for its match against the current King.</div></li>
+                                <li class="doc-step"><span class="doc-step-num">4</span><div><strong>Watch and bet</strong> — place wagers on the live match to earn BC from the prediction pool.</div></li>
+                                <li class="doc-step"><span class="doc-step-num">5</span><div><strong>Claim rewards</strong> — winners receive BC payouts. A reigning King earns continuous treasury income.</div></li>
+                            </ol>
+                        </div>
+                        <div class="doc-section">
+                            <h2 class="doc-h2">Core Stats</h2>
+                            <div class="doc-stats-grid">
+                                <div class="doc-stat-row"><span class="doc-stat-name">⚡ ATK</span><span class="doc-stat-desc">Base damage per hit. Higher ATK = more damage dealt.</span></div>
+                                <div class="doc-stat-row"><span class="doc-stat-name">🛡 DEF</span><span class="doc-stat-desc">Damage reduction percentage per incoming hit.</span></div>
+                                <div class="doc-stat-row"><span class="doc-stat-name">💨 SPD</span><span class="doc-stat-desc">Attack frequency. Higher SPD = more hits per second.</span></div>
+                                <div class="doc-stat-row"><span class="doc-stat-name">❤ HP</span><span class="doc-stat-desc">Total health pool. Fight ends when HP reaches zero.</span></div>
+                                <div class="doc-stat-row"><span class="doc-stat-name">🔮 PWR</span><span class="doc-stat-desc">Overall power score. Determines queue tier and matchmaking.</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
         </div>
-        <div class="cp-hint" id="cp-hint">Click P1 or P2, then pick below</div>
-        <div class="cp-roster">
-            <button class="cp-card cp-card-char04" onclick="cpPickFighter('char04')">
-                <img src="images/fighters/char04/left/stand/0.png" alt="Char04">
-                <span>ROBOT V1</span>
-            </button>
-            <button class="cp-card cp-card-robopepe" onclick="cpPickFighter('robopepe')">
-                <img src="images/fighters/robopepe/left/stand/0.png" alt="RoboPepe">
-                <span>ROBO PEPE</span>
-            </button>
-            <button class="cp-card cp-card-floatrobo" onclick="cpPickFighter('floatrobo')">
-                <img src="images/fighters/floatrobo/left/stand/0.png" alt="Floatrobo">
-                <span>FLOATROBO</span>
-            </button>
-            <button class="cp-card cp-card-crimsonbot" onclick="cpPickFighter('crimsonbot')">
-                <img src="images/fighters/crimsonbot/left/stand/0.png" alt="Crimsonbot">
-                <span>CRIMSONBOT</span>
-            </button>
-            <button class="cp-card cp-card-toxicbot" onclick="cpPickFighter('toxicbot')">
-                <img src="images/fighters/toxicbot/left/stand/0.png" alt="Toxicbot">
-                <span>TOXICBOT</span>
-            </button>
-            <button class="cp-card cp-card-voidbot" onclick="cpPickFighter('voidbot')">
-                <img src="images/fighters/voidbot/left/stand/0.png" alt="Voidbot">
-                <span>VOIDBOT</span>
-            </button>
-            <button class="cp-card cp-card-furyman" onclick="cpPickFighter('furyman')">
-                <img src="images/fighters/furyman/left/stand/0.png" alt="Furyman">
-                <span>FURY</span>
-            </button>
+
+        <!-- MARKETPLACE SECTION -->
+        <div id="page-marketplace" class="page-overlay bantahbro-next-ui dark" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">🛒 Marketplace</h1>
+                    <p class="pg-subtitle">Buy, sell, and trade fighters &amp; items</p>
+                </div>
+                <div class="mkt-header-actions">
+                    <div class="mkt-search-wrap">
+                        <span class="mkt-search-icon">🔍</span>
+                        <input type="text" class="mkt-search" placeholder="Search fighters, items…" />
+                    </div>
+                    <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+                </div>
+            </div>
+            <div class="pg-body">
+                <div class="mkt-filters">
+                    <button class="mkt-filter active" onclick="mktFilter(this,'all')">All</button>
+                    <button class="mkt-filter" onclick="mktFilter(this,'fighters')">Fighters</button>
+                    <button class="mkt-filter" onclick="mktFilter(this,'items')">Items</button>
+                    <button class="mkt-filter" onclick="mktFilter(this,'skins')">Skins</button>
+                    <button class="mkt-filter" onclick="mktFilter(this,'runes')">Runes</button>
+                    <div class="mkt-sort-wrap">
+                        <select class="mkt-sort">
+                            <option>Newest First</option>
+                            <option>Price: Low → High</option>
+                            <option>Price: High → Low</option>
+                            <option>Highest Power</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mkt-grid">
+                    <!-- Fighter cards -->
+                    <div class="mkt-card" data-type="fighters">
+                        <div class="mkt-card-badge">FIGHTER</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#1a0a2e,#2d1b4e)">
+                            <span style="font-size:52px;line-height:1">🤖</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Robot V1</div>
+                            <div class="mkt-card-owner">0xA12F…B7C9</div>
+                            <div class="mkt-card-stats">
+                                <span>⚡ 480</span><span>🛡 310</span><span>💨 128</span>
+                            </div>
+                            <div class="mkt-card-power">PWR <strong class="gold">2,450</strong></div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">12,000 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="fighters">
+                        <div class="mkt-card-badge mkt-badge-hot">🔥 HOT</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a1a2e,#1b3d4e)">
+                            <span style="font-size:52px;line-height:1">🦾</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Floatrobo</div>
+                            <div class="mkt-card-owner">0xB34E…C8D1</div>
+                            <div class="mkt-card-stats">
+                                <span>⚡ 390</span><span>🛡 420</span><span>💨 155</span>
+                            </div>
+                            <div class="mkt-card-power">PWR <strong class="gold">2,310</strong></div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">9,500 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="fighters">
+                        <div class="mkt-card-badge mkt-badge-rare">💎 RARE</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#1a2e0a,#2e4e1b)">
+                            <span style="font-size:52px;line-height:1">🐸</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Robo Pepe</div>
+                            <div class="mkt-card-owner">0xC56D…D2E4</div>
+                            <div class="mkt-card-stats">
+                                <span>⚡ 510</span><span>🛡 280</span><span>💨 200</span>
+                            </div>
+                            <div class="mkt-card-power">PWR <strong class="gold">2,180</strong></div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">22,000 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="fighters">
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#2e0a0a,#4e1b1b)">
+                            <span style="font-size:52px;line-height:1">🦀</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-badge mkt-badge-inline">FIGHTER</div>
+                            <div class="mkt-card-name">Crimsonbot</div>
+                            <div class="mkt-card-owner">0xD78F…E3F5</div>
+                            <div class="mkt-card-stats">
+                                <span>⚡ 460</span><span>🛡 340</span><span>💨 140</span>
+                            </div>
+                            <div class="mkt-card-power">PWR <strong class="gold">2,050</strong></div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">7,800 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Items -->
+                    <div class="mkt-card" data-type="items">
+                        <div class="mkt-card-badge mkt-badge-item">ITEM</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#1a1a0a,#3a3a10)">
+                            <span style="font-size:52px;line-height:1">🧪</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Bantah Potion ×5</div>
+                            <div class="mkt-card-owner">Restore 30 HP below 35%</div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">800 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="runes">
+                        <div class="mkt-card-badge mkt-badge-rune">RUNE</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a102e,#1b2560)">
+                            <span style="font-size:52px;line-height:1">⚡</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Thunder Rune</div>
+                            <div class="mkt-card-owner">Steal 10–35 BC on hit</div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">3,200 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="skins">
+                        <div class="mkt-card-badge mkt-badge-skin">SKIN</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#2e0a2e,#4e1b4e)">
+                            <span style="font-size:52px;line-height:1">👑</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">King Crown Skin</div>
+                            <div class="mkt-card-owner">Cosmetic — all fighters</div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">5,000 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mkt-card" data-type="runes">
+                        <div class="mkt-card-badge mkt-badge-rune">RUNE</div>
+                        <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a2e1a,#1b6035)">
+                            <span style="font-size:52px;line-height:1">🛡</span>
+                        </div>
+                        <div class="mkt-card-body">
+                            <div class="mkt-card-name">Iron Shield Rune</div>
+                            <div class="mkt-card-owner">Absorbs next incoming hit</div>
+                            <div class="mkt-card-footer">
+                                <span class="mkt-price">2,600 BC</span>
+                                <button class="mkt-buy-btn">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<!-- MOBILE BOTTOM PANEL -->
-<div id="mobile-bottom">
-    <div id="mobile-stats-bar">
-        <div class="mb-stat"><span class="mb-label">DAMAGE</span><span class="mb-val gold" id="mb-damage">0</span></div>
-        <div class="mb-divider"></div>
-        <div class="mb-stat"><span class="mb-label">HITS</span><span class="mb-val" id="mb-hits">0 <span class="live-badge">LIVE</span></span></div>
-        <div class="mb-divider"></div>
-        <div class="mb-stat"><span class="mb-label">KING</span><span class="mb-val" id="mb-king">Sub-Zero</span></div>
-    </div>
-    <div id="mobile-feed-wrap"><div id="battle-feed-mobile"></div></div>
-</div>
+        <!-- CREATE SECTION -->
+        <div id="page-create" class="page-overlay bantahbro-next-ui dark" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">🛠 Create Fighter</h1>
+                    <p class="pg-subtitle">Design your fighter and mint it to the arena</p>
+                </div>
+                <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+            </div>
+            <div class="pg-body">
+                <div class="create-layout">
+                    <!-- Preview -->
+                    <div class="create-preview">
+                        <div class="create-preview-card">
+                            <div class="create-avatar" id="create-avatar">🤖</div>
+                            <div class="create-preview-name" id="create-preview-name">YOUR FIGHTER</div>
+                            <div class="create-preview-stats">
+                                <div class="cps-row"><span>⚡ ATK</span><span id="prev-atk" class="gold">400</span></div>
+                                <div class="cps-row"><span>🛡 DEF</span><span id="prev-def">300</span></div>
+                                <div class="cps-row"><span>💨 SPD</span><span id="prev-spd">130</span></div>
+                                <div class="cps-row"><span>❤ HP</span><span id="prev-hp">8,000</span></div>
+                            </div>
+                            <div class="create-preview-pwr">
+                                <span class="cps-label">POWER</span>
+                                <span class="cps-pwr gold" id="prev-pwr">2,000</span>
+                            </div>
+                        </div>
+                        <div class="create-cost-box">
+                            <div class="create-cost-label">Mint Cost</div>
+                            <div class="create-cost-val gold">5,000 BC</div>
+                            <div class="create-cost-sub">+ gas fees</div>
+                        </div>
+                    </div>
 
-<!-- MOBILE NAV FOOTER -->
-<div id="mobile-nav-footer">
-    <div class="nav-item active"><div class="nav-icon">⚔</div><div class="nav-label">ARENA</div></div>
-    <div class="nav-item"><div class="nav-icon">🤖</div><div class="nav-label">ROSTER</div></div>
-    <div class="nav-item"><div class="nav-icon">🎁</div><div class="nav-label">LOOT</div></div>
-    <div class="nav-item"><div class="nav-icon">🛒</div><div class="nav-label">SHOP</div></div>
-    <div class="nav-item"><div class="nav-icon">⚙</div><div class="nav-label">SETTINGS</div></div>
-</div>
+                    <!-- Builder Form -->
+                    <div class="create-form">
+                        <div class="create-section-title">① Identity</div>
+                        <div class="create-row">
+                            <label class="create-label">Fighter Name</label>
+                            <input type="text" class="create-input" id="fighter-name" placeholder="e.g. ShadowBot X" maxlength="24"
+                                oninput="document.getElementById('create-preview-name').textContent=this.value||'YOUR FIGHTER'" />
+                        </div>
+                        <div class="create-row">
+                            <label class="create-label">Avatar</label>
+                            <div class="create-avatar-picker">
+                                <button class="av-btn active" onclick="pickAvatar(this,'🤖')">🤖</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🦾')">🦾</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🐸')">🐸</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🦀')">🦀</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'👹')">👹</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🐲')">🐲</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'💀')">💀</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'⚡')">⚡</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🔥')">🔥</button>
+                                <button class="av-btn" onclick="pickAvatar(this,'🌪')">🌪</button>
+                            </div>
+                        </div>
 
-</div><!-- /hud-root -->
+                        <div class="create-section-title">② Allocate Stats <span class="create-points-badge"><span id="pts-remaining">20</span> pts left</span></div>
+                        <div class="create-stat-row">
+                            <span class="create-stat-icon">⚡</span>
+                            <span class="create-stat-name">Attack</span>
+                            <div class="create-stat-bar-wrap">
+                                <input type="range" class="create-slider" id="sl-atk" min="0" max="20" value="5"
+                                    oninput="updateStats()" />
+                                <div class="create-stat-fill" id="fill-atk"></div>
+                            </div>
+                            <span class="create-stat-val" id="val-atk">400+</span>
+                        </div>
+                        <div class="create-stat-row">
+                            <span class="create-stat-icon">🛡</span>
+                            <span class="create-stat-name">Defense</span>
+                            <div class="create-stat-bar-wrap">
+                                <input type="range" class="create-slider" id="sl-def" min="0" max="20" value="5"
+                                    oninput="updateStats()" />
+                                <div class="create-stat-fill" id="fill-def"></div>
+                            </div>
+                            <span class="create-stat-val" id="val-def">300+</span>
+                        </div>
+                        <div class="create-stat-row">
+                            <span class="create-stat-icon">💨</span>
+                            <span class="create-stat-name">Speed</span>
+                            <div class="create-stat-bar-wrap">
+                                <input type="range" class="create-slider" id="sl-spd" min="0" max="20" value="5"
+                                    oninput="updateStats()" />
+                                <div class="create-stat-fill" id="fill-spd"></div>
+                            </div>
+                            <span class="create-stat-val" id="val-spd">130+</span>
+                        </div>
 
-<script>
-(function () {
-    function $(id) { return document.getElementById(id); }
+                        <div class="create-section-title">③ Choose Runes <span class="create-points-badge">Pick 2</span></div>
+                        <div class="create-rune-grid">
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> ⚡ Thunder — steal BC on hit
+                            </label>
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🛡 Iron Shield — absorb 1 hit
+                            </label>
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🧪 Bantah Potion — heal when low HP
+                            </label>
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🌀 Phase Shift — dodge next attack
+                            </label>
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 💥 Overcharge — burst damage ×2
+                            </label>
+                            <label class="create-rune-opt">
+                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🩸 Lifesteal — heal 15% of damage dealt
+                            </label>
+                        </div>
 
-    var hitCount = 0;
-    var totalDamage = 0;
-    var kingStreak = 0;
-    var kingDefended = 0;
-    var currentKing = 'subzero';
-    var p1Life = 100, p2Life = 100;
+                        <div class="create-section-title">④ Strategy</div>
+                        <div class="create-strategy-grid">
+                            <label class="create-strategy-opt" id="strat-aggressive">
+                                <input type="radio" name="strategy" value="aggressive" onchange="updateStrategy(this)" />
+                                <span class="strat-icon">⚔</span>
+                                <span class="strat-name">Aggressive</span>
+                                <span class="strat-desc">All-in offense, high risk</span>
+                            </label>
+                            <label class="create-strategy-opt" id="strat-defensive">
+                                <input type="radio" name="strategy" value="defensive" onchange="updateStrategy(this)" />
+                                <span class="strat-icon">🛡</span>
+                                <span class="strat-name">Defensive</span>
+                                <span class="strat-desc">Outlast through attrition</span>
+                            </label>
+                            <label class="create-strategy-opt" id="strat-balanced">
+                                <input type="radio" name="strategy" value="balanced" checked onchange="updateStrategy(this)" />
+                                <span class="strat-icon">⚖</span>
+                                <span class="strat-name">Balanced</span>
+                                <span class="strat-desc">Adaptive mixed tactics</span>
+                            </label>
+                            <label class="create-strategy-opt" id="strat-trickster">
+                                <input type="radio" name="strategy" value="trickster" onchange="updateStrategy(this)" />
+                                <span class="strat-icon">🎭</span>
+                                <span class="strat-name">Trickster</span>
+                                <span class="strat-desc">Unpredictable, evasive</span>
+                            </label>
+                        </div>
 
-    /* ── Character Picker ── */
-    var cpActiveSlot = 0;
-    var cpPicks = ['char04', 'floatrobo'];
-    var CHAR_DISPLAY = {
-        char04: 'ROBOT V1', robopepe: 'ROBO PEPE', floatrobo: 'FLOATROBO',
-        crimsonbot: 'CRIMSONBOT', toxicbot: 'TOXICBOT', voidbot: 'VOIDBOT', furyman: 'FURY'
-    };
+                        <div class="create-actions">
+                            <button class="create-btn-secondary" onclick="resetCreate()">Reset</button>
+                            <button class="create-btn-primary" onclick="mintFighter()">⚡ Mint Fighter — 5,000 BC</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    window.openCpModal = function() {
-        var m = $('cp-modal');
-        if (m) { m.style.display = 'flex'; }
-    };
-    window.closeCpModalDirect = function() {
-        var m = $('cp-modal');
-        if (m) m.style.display = 'none';
-    };
-    window.closeCpModal = function(e) {
-        if (e.target === $('cp-modal')) window.closeCpModalDirect();
-    };
+        <!-- LEADERBOARD SECTION -->
+        <div id="page-leaderboard" class="page-overlay bantahbro-next-ui dark" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">🏆 Leaderboard</h1>
+                    <p class="pg-subtitle">Top fighters ranked by performance</p>
+                </div>
+                <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+            </div>
+            <div class="pg-body lb-body">
+                <!-- Tabs -->
+                <div class="lb-tabs">
+                    <button class="lb-tab active" onclick="lbTab(this,'all')">All Time</button>
+                    <button class="lb-tab" onclick="lbTab(this,'week')">This Week</button>
+                    <button class="lb-tab" onclick="lbTab(this,'month')">This Month</button>
+                    <div class="lb-tab-spacer"></div>
+                    <div class="lb-live-indicator"><span class="live-badge">LIVE</span> Updates every 30s</div>
+                </div>
+                <!-- Table -->
+                <div class="lb-table-wrap">
+                    <table class="lb-table">
+                        <thead>
+                            <tr>
+                                <th class="lb-th lb-th-rank">#</th>
+                                <th class="lb-th">Fighter</th>
+                                <th class="lb-th">Owner</th>
+                                <th class="lb-th lb-th-num">Wins</th>
+                                <th class="lb-th lb-th-num">Losses</th>
+                                <th class="lb-th lb-th-num">Win %</th>
+                                <th class="lb-th lb-th-num">BC Earned</th>
+                                <th class="lb-th lb-th-num">Power</th>
+                                <th class="lb-th lb-th-status">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="lb-row lb-row-gold">
+                                <td class="lb-rank">🥇</td>
+                                <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#1a0a2e,#3d1b7e)">🤖</span><div><div class="lb-name">Robot V1</div><div class="lb-sub">Lv 82</div></div></td>
+                                <td class="lb-owner">0xA12F…B7C9</td>
+                                <td class="lb-num gold">247</td>
+                                <td class="lb-num">38</td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-high">86.7%</span></td>
+                                <td class="lb-num gold">1,240,000 BC</td>
+                                <td class="lb-num">2,450</td>
+                                <td><span class="lb-status lb-status-king">👑 KING</span></td>
+                            </tr>
+                            <tr class="lb-row lb-row-silver">
+                                <td class="lb-rank">🥈</td>
+                                <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#0a1a2e,#1b3d7e)">🦾</span><div><div class="lb-name">Floatrobo</div><div class="lb-sub">Lv 68</div></div></td>
+                                <td class="lb-owner">0xB34E…C8D1</td>
+                                <td class="lb-num gold">198</td>
+                                <td class="lb-num">52</td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-high">79.2%</span></td>
+                                <td class="lb-num gold">890,000 BC</td>
+                                <td class="lb-num">2,310</td>
+                                <td><span class="lb-status lb-status-queue">⏳ QUEUE</span></td>
+                            </tr>
+                            <tr class="lb-row lb-row-bronze">
+                                <td class="lb-rank">🥉</td>
+                                <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#1a2e0a,#2e7e1b)">🐸</span><div><div class="lb-name">Robo Pepe</div><div class="lb-sub">Lv 55</div></div></td>
+                                <td class="lb-owner">0xC56D…D2E4</td>
+                                <td class="lb-num gold">162</td>
+                                <td class="lb-num">71</td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-med">69.5%</span></td>
+                                <td class="lb-num gold">605,000 BC</td>
+                                <td class="lb-num">2,180</td>
+                                <td><span class="lb-status lb-status-idle">💤 IDLE</span></td>
+                            </tr>
+                            <tr class="lb-row">
+                                <td class="lb-rank lb-rank-n">4</td>
+                                <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#2e0a0a,#7e1b1b)">🦀</span><div><div class="lb-name">Crimsonbot</div><div class="lb-sub">Lv 49</div></div></td>
+                                <td class="lb-owner">0xD78F…E3F5</td>
+                                <td class="lb-num gold">131</td>
+                                <td class="lb-num">88</td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-med">59.8%</span></td>
+                                <td class="lb-num gold">412,000 BC</td>
+                                <td class="lb-num">2,050</td>
+                                <td><span class="lb-status lb-status-queue">⏳ QUEUE</span></td>
+                            </tr>
+                            <tr class="lb-row">
+                                <td class="lb-rank lb-rank-n">5</td>
+                                <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#0a2e1a,#1b7e4a)">💀</span><div><div class="lb-name">Toxicbot</div><div class="lb-sub">Lv 44</div></div></td>
+                                <td class="lb-owner">0xE91A…F4G6</td>
+                                <td class="lb-num gold">109</td>
+                                <td class="lb-num">102</td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-low">51.7%</span></td>
+                                <td class="lb-num gold">298,000 BC</td>
+                                <td class="lb-num">1,980</td>
+                                <td><span class="lb-status lb-status-idle">💤 IDLE</span></td>
+                            </tr>
+                            <tr class="lb-row">
+                                <td class="lb-rank lb-rank-n">6</td>
+                                <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#1a0a2e,#4a1b7e)">👹</span><div><div class="lb-name">Voidbot</div><div class="lb-sub">Lv 38</div></div></td>
+                                <td class="lb-owner">0xF02B…G5H7</td>
+                                <td class="lb-num gold">87</td>
+                                <td class="lb-num">93</td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-low">48.3%</span></td>
+                                <td class="lb-num gold">201,000 BC</td>
+                                <td class="lb-num">1,820</td>
+                                <td><span class="lb-status lb-status-idle">💤 IDLE</span></td>
+                            </tr>
+                            <tr class="lb-row">
+                                <td class="lb-rank lb-rank-n">7</td>
+                                <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#2e2a0a,#7e6e1b)">⚡</span><div><div class="lb-name">Fury Man</div><div class="lb-sub">Lv 31</div></div></td>
+                                <td class="lb-owner">0xA88C…I9J2</td>
+                                <td class="lb-num gold">64</td>
+                                <td class="lb-num">71</td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-low">47.4%</span></td>
+                                <td class="lb-num gold">138,000 BC</td>
+                                <td class="lb-num">1,650</td>
+                                <td><span class="lb-status lb-status-queue">⏳ QUEUE</span></td>
+                            </tr>
+                            <tr class="lb-row">
+                                <td class="lb-rank lb-rank-n">8</td>
+                                <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#0a2e2e,#1b7e7e)">🌪</span><div><div class="lb-name">StormBot</div><div class="lb-sub">Lv 22</div></div></td>
+                                <td class="lb-owner">0xB11D…K3L5</td>
+                                <td class="lb-num gold">41</td>
+                                <td class="lb-num">59</td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-low">41.0%</span></td>
+                                <td class="lb-num gold">72,000 BC</td>
+                                <td class="lb-num">1,430</td>
+                                <td><span class="lb-status lb-status-idle">💤 IDLE</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-    window.cpSelectSlot = function(idx) {
-        cpActiveSlot = idx;
-        [$('cp-slot-0'), $('cp-slot-1')].forEach(function(el, i) {
-            if (!el) return;
-            el.classList.toggle('cp-slot-active', i === idx);
+        <!-- NOTIFICATIONS SECTION -->
+        <div id="page-notifications" class="page-overlay bantahbro-next-ui dark" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">🔔 Notifications</h1>
+                    <p class="pg-subtitle">Activity, alerts &amp; arena updates</p>
+                </div>
+                <div class="notif-header-actions">
+                    <button class="notif-mark-all" onclick="markAllRead()">Mark all read</button>
+                    <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+                </div>
+            </div>
+            <div class="pg-body notif-body">
+                <div class="notif-tabs">
+                    <button class="notif-tab active" onclick="notifTab(this,'all')">All</button>
+                    <button class="notif-tab" onclick="notifTab(this,'battle')">Battle</button>
+                    <button class="notif-tab" onclick="notifTab(this,'reward')">Rewards</button>
+                    <button class="notif-tab" onclick="notifTab(this,'system')">System</button>
+                </div>
+                <div class="notif-list" id="notif-list">
+
+                    <!-- Unread -->
+                    <div class="notif-item notif-unread" data-type="battle">
+                        <div class="notif-icon-wrap notif-icon-battle">⚔</div>
+                        <div class="notif-content">
+                            <div class="notif-title">Your fighter entered the queue</div>
+                            <div class="notif-desc">Floatrobo is now #2 in the challenger queue. Next match in ~45s.</div>
+                            <div class="notif-time">Just now</div>
+                        </div>
+                        <div class="notif-dot"></div>
+                    </div>
+
+                    <div class="notif-item notif-unread" data-type="reward">
+                        <div class="notif-icon-wrap notif-icon-reward">💰</div>
+                        <div class="notif-content">
+                            <div class="notif-title">Bet payout received</div>
+                            <div class="notif-desc">You correctly predicted Robot V1 wins. <strong class="gold">+3,200 BC</strong> added to your wallet.</div>
+                            <div class="notif-time">2 min ago</div>
+                        </div>
+                        <div class="notif-dot"></div>
+                    </div>
+
+                    <div class="notif-item notif-unread" data-type="system">
+                        <div class="notif-icon-wrap notif-icon-system">🛡</div>
+                        <div class="notif-content">
+                            <div class="notif-title">New rune unlocked</div>
+                            <div class="notif-desc">You've reached 20 wins! The <strong>Phase Shift</strong> rune is now available.</div>
+                            <div class="notif-time">18 min ago</div>
+                        </div>
+                        <div class="notif-dot"></div>
+                    </div>
+
+                    <!-- Read -->
+                    <div class="notif-divider">Earlier</div>
+
+                    <div class="notif-item" data-type="battle">
+                        <div class="notif-icon-wrap notif-icon-battle">⚔</div>
+                        <div class="notif-content">
+                            <div class="notif-title">Match ended — Robot V1 wins</div>
+                            <div class="notif-desc">Robot V1 defeated Floatrobo in 1:12. King streak: <strong>4</strong>.</div>
+                            <div class="notif-time">34 min ago</div>
+                        </div>
+                    </div>
+
+                    <div class="notif-item" data-type="reward">
+                        <div class="notif-icon-wrap notif-icon-reward">💰</div>
+                        <div class="notif-content">
+                            <div class="notif-title">King treasury reward</div>
+                            <div class="notif-desc">Your fighter held the throne for 3 defenses. <strong class="gold">+8,750 BC</strong> from treasury.</div>
+                            <div class="notif-time">1 hr ago</div>
+                        </div>
+                    </div>
+
+                    <div class="notif-item" data-type="system">
+                        <div class="notif-icon-wrap notif-icon-system">🔧</div>
+                        <div class="notif-content">
+                            <div class="notif-title">Arena maintenance complete</div>
+                            <div class="notif-desc">The arena has been upgraded to v2.4. New shrine mechanics are now live.</div>
+                            <div class="notif-time">3 hr ago</div>
+                        </div>
+                    </div>
+
+                    <div class="notif-item" data-type="battle">
+                        <div class="notif-icon-wrap notif-icon-battle">👑</div>
+                        <div class="notif-content">
+                            <div class="notif-title">New king crowned</div>
+                            <div class="notif-desc">Sub-Zero has claimed the throne after defeating Toxicbot. Power: 2,450.</div>
+                            <div class="notif-time">5 hr ago</div>
+                        </div>
+                    </div>
+
+                    <div class="notif-item" data-type="reward">
+                        <div class="notif-icon-wrap notif-icon-reward">🎁</div>
+                        <div class="notif-content">
+                            <div class="notif-title">Daily login reward</div>
+                            <div class="notif-desc">Welcome back! You've received your daily reward of <strong class="gold">500 BC</strong>.</div>
+                            <div class="notif-time">Yesterday</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH MODAL -->
+        <div id="search-modal" class="search-modal-overlay" style="display:none" onclick="closeSearchOnBg(event)">
+            <div class="search-modal-box">
+                <div class="search-modal-bar">
+                    <svg class="search-modal-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="search-input" class="search-modal-input" placeholder="Search docs, fighters, pages…" oninput="runSearch(this.value)" onkeydown="searchKeydown(event)" autofocus />
+                    <button class="search-modal-close" onclick="closeSearch()">✕</button>
+                </div>
+                <div id="search-results" class="search-results">
+                    <div class="search-hint">Type to search…</div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                function $(id) {
+                    return document.getElementById(id);
+                }
+
+                var hitCount = 0;
+                var totalDamage = 0;
+                var kingStreak = 0;
+                var kingDefended = 0;
+                var currentKing = "subzero";
+                var p1Life = 100,
+                    p2Life = 100;
+
+                /* ── Character Picker ── */
+                var cpActiveSlot = 0;
+                var cpPicks = ["char04", "floatrobo"];
+                var CHAR_DISPLAY = {
+                    char04: "ROBOT V1",
+                    robopepe: "ROBO PEPE",
+                    floatrobo: "FLOATROBO",
+                    crimsonbot: "CRIMSONBOT",
+                    toxicbot: "TOXICBOT",
+                    voidbot: "VOIDBOT",
+                    furyman: "FURY",
+                };
+
+                window.openCpModal = function () {
+                    var m = $("cp-modal");
+                    if (m) {
+                        m.style.display = "flex";
+                    }
+                };
+                window.closeCpModalDirect = function () {
+                    var m = $("cp-modal");
+                    if (m) m.style.display = "none";
+                };
+                window.closeCpModal = function (e) {
+                    if (e.target === $("cp-modal")) window.closeCpModalDirect();
+                };
+
+                window.cpSelectSlot = function (idx) {
+                    cpActiveSlot = idx;
+                    [$("cp-slot-0"), $("cp-slot-1")].forEach(function (el, i) {
+                        if (!el) return;
+                        el.classList.toggle("cp-slot-active", i === idx);
+                    });
+                    if ($("cp-hint"))
+                        $("cp-hint").textContent =
+                            "Click a fighter below for P" + (idx + 1);
+                };
+
+                window.cpPickFighter = function (key) {
+                    cpPicks[cpActiveSlot] = key;
+                    var imgSrc = "images/fighters/" + key + "/left/stand/0.png";
+                    var name = CHAR_DISPLAY[key] || key.toUpperCase();
+                    var slotImg = $("cp-slot-img-" + cpActiveSlot);
+                    var slotName = $("cp-slot-name-" + cpActiveSlot);
+                    if (slotImg) slotImg.src = imgSrc;
+                    if (slotName) slotName.textContent = name;
+                    /* Update queue portraits */
+                    var qPortrait = cpActiveSlot === 0 ? $("q-p1") : $("q-p2");
+                    if (qPortrait) {
+                        var img = qPortrait.querySelector(".qi-portrait img");
+                        if (img) img.src = imgSrc;
+                        var qname = qPortrait.querySelector(".qi-name");
+                        if (qname) qname.textContent = name;
+                    }
+                    /* Update bp portrait */
+                    if (cpActiveSlot === 1 && $("bp-portrait-img"))
+                        $("bp-portrait-img").src = imgSrc;
+                    if (cpActiveSlot === 1 && $("bp-name"))
+                        $("bp-name").textContent = name.toLowerCase() + ".sol";
+                    cpSelectSlot(1 - cpActiveSlot);
+                    if ($("cp-hint"))
+                        $("cp-hint").textContent =
+                            "Ready! Starting next match.";
+                    window.closeCpModalDirect();
+                    setTimeout(function () {
+                        window.startPhaserMatch(cpPicks[0], cpPicks[1]);
+                    }, 400);
+                };
+
+                /* ── Arena Scaling ── */
+                function scaleArena() {
+                    var wrapper = $("arena-wrapper");
+                    var parent = $("parent");
+                    if (!wrapper || !parent) return;
+                    var availW = wrapper.clientWidth;
+                    var availH = wrapper.clientHeight;
+                    if (!availW || !availH) return;
+                    var isMobile = window.innerWidth <= 768;
+                    var baseW = isMobile ? 800 : 1200;
+                    var baseH = isMobile ? 1600 : 800;
+                    parent.style.width = baseW + "px";
+                    parent.style.height = baseH + "px";
+                    var scaleW = availW / baseW;
+                    var scaleH = availH / baseH;
+                    var scale = Math.max(scaleW, scaleH);
+                    var offsetX = (availW - baseW * scale) / 2;
+                    var offsetY = (availH - baseH * scale) / 2;
+                    parent.style.transform = "scale(" + scale + ")";
+                    parent.style.left = offsetX + "px";
+                    parent.style.top = offsetY + "px";
+
+                    var utils = $("utils");
+                    if (utils) {
+                        utils.style.position = "absolute";
+                        utils.style.left = offsetX + "px";
+                        utils.style.top = offsetY + "px";
+                        utils.style.width = baseW * scale + "px";
+                        utils.style.height = baseH * scale + "px";
+                    }
+                    var cardHand = $("rune-card-hand");
+                    if (cardHand) {
+                        var arenaW = baseW * scale;
+                        var arenaH = baseH * scale;
+                        var handGap = isMobile ? 8 : 14;
+                        cardHand.style.left = offsetX + arenaW / 2 + "px";
+                        cardHand.style.bottom =
+                            Math.max(
+                                handGap,
+                                availH - (offsetY + arenaH) + handGap,
+                            ) + "px";
+                        cardHand.style.width =
+                            Math.min(
+                                arenaW - (isMobile ? 12 : 24),
+                                isMobile ? 320 : 480,
+                            ) + "px";
+                    }
+                    if (typeof mk !== "undefined" && mk.config) {
+                        mk.config.FIGHTER_SCALE = isMobile ? 1.1 : 0.8;
+                        mk.config.PLAYER_TOP = isMobile ? 700 : 400;
+                    }
+                }
+
+                window.addEventListener("resize", scaleArena);
+
+                /* Fire as soon as the arena-wrapper has real pixel dimensions —
+       ResizeObserver is the most reliable trigger, with setTimeout fallbacks */
+                if (typeof ResizeObserver !== "undefined") {
+                    var _ro = new ResizeObserver(function () {
+                        scaleArena();
+                    });
+                    _ro.observe($("arena-wrapper"));
+                }
+                /* Belt-and-suspenders: also fire after layout paints */
+                setTimeout(scaleArena, 0);
+                setTimeout(scaleArena, 200);
+
+                /* ── Battle Feed ── */
+                function addFeed(icon, text, time, cls) {
+                    var feed = $("battle-feed");
+                    if (!feed) return;
+                    var d = document.createElement("div");
+                    d.className = "feed-row " + (cls || "");
+                    d.innerHTML =
+                        '<span class="fr-icon">' +
+                        icon +
+                        "</span>" +
+                        '<span class="fr-text">' +
+                        text +
+                        "</span>" +
+                        '<span class="fr-time">' +
+                        (time || "now") +
+                        "</span>";
+                    feed.insertBefore(d, feed.firstChild);
+                    if (feed.children.length > 10)
+                        feed.removeChild(feed.lastChild);
+                }
+
+                /* ── Predictions ── */
+                function updatePredictions(p1hp, p2hp) {
+                    var total = p1hp + p2hp;
+                    if (total === 0) return;
+                    var p1pct = Math.round((p1hp / total) * 100);
+                    var p2pct = 100 - p1pct;
+                    if ($("pred-pct-p1"))
+                        $("pred-pct-p1").textContent = p1pct + "%";
+                    if ($("pred-pct-p2"))
+                        $("pred-pct-p2").textContent = p2pct + "%";
+                    if ($("pred-bar-p1"))
+                        $("pred-bar-p1").style.width = p1pct + "%";
+                    if ($("pred-bar-p2"))
+                        $("pred-bar-p2").style.width = p2pct + "%";
+                }
+
+                /* ── FX Layer ── */
+                function showClashFX(attacker, defender, dmg) {
+                    var layer = $("fx-layer");
+                    if (!layer) return;
+                    var GAME_W = 600,
+                        GAME_H = 400;
+                    var aW = attacker.getWidth ? attacker.getWidth() : 130;
+                    var dW = defender.getWidth ? defender.getWidth() : 130;
+                    var ax = (attacker.x / GAME_W) * 100;
+                    var dx = (defender.x / GAME_W) * 100;
+                    var midX = (ax + dx) / 2;
+                    var midY = 45;
+                    var dmgEl = document.createElement("div");
+                    var size =
+                        dmg >= 35
+                            ? "fx-crit"
+                            : dmg >= 20
+                              ? "fx-big"
+                              : dmg >= 12
+                                ? "fx-medium"
+                                : "fx-small";
+                    dmgEl.className = "fx-dmg " + size;
+                    dmgEl.style.left = midX + "%";
+                    dmgEl.style.top = midY + "%";
+                    dmgEl.textContent = (dmg >= 35 ? "CRIT! " : "") + dmg;
+                    layer.appendChild(dmgEl);
+                    setTimeout(function () {
+                        if (dmgEl.parentNode)
+                            dmgEl.parentNode.removeChild(dmgEl);
+                    }, 1200);
+                    if (dmg >= 35) {
+                        var flash = document.createElement("div");
+                        flash.className = "fx-flash";
+                        flash.style.background = "rgba(255,30,30,0.25)";
+                        layer.appendChild(flash);
+                        setTimeout(function () {
+                            if (flash.parentNode)
+                                flash.parentNode.removeChild(flash);
+                        }, 380);
+                    }
+                }
+
+                /* ── BattleScene Events ── */
+                window.addEventListener("battleHit", function (e) {
+                    var d = e.detail || {};
+                    hitCount++;
+                    totalDamage += d.damage || 0;
+                    if ($("total-damage"))
+                        $("total-damage").textContent = totalDamage;
+                    if ($("tb-hits")) $("tb-hits").textContent = hitCount;
+                    if ($("mb-damage"))
+                        $("mb-damage").textContent = totalDamage;
+                    if ($("mb-hits")) $("mb-hits").textContent = hitCount;
+                    if (d.attacker && d.defender)
+                        showClashFX(d.attacker, d.defender, d.damage || 0);
+                    var attackerName =
+                        d.attackerName ||
+                        (d.attackerIdx === 0 ? cpPicks[0] : cpPicks[1]);
+                    var dmg = d.damage || 0;
+                    var isCrit = dmg >= 35;
+                    addFeed(
+                        isCrit ? "💥" : "⚔",
+                        (CHAR_DISPLAY[attackerName] || attackerName) +
+                            " dealt " +
+                            dmg +
+                            " damage" +
+                            (isCrit ? " — CRITICAL HIT!" : ""),
+                        "now",
+                        isCrit ? "feed-crit" : "",
+                    );
+                    updatePredictions(p1Life, p2Life);
+                });
+
+                window.addEventListener("battleLifeUpdate", function (e) {
+                    var d = e.detail || {};
+                    if (d.playerIdx === 0) {
+                        p1Life = d.life;
+                        if ($("qi-p1-hp"))
+                            $("qi-p1-hp").textContent =
+                                Math.round(p1Life) + "%";
+                    } else {
+                        p2Life = d.life;
+                        if ($("qi-p2-hp"))
+                            $("qi-p2-hp").textContent =
+                                Math.round(p2Life) + "%";
+                    }
+                    updatePredictions(p1Life, p2Life);
+                });
+
+                window.addEventListener("battleStart", function () {
+                    addFeed("⚡", "Round Start!", "now", "feed-system");
+                    if ($("vs-overlay")) {
+                        $("vs-overlay").style.opacity = "1";
+                        setTimeout(function () {
+                            $("vs-overlay").style.opacity = "0";
+                        }, 1500);
+                    }
+                });
+
+                window.addEventListener("battleWin", function (e) {
+                    var d = e.detail || {};
+                    var winnerIdx = d.winnerIdx !== undefined ? d.winnerIdx : 0;
+                    var winnerName = cpPicks[winnerIdx];
+                    var loserName = cpPicks[1 - winnerIdx];
+                    var winnerDisplay = CHAR_DISPLAY[winnerName] || winnerName;
+                    var loserDisplay = CHAR_DISPLAY[loserName] || loserName;
+                    kingStreak++;
+                    kingDefended++;
+                    var earned =
+                        1800 +
+                        kingStreak * 650 +
+                        winnerIdx * 250 +
+                        Math.floor(totalDamage / 10) * 100;
+                    if ($("ks-streak"))
+                        $("ks-streak").textContent = kingStreak + " WINS";
+                    if ($("ks-defended"))
+                        $("ks-defended").textContent = kingDefended + " TIMES";
+                    if ($("ks-earned"))
+                        $("ks-earned").textContent = "+" + earned + " BC";
+                    if ($("ck-name")) $("ck-name").textContent = winnerDisplay;
+                    if ($("mb-king")) $("mb-king").textContent = winnerDisplay;
+                    addFeed(
+                        "♛",
+                        winnerDisplay + " WINS! " + loserDisplay + " defeated.",
+                        "now",
+                        "feed-win",
+                    );
+                    if (typeof confetti !== "undefined") {
+                        confetti({
+                            particleCount: 150,
+                            spread: 100,
+                            origin: { y: 0.6 },
+                            colors: [
+                                "#8855ee",
+                                "#44aaff",
+                                "#c49aff",
+                                "#ffffff",
+                            ],
+                        });
+                    }
+                    var winModal = $("win-modal");
+                    if (winModal) {
+                        var rewardAmount = earned;
+                        var winnerLevel = 10 + kingStreak * 3 + winnerIdx;
+                        if ($("win-title"))
+                            $("win-title").textContent =
+                                winnerDisplay.toUpperCase() + " WINS!";
+                        if ($("win-level"))
+                            $("win-level").textContent = "Level " + winnerLevel;
+                        if ($("win-reward"))
+                            $("win-reward").textContent = "+" + rewardAmount;
+                        winModal.style.display = "flex";
+                        void winModal.offsetWidth;
+                        winModal.style.opacity = "1";
+                    }
+                    setTimeout(function () {
+                        p1Life = 100;
+                        p2Life = 100;
+                        if ($("qi-p1-hp")) $("qi-p1-hp").textContent = "100%";
+                        if ($("qi-p2-hp")) $("qi-p2-hp").textContent = "100%";
+                        totalDamage = 0;
+                        hitCount = 0;
+                        if ($("total-damage"))
+                            $("total-damage").textContent = "0";
+                        if ($("tb-hits")) $("tb-hits").textContent = "0";
+                        if ($("mb-damage")) $("mb-damage").textContent = "0";
+                        if ($("mb-hits")) $("mb-hits").textContent = "0";
+                        if (winModal) {
+                            winModal.style.opacity = "0";
+                            setTimeout(function () {
+                                winModal.style.display = "none";
+                            }, 300);
+                        }
+                        addFeed("⚔", "New Round Start!", "now", "feed-system");
+                        window.startPhaserMatch(cpPicks[0], cpPicks[1]);
+                        updatePredictions(p1Life, p2Life);
+                    }, 3000);
+                });
+
+                /* ── Fullscreen + Sound ── */
+                window.toggleFullscreen = function () {
+                    if (!document.fullscreenElement) {
+                        document.documentElement
+                            .requestFullscreen()
+                            .catch(function () {});
+                    } else {
+                        document.exitFullscreen().catch(function () {});
+                    }
+                };
+                var soundOn = true;
+                window.toggleSound = function () {
+                    soundOn = !soundOn;
+                    var bgm = $("bgm");
+                    if (bgm) bgm.muted = !soundOn;
+                };
+
+                /* ── Loading Screen ── */
+                window.onGameStarted = function () {
+                    var loadingEl = $("loading");
+                    if (loadingEl) loadingEl.style.display = "none";
+                    requestAnimationFrame(scaleArena);
+                };
+
+                var _origStartPhaserMatch = window.startPhaserMatch;
+                window.startPhaserMatch = function (p1Key, p2Key) {
+                    var loadingEl = $("loading");
+                    if (loadingEl) loadingEl.style.display = "flex";
+                    _origStartPhaserMatch(p1Key, p2Key);
+                };
+
+                /* ── Init ── */
+                addFeed(
+                    "♛",
+                    "challenger.sol has challenged the King!",
+                    "00:12",
+                    "feed-system",
+                );
+                addFeed("⚡", "Round Start!", "00:09", "feed-system");
+                addFeed("⚔", "Robot V1 used Shadow Strike", "00:07", "");
+                addFeed("⚔", "Floatrobo used Iron Slash", "00:06", "");
+                addFeed("💥", "Critical Hit! −1,250 HP", "00:05", "feed-crit");
+
+                requestAnimationFrame(scaleArena);
+                window.startPhaserMatch(cpPicks[0], cpPicks[1]);
+            })();
+        </script>
+
+        <script>
+        /* ── Page navigation ── */
+        var _activePage = null;
+
+        var _pages = ['docs','marketplace','create','leaderboard','notifications'];
+
+        function openPage(name) {
+            if (_activePage === name) { closePage(); return; }
+            _pages.forEach(function(p) {
+                var el = document.getElementById('page-' + p);
+                if (el) el.style.display = 'none';
+            });
+            var target = document.getElementById('page-' + name);
+            if (target) {
+                target.style.display = 'flex';
+                _activePage = name;
+            }
+            document.querySelectorAll('.tb-nav-item').forEach(function(a) {
+                a.classList.toggle('tb-nav-active', a.dataset.page === name);
+            });
+            document.body.classList.add('page-active');
+        }
+
+        function closePage() {
+            _pages.forEach(function(p) {
+                var el = document.getElementById('page-' + p);
+                if (el) el.style.display = 'none';
+            });
+            document.querySelectorAll('.tb-nav-item').forEach(function(a) {
+                a.classList.remove('tb-nav-active');
+            });
+            _activePage = null;
+            document.body.classList.remove('page-active');
+        }
+
+        /* ── Leaderboard tabs ── */
+        function lbTab(btn, period) {
+            document.querySelectorAll('.lb-tab').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+        }
+
+        /* ── Notifications ── */
+        function notifTab(btn, type) {
+            document.querySelectorAll('.notif-tab').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('.notif-item').forEach(function(el) {
+                el.style.display = (type === 'all' || el.dataset.type === type) ? 'flex' : 'none';
+            });
+            document.querySelectorAll('.notif-divider').forEach(function(el) {
+                el.style.display = type === 'all' ? 'block' : 'none';
+            });
+        }
+
+        function markAllRead() {
+            document.querySelectorAll('.notif-unread').forEach(function(el) {
+                el.classList.remove('notif-unread');
+            });
+            document.querySelectorAll('.notif-dot').forEach(function(el) { el.remove(); });
+            var badge = document.querySelector('.tb-notif-badge');
+            if (badge) badge.style.display = 'none';
+        }
+
+        /* ── Search ── */
+        var _SEARCH_INDEX = [
+            { label:'Docs',          icon:'📖', type:'Page',      action:function(){ openPage('docs'); } },
+            { label:'Marketplace',   icon:'🛒', type:'Page',      action:function(){ openPage('marketplace'); } },
+            { label:'Leaderboard',   icon:'🏆', type:'Page',      action:function(){ openPage('leaderboard'); } },
+            { label:'Create Fighter',icon:'🛠', type:'Page',      action:function(){ openPage('create'); } },
+            { label:'Introduction',  icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('intro'); } },
+            { label:'Quick Start',   icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('quickstart'); } },
+            { label:'Rune Abilities',icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('runes'); } },
+            { label:'Betting System',icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('betting'); } },
+            { label:'Battle Coins',  icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('bc'); } },
+            { label:'NFT Fighters',  icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('nft'); } },
+            { label:'Robot V1',      icon:'🤖', type:'Fighter',   action:function(){ openPage('leaderboard'); } },
+            { label:'Floatrobo',     icon:'🦾', type:'Fighter',   action:function(){ openPage('leaderboard'); } },
+            { label:'Robo Pepe',     icon:'🐸', type:'Fighter',   action:function(){ openPage('leaderboard'); } },
+            { label:'Crimsonbot',    icon:'🦀', type:'Fighter',   action:function(){ openPage('leaderboard'); } },
+            { label:'Bantah Potion', icon:'🧪', type:'Item',      action:function(){ openPage('marketplace'); } },
+            { label:'Iron Shield Rune', icon:'🛡', type:'Item',   action:function(){ openPage('marketplace'); } },
+            { label:'Thunder Rune',  icon:'⚡', type:'Item',      action:function(){ openPage('marketplace'); } },
+            { label:'King Crown Skin', icon:'👑', type:'Item',    action:function(){ openPage('marketplace'); } },
+            { label:'Pick Fighters', icon:'⚔', type:'Action',    action:function(){ closeSearch(); openCpModal(); } },
+        ];
+        var _searchSelected = 0;
+
+        function openSearch() {
+            var modal = document.getElementById('search-modal');
+            var input = document.getElementById('search-input');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            setTimeout(function(){ if (input) input.focus(); }, 50);
+            runSearch('');
+        }
+
+        function closeSearch() {
+            var modal = document.getElementById('search-modal');
+            if (modal) modal.style.display = 'none';
+            var input = document.getElementById('search-input');
+            if (input) input.value = '';
+        }
+
+        function closeSearchOnBg(e) {
+            if (e.target === document.getElementById('search-modal')) closeSearch();
+        }
+
+        function runSearch(q) {
+            q = (q || '').trim().toLowerCase();
+            var results = q === ''
+                ? _SEARCH_INDEX.slice(0, 8)
+                : _SEARCH_INDEX.filter(function(r){ return r.label.toLowerCase().includes(q) || r.type.toLowerCase().includes(q); });
+            _searchSelected = 0;
+            renderSearchResults(results, q);
+        }
+
+        function renderSearchResults(results, q) {
+            var box = document.getElementById('search-results');
+            if (!box) return;
+            if (!results.length) {
+                box.innerHTML = '<div class="search-no-results">No results for "' + q + '"</div>';
+                return;
+            }
+            box.innerHTML = results.map(function(r, i) {
+                return '<div class="search-result-item' + (i === 0 ? ' selected' : '') + '" onclick="searchPick(' + i + ')" onmouseover="searchHover(' + i + ')" data-idx="' + i + '">' +
+                    '<span class="sr-icon">' + r.icon + '</span>' +
+                    '<span class="sr-label">' + r.label + '</span>' +
+                    '<span class="sr-type">' + r.type + '</span>' +
+                    '</div>';
+            }).join('');
+            box._results = results;
+        }
+
+        function searchHover(idx) {
+            _searchSelected = idx;
+            document.querySelectorAll('.search-result-item').forEach(function(el, i) {
+                el.classList.toggle('selected', i === idx);
+            });
+        }
+
+        function searchPick(idx) {
+            var box = document.getElementById('search-results');
+            if (!box || !box._results) return;
+            var r = box._results[idx];
+            if (r) { closeSearch(); r.action(); }
+        }
+
+        function searchKeydown(e) {
+            var items = document.querySelectorAll('.search-result-item');
+            if (e.key === 'ArrowDown') { e.preventDefault(); _searchSelected = Math.min(_searchSelected + 1, items.length - 1); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); _searchSelected = Math.max(_searchSelected - 1, 0); }
+            else if (e.key === 'Enter') { e.preventDefault(); searchPick(_searchSelected); return; }
+            else if (e.key === 'Escape') { closeSearch(); return; }
+            items.forEach(function(el, i){ el.classList.toggle('selected', i === _searchSelected); });
+        }
+
+        /* Close search with Cmd/Ctrl+K shortcut too */
+        document.addEventListener('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+            if (e.key === 'Escape' && document.getElementById('search-modal').style.display !== 'none') { closeSearch(); }
         });
-        if ($('cp-hint')) $('cp-hint').textContent = 'Click a fighter below for P' + (idx + 1);
-    };
 
-    window.cpPickFighter = function(key) {
-        cpPicks[cpActiveSlot] = key;
-        var imgSrc = 'images/fighters/' + key + '/left/stand/0.png';
-        var name = CHAR_DISPLAY[key] || key.toUpperCase();
-        var slotImg = $('cp-slot-img-' + cpActiveSlot);
-        var slotName = $('cp-slot-name-' + cpActiveSlot);
-        if (slotImg) slotImg.src = imgSrc;
-        if (slotName) slotName.textContent = name;
-        /* Update queue portraits */
-        var qPortrait = cpActiveSlot === 0 ? $('q-p1') : $('q-p2');
-        if (qPortrait) {
-            var img = qPortrait.querySelector('.qi-portrait img');
-            if (img) img.src = imgSrc;
-            var qname = qPortrait.querySelector('.qi-name');
-            if (qname) qname.textContent = name;
+        /* ── Docs sidebar navigation ── */
+        function showDoc(id) {
+            document.querySelectorAll('.doc-page').forEach(function(p) { p.style.display = 'none'; });
+            var page = document.getElementById('doc-' + id);
+            if (page) page.style.display = 'block';
+            document.querySelectorAll('.docs-nav-link').forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('onclick') && a.getAttribute('onclick').includes("'" + id + "'"));
+            });
+            return false;
         }
-        /* Update bp portrait */
-        if (cpActiveSlot === 1 && $('bp-portrait-img')) $('bp-portrait-img').src = imgSrc;
-        if (cpActiveSlot === 1 && $('bp-name')) $('bp-name').textContent = name.toLowerCase() + '.sol';
-        cpSelectSlot(1 - cpActiveSlot);
-        if ($('cp-hint')) $('cp-hint').textContent = 'Ready! Starting next match.';
-        window.closeCpModalDirect();
-        setTimeout(function () { window.startPhaserMatch(cpPicks[0], cpPicks[1]); }, 400);
-    };
 
-    /* ── Arena Scaling ── */
-    function scaleArena() {
-        var wrapper = $('arena-wrapper');
-        var parent = $('parent');
-        if (!wrapper || !parent) return;
-        var availW = wrapper.clientWidth;
-        var availH = wrapper.clientHeight;
-        var isMobile = window.innerWidth <= 768;
-        var baseW = isMobile ? 800 : 1200;
-        var baseH = isMobile ? 1600 : 800;
-        parent.style.width = baseW + 'px';
-        parent.style.height = baseH + 'px';
-        var scaleW = availW / baseW;
-        var scaleH = availH / baseH;
-        var scale = isMobile ? Math.max(scaleW, scaleH) : Math.min(scaleW, scaleH);
-        var offsetX = (availW - baseW * scale) / 2;
-        var offsetY = (availH - baseH * scale) / 2;
-        parent.style.transform = 'scale(' + scale + ')';
-        parent.style.left = offsetX + 'px';
-        parent.style.top = offsetY + 'px';
-        parent.style.marginTop = '0';
-        var utils = $('utils');
-        if (utils) {
-            utils.style.position = 'absolute';
-            utils.style.left = offsetX + 'px';
-            utils.style.top = offsetY + 'px';
-            utils.style.width = (baseW * scale) + 'px';
-            utils.style.height = (baseH * scale) + 'px';
+        /* ── Marketplace filter ── */
+        function mktFilter(btn, type) {
+            document.querySelectorAll('.mkt-filter').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('.mkt-card').forEach(function(c) {
+                c.style.display = (type === 'all' || c.dataset.type === type) ? 'flex' : 'none';
+            });
         }
-        var cardHand = $('rune-card-hand');
-        if (cardHand) {
-            var arenaW = baseW * scale;
-            var arenaH = baseH * scale;
-            var handGap = isMobile ? 8 : 14;
-            cardHand.style.left = (offsetX + arenaW / 2) + 'px';
-            cardHand.style.bottom = Math.max(handGap, availH - (offsetY + arenaH) + handGap) + 'px';
-            cardHand.style.width = Math.min(arenaW - (isMobile ? 12 : 24), isMobile ? 320 : 480) + 'px';
+
+        /* ── Create fighter ── */
+        var _totalPoints = 20;
+
+        function updateStats() {
+            var atk = parseInt(document.getElementById('sl-atk').value) || 0;
+            var def = parseInt(document.getElementById('sl-def').value) || 0;
+            var spd = parseInt(document.getElementById('sl-spd').value) || 0;
+            var used = atk + def + spd;
+            var remaining = _totalPoints - used;
+
+            if (remaining < 0) {
+                /* Clamp — prevent over-allocation */
+                var last = event && event.target;
+                if (last) last.value = parseInt(last.value) + remaining;
+                remaining = 0;
+            }
+            document.getElementById('pts-remaining').textContent = Math.max(0, _totalPoints - (
+                parseInt(document.getElementById('sl-atk').value) +
+                parseInt(document.getElementById('sl-def').value) +
+                parseInt(document.getElementById('sl-spd').value)
+            ));
+
+            var a = parseInt(document.getElementById('sl-atk').value);
+            var d = parseInt(document.getElementById('sl-def').value);
+            var s = parseInt(document.getElementById('sl-spd').value);
+
+            document.getElementById('val-atk').textContent = (300 + a * 15) + '';
+            document.getElementById('val-def').textContent = (200 + d * 10) + '';
+            document.getElementById('val-spd').textContent = (100 + s * 6)  + '';
+            document.getElementById('prev-atk').textContent = (300 + a * 15) + '';
+            document.getElementById('prev-def').textContent = (200 + d * 10) + '';
+            document.getElementById('prev-spd').textContent = (100 + s * 6)  + '';
+            document.getElementById('prev-pwr').textContent = (1500 + a * 20 + d * 15 + s * 12).toLocaleString();
+
+            ['atk','def','spd'].forEach(function(stat) {
+                var fill = document.getElementById('fill-' + stat);
+                var sl = document.getElementById('sl-' + stat);
+                if (fill && sl) fill.style.width = (parseInt(sl.value) / 20 * 100) + '%';
+            });
         }
-        if (typeof mk !== 'undefined' && mk.config) {
-            mk.config.FIGHTER_SCALE = isMobile ? 1.10 : 0.80;
-            mk.config.PLAYER_TOP = isMobile ? 700 : 400;
+
+        function checkRunes() {
+            var cbs = document.querySelectorAll('.create-rune-cb');
+            var checked = Array.from(cbs).filter(function(c){ return c.checked; });
+            if (checked.length > 2) { event.target.checked = false; }
         }
-    }
-    window.addEventListener('resize', scaleArena);
 
-    /* ── Battle Feed ── */
-    function addFeed(icon, text, time, cls) {
-        var feed = $('battle-feed');
-        if (!feed) return;
-        var d = document.createElement('div');
-        d.className = 'feed-row ' + (cls || '');
-        d.innerHTML = '<span class="fr-icon">' + icon + '</span>' +
-            '<span class="fr-text">' + text + '</span>' +
-            '<span class="fr-time">' + (time || 'now') + '</span>';
-        feed.insertBefore(d, feed.firstChild);
-        if (feed.children.length > 10) feed.removeChild(feed.lastChild);
-    }
-
-    /* ── Predictions ── */
-    function updatePredictions(p1hp, p2hp) {
-        var total = p1hp + p2hp;
-        if (total === 0) return;
-        var p1pct = Math.round((p1hp / total) * 100);
-        var p2pct = 100 - p1pct;
-        if ($('pred-pct-p1')) $('pred-pct-p1').textContent = p1pct + '%';
-        if ($('pred-pct-p2')) $('pred-pct-p2').textContent = p2pct + '%';
-        if ($('pred-bar-p1')) $('pred-bar-p1').style.width = p1pct + '%';
-        if ($('pred-bar-p2')) $('pred-bar-p2').style.width = p2pct + '%';
-    }
-
-    /* ── FX Layer ── */
-    function showClashFX(attacker, defender, dmg) {
-        var layer = $('fx-layer');
-        if (!layer) return;
-        var GAME_W = 600, GAME_H = 400;
-        var aW = attacker.getWidth ? attacker.getWidth() : 130;
-        var dW = defender.getWidth ? defender.getWidth() : 130;
-        var ax = (attacker.x / GAME_W) * 100;
-        var dx = (defender.x / GAME_W) * 100;
-        var midX = ((ax + dx) / 2);
-        var midY = 45;
-        var dmgEl = document.createElement('div');
-        var size = dmg >= 35 ? 'fx-crit' : dmg >= 20 ? 'fx-big' : dmg >= 12 ? 'fx-medium' : 'fx-small';
-        dmgEl.className = 'fx-dmg ' + size;
-        dmgEl.style.left = midX + '%';
-        dmgEl.style.top = midY + '%';
-        dmgEl.textContent = (dmg >= 35 ? 'CRIT! ' : '') + dmg;
-        layer.appendChild(dmgEl);
-        setTimeout(function () { if (dmgEl.parentNode) dmgEl.parentNode.removeChild(dmgEl); }, 1200);
-        if (dmg >= 35) {
-            var flash = document.createElement('div');
-            flash.className = 'fx-flash';
-            flash.style.background = 'rgba(255,30,30,0.25)';
-            layer.appendChild(flash);
-            setTimeout(function () { if (flash.parentNode) flash.parentNode.removeChild(flash); }, 380);
+        function pickAvatar(btn, emoji) {
+            document.querySelectorAll('.av-btn').forEach(function(b){ b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.getElementById('create-avatar').textContent = emoji;
         }
-    }
 
-    /* ── BattleScene Events ── */
-    window.addEventListener('battleHit', function (e) {
-        var d = e.detail || {};
-        hitCount++;
-        totalDamage += (d.damage || 0);
-        if ($('total-damage')) $('total-damage').textContent = totalDamage;
-        if ($('tb-hits')) $('tb-hits').textContent = hitCount;
-        if ($('mb-damage')) $('mb-damage').textContent = totalDamage;
-        if ($('mb-hits')) $('mb-hits').textContent = hitCount;
-        if (d.attacker && d.defender) showClashFX(d.attacker, d.defender, d.damage || 0);
-        var attackerName = d.attackerName || (d.attackerIdx === 0 ? cpPicks[0] : cpPicks[1]);
-        var dmg = d.damage || 0;
-        var isCrit = dmg >= 35;
-        addFeed(isCrit ? '💥' : '⚔', (CHAR_DISPLAY[attackerName] || attackerName) + ' dealt ' + dmg + ' damage' + (isCrit ? ' — CRITICAL HIT!' : ''), 'now', isCrit ? 'feed-crit' : '');
-        updatePredictions(p1Life, p2Life);
-    });
-
-    window.addEventListener('battleLifeUpdate', function (e) {
-        var d = e.detail || {};
-        if (d.playerIdx === 0) {
-            p1Life = d.life;
-            if ($('qi-p1-hp')) $('qi-p1-hp').textContent = Math.round(p1Life) + '%';
-        } else {
-            p2Life = d.life;
-            if ($('qi-p2-hp')) $('qi-p2-hp').textContent = Math.round(p2Life) + '%';
+        function updateStrategy(radio) {
+            document.querySelectorAll('.create-strategy-opt').forEach(function(l){ l.classList.remove('active'); });
+            radio.closest('.create-strategy-opt').classList.add('active');
         }
-        updatePredictions(p1Life, p2Life);
-    });
+        /* Pre-select balanced strategy */
+        document.addEventListener('DOMContentLoaded', function() {
+            var bal = document.querySelector('[value="balanced"]');
+            if (bal) bal.closest('.create-strategy-opt').classList.add('active');
+        });
 
-    window.addEventListener('battleStart', function () {
-        addFeed('⚡', 'Round Start!', 'now', 'feed-system');
-        if ($('vs-overlay')) {
-            $('vs-overlay').style.opacity = '1';
-            setTimeout(function () { $('vs-overlay').style.opacity = '0'; }, 1500);
+        function resetCreate() {
+            ['sl-atk','sl-def','sl-spd'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=5; });
+            document.querySelectorAll('.create-rune-cb').forEach(function(c){ c.checked=false; });
+            document.getElementById('fighter-name').value = '';
+            document.getElementById('create-preview-name').textContent = 'YOUR FIGHTER';
+            updateStats();
         }
-    });
 
-    window.addEventListener('battleWin', function (e) {
-        var d = e.detail || {};
-        var winnerIdx = d.winnerIdx !== undefined ? d.winnerIdx : 0;
-        var winnerName = cpPicks[winnerIdx];
-        var loserName = cpPicks[1 - winnerIdx];
-        var winnerDisplay = CHAR_DISPLAY[winnerName] || winnerName;
-        var loserDisplay = CHAR_DISPLAY[loserName] || loserName;
-        kingStreak++;
-        kingDefended++;
-        var earned = 1800 + (kingStreak * 650) + (winnerIdx * 250) + (Math.floor(totalDamage / 10) * 100);
-        if ($('ks-streak')) $('ks-streak').textContent = kingStreak + ' WINS';
-        if ($('ks-defended')) $('ks-defended').textContent = kingDefended + ' TIMES';
-        if ($('ks-earned')) $('ks-earned').textContent = '+' + earned + ' BC';
-        if ($('ck-name')) $('ck-name').textContent = winnerDisplay;
-        if ($('mb-king')) $('mb-king').textContent = winnerDisplay;
-        addFeed('♛', winnerDisplay + ' WINS! ' + loserDisplay + ' defeated.', 'now', 'feed-win');
-        if (typeof confetti !== 'undefined') {
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#8855ee','#44aaff','#c49aff','#ffffff'] });
+        function mintFighter() {
+            alert('Minting coming soon — connect your wallet to proceed.');
         }
-        var winModal = $('win-modal');
-        if (winModal) {
-            var rewardAmount = earned;
-            var winnerLevel = 10 + (kingStreak * 3) + winnerIdx;
-            if ($('win-title')) $('win-title').textContent = winnerDisplay.toUpperCase() + ' WINS!';
-            if ($('win-level')) $('win-level').textContent = 'Level ' + winnerLevel;
-            if ($('win-reward')) $('win-reward').textContent = '+' + rewardAmount;
-            winModal.style.display = 'flex';
-            void winModal.offsetWidth;
-            winModal.style.opacity = '1';
-        }
-        setTimeout(function () {
-            p1Life = 100; p2Life = 100;
-            if ($('qi-p1-hp')) $('qi-p1-hp').textContent = '100%';
-            if ($('qi-p2-hp')) $('qi-p2-hp').textContent = '100%';
-            totalDamage = 0; hitCount = 0;
-            if ($('total-damage')) $('total-damage').textContent = '0';
-            if ($('tb-hits')) $('tb-hits').textContent = '0';
-            if ($('mb-damage')) $('mb-damage').textContent = '0';
-            if ($('mb-hits')) $('mb-hits').textContent = '0';
-            if (winModal) { winModal.style.opacity = '0'; setTimeout(function () { winModal.style.display = 'none'; }, 300); }
-            addFeed('⚔', 'New Round Start!', 'now', 'feed-system');
-            window.startPhaserMatch(cpPicks[0], cpPicks[1]);
-            updatePredictions(p1Life, p2Life);
-        }, 3000);
-    });
-
-    /* ── Fullscreen + Sound ── */
-    window.toggleFullscreen = function() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(function(){});
-        } else {
-            document.exitFullscreen().catch(function(){});
-        }
-    };
-    var soundOn = true;
-    window.toggleSound = function() {
-        soundOn = !soundOn;
-        var bgm = $('bgm');
-        if (bgm) bgm.muted = !soundOn;
-    };
-
-    /* ── Init ── */
-    addFeed('♛', 'challenger.sol has challenged the King!', '00:12', 'feed-system');
-    addFeed('⚡', 'Round Start!', '00:09', 'feed-system');
-    addFeed('⚔', 'Robot V1 used Shadow Strike', '00:07', '');
-    addFeed('⚔', 'Floatrobo used Iron Slash', '00:06', '');
-    addFeed('💥', 'Critical Hit! −1,250 HP', '00:05', 'feed-crit');
-
-    scaleArena();
-    window.startPhaserMatch(cpPicks[0], cpPicks[1]);
-}());
-</script>
-</body>
+        </script>
+    </body>
 </html>
