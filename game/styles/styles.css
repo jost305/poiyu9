@@ -1576,6 +1576,361 @@ body.page-active .page-overlay { bottom: 0; }
 .doc-stat-desc { color: var(--bb-muted-foreground); line-height: 1.5; }
 
 /* ══════════════════════════════════════════
+   DOCS PAGE v2 — BOTA full-width docs
+══════════════════════════════════════════ */
+#page-docs .pg-body { overflow-y: auto; display: block; }
+
+.doc2-wrap { min-height: 100%; background: var(--bb-background); }
+.doc2-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 20px 60px;
+}
+
+/* ── Doc2 page header ── */
+.doc2-header {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-bottom: 1px solid var(--bb-border);
+    padding-bottom: 18px;
+}
+.doc2-header-left { flex: 1; min-width: 0; }
+.doc2-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid rgb(var(--bb-primary-rgb) / 0.3);
+    background: rgb(var(--bb-primary-rgb) / 0.1);
+    color: hsl(var(--bb-primary));
+    border-radius: 5px;
+    padding: 3px 9px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+.doc2-h1 {
+    margin: 10px 0 4px;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--bb-foreground);
+    line-height: 1.2;
+}
+.doc2-lead {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--bb-muted-foreground);
+    max-width: 640px;
+    margin: 0;
+}
+.doc2-quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.doc2-quick-link {
+    display: inline-block;
+    border: 1px solid var(--bb-border);
+    background: var(--bb-card);
+    color: var(--bb-foreground);
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.12s, color 0.12s;
+    white-space: nowrap;
+}
+.doc2-quick-link:hover {
+    border-color: rgb(var(--bb-primary-rgb) / 0.5);
+    color: hsl(var(--bb-primary));
+}
+
+/* ── Doc2 section heading ── */
+.doc2-section { margin-top: 22px; }
+.doc2-section-head {
+    border-top: 1px solid var(--bb-border);
+    padding-top: 18px;
+    margin-bottom: 12px;
+}
+.doc2-eyebrow {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsl(var(--bb-primary));
+    margin-bottom: 3px;
+}
+.doc2-section-h2 {
+    font-size: 17px;
+    font-weight: 900;
+    color: var(--bb-foreground);
+    margin: 0 0 4px;
+}
+.doc2-section-body {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--bb-muted-foreground);
+    max-width: 720px;
+    margin: 0;
+}
+
+/* ── Doc2 grids ── */
+.doc2-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+.doc2-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+.doc2-grid-5 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+.doc2-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+@media (min-width: 700px) {
+    .doc2-grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .doc2-grid-3 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 900px) {
+    .doc2-grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .doc2-grid-5 { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* ── Doc2 cards ── */
+.doc2-card {
+    border: 1px solid var(--bb-border);
+    background: var(--bb-card);
+    border-radius: 7px;
+    padding: 12px;
+}
+.doc2-card-icon {
+    display: grid;
+    place-items: center;
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    background: rgb(var(--bb-primary-rgb) / 0.1);
+    font-size: 14px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+.doc2-card-icon-sec {
+    display: grid;
+    place-items: center;
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    background: rgba(22, 163, 74, 0.1);
+    font-size: 14px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+.doc2-card-h3 {
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--bb-foreground);
+    margin: 0 0 4px;
+}
+.doc2-card-p {
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--bb-muted-foreground);
+    margin: 0;
+}
+.doc2-card-row-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.doc2-card-row-top .doc2-card-icon { margin-bottom: 0; }
+.doc2-card-row-title {
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--bb-foreground);
+    flex: 1;
+    min-width: 0;
+}
+.doc2-status-badge {
+    flex-shrink: 0;
+    border-radius: 4px;
+    background: var(--bb-muted);
+    padding: 2px 7px;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--bb-muted-foreground);
+}
+
+/* ── Numbered steps ── */
+.doc2-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border: 1px solid var(--bb-border);
+    background: var(--bb-card);
+    border-radius: 7px;
+    padding: 10px 12px;
+}
+.doc2-step-num {
+    display: grid;
+    place-items: center;
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: hsl(var(--bb-primary));
+    color: #fff;
+    font-size: 11px;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+.doc2-step-text {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--bb-foreground);
+    margin: 0;
+    padding-top: 4px;
+}
+
+/* ── Tables ── */
+.doc2-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--bb-border);
+    border-radius: 7px;
+    background: var(--bb-card);
+    margin-top: 10px;
+}
+.doc2-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.doc2-table th {
+    background: rgb(var(--bb-muted-rgb) / 0.6);
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--bb-muted-foreground);
+    padding: 8px 12px;
+    text-align: left;
+    border-right: 1px solid var(--bb-border);
+    white-space: nowrap;
+}
+.doc2-table th:last-child { border-right: none; }
+.doc2-table td {
+    padding: 8px 12px;
+    font-size: 11px;
+    line-height: 1.5;
+    border-top: 1px solid var(--bb-border);
+    border-right: 1px solid var(--bb-border);
+    vertical-align: top;
+}
+.doc2-table td:last-child { border-right: none; }
+.doc2-td-key {
+    font-weight: 900;
+    color: var(--bb-foreground);
+    background: rgb(var(--bb-background-rgb) / 0.6);
+    white-space: nowrap;
+}
+.doc2-td-primary {
+    font-weight: 700;
+    color: hsl(var(--bb-primary));
+}
+.doc2-td-muted {
+    color: var(--bb-muted-foreground);
+    font-weight: 600;
+}
+
+/* ── Highlight / info boxes ── */
+.doc2-highlight {
+    border: 1px solid rgb(var(--bb-primary-rgb) / 0.2);
+    background: rgb(var(--bb-primary-rgb) / 0.08);
+    border-radius: 7px;
+    padding: 12px;
+}
+.doc2-highlight-label {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: hsl(var(--bb-primary));
+    margin-bottom: 4px;
+}
+.doc2-highlight-h3 {
+    font-size: 12px;
+    font-weight: 900;
+    color: hsl(var(--bb-primary));
+    margin: 0 0 4px;
+}
+.doc2-highlight-body {
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--bb-muted-foreground);
+    font-weight: 600;
+    margin: 0;
+}
+
+/* ── Mode cards point list ── */
+.doc2-mode-points {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.doc2-mode-point {
+    border-radius: 5px;
+    background: rgb(var(--bb-background-rgb) / 0.7);
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--bb-muted-foreground);
+}
+
+/* ── Source badge cards ── */
+.doc2-badge-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--bb-border);
+    background: var(--bb-card);
+    border-radius: 7px;
+    padding: 12px;
+}
+.doc2-badge-img {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--bb-border);
+    background: var(--bb-background);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.doc2-badge-name {
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--bb-foreground);
+}
+.doc2-badge-sub {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--bb-muted-foreground);
+    margin-top: 1px;
+}
+
+/* ── Spacer util ── */
+.doc2-mt { margin-top: 10px; }
+
+/* ══════════════════════════════════════════
    MARKETPLACE PAGE
 ══════════════════════════════════════════ */
 .mkt-header-actions { display: flex; align-items: center; gap: 12px; }

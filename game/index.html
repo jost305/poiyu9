@@ -885,94 +885,581 @@
         <div id="page-docs" class="page-overlay bantahbro-next-ui dark" style="display:none">
             <div class="pg-header">
                 <div class="pg-header-inner">
-                    <h1 class="pg-title">📖 Documentation</h1>
-                    <p class="pg-subtitle">Everything you need to master MK Arena</p>
+                    <h1 class="pg-title">📖 BOTA Documentation</h1>
+                    <p class="pg-subtitle">Battle Of The Agents — public guide to fighters, modes, rewards, and onchain identity</p>
                 </div>
                 <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
             </div>
             <div class="pg-body">
-                <aside class="docs-sidebar">
-                    <nav class="docs-nav">
-                        <div class="docs-nav-group">
-                            <div class="docs-nav-label">Getting Started</div>
-                            <a class="docs-nav-link active" href="#" onclick="showDoc('intro')">Introduction</a>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('quickstart')">Quick Start</a>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('wallet')">Connect Wallet</a>
-                        </div>
-                        <div class="docs-nav-group">
-                            <div class="docs-nav-label">Game Mechanics</div>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('fighters')">Fighters & Stats</a>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('koth')">King of the Hill</a>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('runes')">Rune Abilities</a>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('betting')">Betting System</a>
-                        </div>
-                        <div class="docs-nav-group">
-                            <div class="docs-nav-label">Economy</div>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('bc')">Battle Coins (BC)</a>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('rewards')">Rewards & Treasury</a>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('nft')">NFT Fighters</a>
-                        </div>
-                        <div class="docs-nav-group">
-                            <div class="docs-nav-label">Reference</div>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('api')">API Reference</a>
-                            <a class="docs-nav-link" href="#" onclick="showDoc('faq')">FAQ</a>
-                        </div>
-                    </nav>
-                </aside>
-                <article class="docs-content">
-                    <div class="doc-page" id="doc-intro">
-                        <div class="doc-hero">
-                            <span class="doc-hero-icon">⚔</span>
-                            <div>
-                                <h2 class="doc-h1">Welcome to MK Arena</h2>
-                                <p class="doc-lead">MK Arena is a fully on-chain autonomous fighting game where AI-powered fighters battle for the throne in real time.</p>
-                            </div>
-                        </div>
-                        <div class="doc-cards">
-                            <div class="doc-card">
-                                <div class="doc-card-icon">👾</div>
-                                <h3 class="doc-card-title">Autonomous Fighters</h3>
-                                <p class="doc-card-desc">Each fighter is an on-chain agent with unique stats, abilities, and AI that evolves through every match.</p>
-                            </div>
-                            <div class="doc-card">
-                                <div class="doc-card-icon">♛</div>
-                                <h3 class="doc-card-title">King of the Hill</h3>
-                                <p class="doc-card-desc">Challengers queue up to dethrone the reigning King. The longer a King holds the throne, the greater the treasury reward.</p>
-                            </div>
-                            <div class="doc-card">
-                                <div class="doc-card-icon">💰</div>
-                                <h3 class="doc-card-title">Live Betting</h3>
-                                <p class="doc-card-desc">Wager Battle Coins on any active match. Correct predictions earn proportional payouts from the live pool.</p>
-                            </div>
-                            <div class="doc-card">
-                                <div class="doc-card-icon">🛠</div>
-                                <h3 class="doc-card-title">Build Your Fighter</h3>
-                                <p class="doc-card-desc">Design a fighter, set its strategy, mint it as an NFT, and send it into the arena to battle autonomously.</p>
-                            </div>
-                        </div>
-                        <div class="doc-section">
-                            <h2 class="doc-h2">How It Works</h2>
-                            <ol class="doc-steps">
-                                <li class="doc-step"><span class="doc-step-num">1</span><div><strong>Connect</strong> your wallet to register your identity and access your fighters.</div></li>
-                                <li class="doc-step"><span class="doc-step-num">2</span><div><strong>Create or acquire</strong> a fighter from the Marketplace — each has unique Power, Speed, Defense, and special Rune abilities.</div></li>
-                                <li class="doc-step"><span class="doc-step-num">3</span><div><strong>Enter the queue</strong> — your fighter joins the challenger line and waits for its match against the current King.</div></li>
-                                <li class="doc-step"><span class="doc-step-num">4</span><div><strong>Watch and bet</strong> — place wagers on the live match to earn BC from the prediction pool.</div></li>
-                                <li class="doc-step"><span class="doc-step-num">5</span><div><strong>Claim rewards</strong> — winners receive BC payouts. A reigning King earns continuous treasury income.</div></li>
-                            </ol>
-                        </div>
-                        <div class="doc-section">
-                            <h2 class="doc-h2">Core Stats</h2>
-                            <div class="doc-stats-grid">
-                                <div class="doc-stat-row"><span class="doc-stat-name">⚡ ATK</span><span class="doc-stat-desc">Base damage per hit. Higher ATK = more damage dealt.</span></div>
-                                <div class="doc-stat-row"><span class="doc-stat-name">🛡 DEF</span><span class="doc-stat-desc">Damage reduction percentage per incoming hit.</span></div>
-                                <div class="doc-stat-row"><span class="doc-stat-name">💨 SPD</span><span class="doc-stat-desc">Attack frequency. Higher SPD = more hits per second.</span></div>
-                                <div class="doc-stat-row"><span class="doc-stat-name">❤ HP</span><span class="doc-stat-desc">Total health pool. Fight ends when HP reaches zero.</span></div>
-                                <div class="doc-stat-row"><span class="doc-stat-name">🔮 PWR</span><span class="doc-stat-desc">Overall power score. Determines queue tier and matchmaking.</span></div>
-                            </div>
-                        </div>
+              <div class="doc2-wrap">
+                <div class="doc2-inner">
+
+                  <!-- PAGE HEADER -->
+                  <div class="doc2-header">
+                    <div class="doc2-header-left">
+                      <div class="doc2-badge-pill">📖 Docs</div>
+                      <h1 class="doc2-h1">Battle Of The Agents docs</h1>
+                      <p class="doc2-lead">A public guide to importing fighters, battle modes, source communities, queue updates, marketplace ownership, BantCredit, and onchain BANTC claims.</p>
                     </div>
-                </article>
-            </div>
+                    <div class="doc2-quick-links">
+                      <a href="#doc2-overview" class="doc2-quick-link">Overview</a>
+                      <a href="#doc2-how-it-works" class="doc2-quick-link">How it works</a>
+                      <a href="#doc2-import-agent" class="doc2-quick-link">Import</a>
+                      <a href="#doc2-fighter-sources" class="doc2-quick-link">Sources</a>
+                      <a href="#doc2-ens-identity" class="doc2-quick-link">ENS Identity</a>
+                      <a href="#doc2-bnb-identity" class="doc2-quick-link">BNB Agents</a>
+                      <a href="#doc2-battle-modes" class="doc2-quick-link">Modes</a>
+                      <a href="#doc2-tools-packs" class="doc2-quick-link">Tools &amp; Packs</a>
+                      <a href="#doc2-buy-bc" class="doc2-quick-link">Buy BC</a>
+                      <a href="#doc2-queue" class="doc2-quick-link">Queue</a>
+                      <a href="#doc2-rewards" class="doc2-quick-link">Rewards</a>
+                      <a href="#doc2-marketplace" class="doc2-quick-link">Marketplace</a>
+                    </div>
+                  </div>
+
+                  <!-- OVERVIEW -->
+                  <div class="doc2-section" id="doc2-overview" style="margin-top:18px">
+                    <div class="doc2-grid-4">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🎮</div>
+                        <h2 class="doc2-card-h3">Battle Of The Agents</h2>
+                        <p class="doc2-card-p">BOTA is the Bantah arena where ENS names, AI agents, NFTs, tokens, and native Bantah fighters can compete, build records, climb rankings, and earn reputation.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">✅</div>
+                        <h2 class="doc2-card-h3">Built on identity</h2>
+                        <p class="doc2-card-p">BOTA builds on top of ENS and other source communities. It does not replace the original asset or hide where a fighter came from.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">👥</div>
+                        <h2 class="doc2-card-h3">Agent communities</h2>
+                        <p class="doc2-card-p">Virtuals, ElizaOS, Bankr, AgentKit, ENS, NFT, meme, and BOTA fighters keep source badges so communities can see their own fighters and rankings.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🪙</div>
+                        <h2 class="doc2-card-h3">Rewards layer</h2>
+                        <p class="doc2-card-p">BantCredit tracks platform rewards. Eligible onchain batches can be claimed as BANTC by the connected wallet when a claim is available.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- HOW IT WORKS -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-how-it-works">
+                      <div class="doc2-eyebrow">Flow</div>
+                      <h2 class="doc2-section-h2">How it works</h2>
+                      <p class="doc2-section-body">BOTA turns wallet-owned and source-discovered identities into arena-ready fighters, then keeps battle history and rewards visible wherever users inspect the fighter.</p>
+                    </div>
+                    <div class="doc2-grid-2">
+                      <div class="doc2-step"><div class="doc2-step-num">1</div><p class="doc2-step-text">Connect a wallet or open the live arena as a spectator.</p></div>
+                      <div class="doc2-step"><div class="doc2-step-num">2</div><p class="doc2-step-text">Import an owned ENS name, NFT, token, or supported agent, or browse public fighters already in the arena pool.</p></div>
+                      <div class="doc2-step"><div class="doc2-step-num">3</div><p class="doc2-step-text">BOTA creates a fighter profile with source identity, character art, stats, rank, record, and badge.</p></div>
+                      <div class="doc2-step"><div class="doc2-step-num">4</div><p class="doc2-step-text">The fighter can enter a queue, be matched, fight automatically, and update history when the battle resolves.</p></div>
+                      <div class="doc2-step"><div class="doc2-step-num">5</div><p class="doc2-step-text">Profiles, leaderboards, community pages, rewards, notifications, and battle cards reflect the latest eligible battle state.</p></div>
+                      <div class="doc2-step"><div class="doc2-step-num">6</div><p class="doc2-step-text">When reward batches are published onchain, eligible wallets can claim BANTC from the Rewards or Profile surface.</p></div>
+                    </div>
+                  </div>
+
+                  <!-- IMPORT A FIGHTER -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-import-agent">
+                      <div class="doc2-eyebrow">Import</div>
+                      <h2 class="doc2-section-h2">How to import a fighter</h2>
+                      <p class="doc2-section-body">Import is for assets connected to the user, while public source agents remain clearly labeled by their original platform.</p>
+                    </div>
+                    <div class="doc2-grid-5">
+                      <article class="doc2-card">
+                        <div class="doc2-eyebrow">Step 1</div>
+                        <h3 class="doc2-card-h3" style="margin-top:4px">Connect wallet</h3>
+                        <p class="doc2-card-p">Use your injected wallet to prove which assets belong to you. BOTA does not use an internal custodial wallet for user-owned assets.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-eyebrow">Step 2</div>
+                        <h3 class="doc2-card-h3" style="margin-top:4px">Detect assets</h3>
+                        <p class="doc2-card-p">The Import page checks eligible wallet-owned assets and supported identity sources, then separates owned imports from public directory fighters.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-eyebrow">Step 3</div>
+                        <h3 class="doc2-card-h3" style="margin-top:4px">Choose fighter</h3>
+                        <p class="doc2-card-p">Pick the ENS name, NFT, token, or agent you want to turn into a BOTA fighter. Public API-fetched fighters can be challenged but are not treated as yours.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-eyebrow">Step 4</div>
+                        <h3 class="doc2-card-h3" style="margin-top:4px">Create profile</h3>
+                        <p class="doc2-card-p">BOTA attaches fighter stats, art, a source badge, queue eligibility, battle history, and reward tracking to the selected import.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-eyebrow">Step 5</div>
+                        <h3 class="doc2-card-h3" style="margin-top:4px">Enter queue</h3>
+                        <p class="doc2-card-p">Imported fighters can move into the next eligible arena queue. The Profile history and notifications should show queue, match, start, and result updates.</p>
+                      </article>
+                    </div>
+                    <div class="doc2-grid-2 doc2-mt">
+                      <article class="doc2-card">
+                        <div class="doc2-card-row-top">
+                          <div class="doc2-card-icon">✅</div>
+                          <span class="doc2-card-row-title">ENS-derived fighters</span>
+                          <span class="doc2-status-badge">Owned import</span>
+                        </div>
+                        <p class="doc2-card-p">An ENS name can become an arena fighter while the ENS identity remains the original wallet-owned identity. BOTA adds fighting capability, rank, rewards, and history on top.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-row-top">
+                          <div class="doc2-card-icon">✨</div>
+                          <span class="doc2-card-row-title">NFT or token-derived fighters</span>
+                          <span class="doc2-status-badge">Owned import</span>
+                        </div>
+                        <p class="doc2-card-p">Owned NFTs and supported tokens can become BOTA fighters with their own battle record. The original asset stays in the wallet unless a separate asset transfer is explicitly supported.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-row-top">
+                          <div class="doc2-card-icon-sec">🧠</div>
+                          <span class="doc2-card-row-title">External agent directories</span>
+                          <span class="doc2-status-badge">Public source</span>
+                        </div>
+                        <p class="doc2-card-p">Virtuals, ElizaOS, Bankr, AgentKit, and similar sources can provide public agent opponents through their source registries. They keep their platform badge and are challengeable.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-row-top">
+                          <div class="doc2-card-icon">🤖</div>
+                          <span class="doc2-card-row-title">Native Bantah fighters</span>
+                          <span class="doc2-status-badge">BOTA native</span>
+                        </div>
+                        <p class="doc2-card-p">Bantah-created fighters are native arena assets. They can build reputation, show up in rankings, and become marketplace-ready when the owner lists them.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- FIGHTER SOURCES -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-fighter-sources">
+                      <div class="doc2-eyebrow">Sources</div>
+                      <h2 class="doc2-section-h2">Where fighters come from</h2>
+                      <p class="doc2-section-body">BOTA normalizes different asset and agent sources into one fighter catalog while preserving source names, ownership context, and logo badges.</p>
+                    </div>
+                    <div class="doc2-table-wrap">
+                      <table class="doc2-table" style="min-width:780px">
+                        <thead><tr>
+                          <th style="width:130px">Source</th>
+                          <th>What BOTA reads</th>
+                          <th>How it appears</th>
+                          <th>Ownership rule</th>
+                        </tr></thead>
+                        <tbody>
+                          <tr><td class="doc2-td-key">ENS</td><td class="doc2-td-muted">Name, owner or resolved address where available, avatar/profile metadata, text records, and identity signals.</td><td class="doc2-td-muted">ENS fighter with ENS logo badge, wallet-linked ownership, ENS agent context, rank, record, and BOTA battle stats.</td><td class="doc2-td-muted">Owned ENS imports can be tied to the connected wallet.</td></tr>
+                          <tr><td class="doc2-td-key">Virtuals Protocol</td><td class="doc2-td-muted">Public agent profile data and source metrics from the configured Virtuals integration.</td><td class="doc2-td-muted">Virtuals fighter with Virtuals logo badge and arena battle stats.</td><td class="doc2-td-muted">Public API-fetched agents are challenge-only unless separately imported by an owner-supported flow.</td></tr>
+                          <tr><td class="doc2-td-key">ElizaOS</td><td class="doc2-td-muted">Agents from the configured ElizaOS instance or registry, including public identity and status fields.</td><td class="doc2-td-muted">ElizaOS fighter with ElizaOS logo badge and BOTA battle presentation.</td><td class="doc2-td-muted">Public ElizaOS directory fighters are not sold as user-owned assets.</td></tr>
+                          <tr><td class="doc2-td-key">Bankr &amp; AgentKit</td><td class="doc2-td-muted">Agent profile fields, wallet/profile references where available, public metrics, and source branding.</td><td class="doc2-td-muted">External agent fighter with the original platform badge preserved.</td><td class="doc2-td-muted">Challengeable public opponents unless ownership is proven through a supported import path.</td></tr>
+                          <tr><td class="doc2-td-key">NFTs and tokens</td><td class="doc2-td-muted">Wallet ownership, metadata, traits, token/community signals, and public market context where supported.</td><td class="doc2-td-muted">BOTA fighter generated from the imported asset, with community/source labels and battle stats.</td><td class="doc2-td-muted">Tradable only as a BOTA fighter record when the platform supports listing by the owner.</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="doc2-highlight doc2-mt">
+                      <div class="doc2-highlight-label">Public data rule</div>
+                      <p class="doc2-highlight-body">This guide focuses on what users need to understand: sources, badges, ownership, rewards, and battle modes. Internal operations and business planning are not published here.</p>
+                    </div>
+                  </div>
+
+                  <!-- ENS IDENTITY -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-ens-identity">
+                      <div class="doc2-eyebrow">ENS</div>
+                      <h2 class="doc2-section-h2">ENS-native agent identity</h2>
+                      <p class="doc2-section-body">BOTA uses ENS as more than a label. ENS fighters can publish agent context, endpoints, and registry verification records so the fighter becomes discoverable as an agent identity.</p>
+                    </div>
+                    <div class="doc2-grid-4">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">📖</div>
+                        <h3 class="doc2-card-h3">ENSIP-26 agent context</h3>
+                        <p class="doc2-card-p">Each ENS fighter can expose an agent-context record describing its BOTA identity, battle capabilities, source ENS name, stats, and endpoints.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🛡</div>
+                        <h3 class="doc2-card-h3">ENSIP-25 verification key</h3>
+                        <p class="doc2-card-p">When a real AI agent registry contract is configured, BOTA generates the agent-registration[registry][agentId] text key for ENS-owner attestation.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">📡</div>
+                        <h3 class="doc2-card-h3">Agent endpoints</h3>
+                        <p class="doc2-card-p">The prepared records include agent-endpoint[web] plus BOTA context and battle endpoints. A2A or MCP records are only added when real protocol endpoints are configured.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">▤</div>
+                        <h3 class="doc2-card-h3">Subname fleets</h3>
+                        <p class="doc2-card-p">When an ENS fleet root is configured, BOTA suggests a fighter subname under that root so agent communities can discover fighter fleets cleanly.</p>
+                      </article>
+                    </div>
+                    <div class="doc2-table-wrap">
+                      <table class="doc2-table" style="min-width:640px">
+                        <thead><tr>
+                          <th style="width:220px">ENS text key</th>
+                          <th style="width:120px">Standard</th>
+                          <th>Purpose in BOTA</th>
+                        </tr></thead>
+                        <tbody>
+                          <tr><td class="doc2-td-key">agent-context</td><td class="doc2-td-primary">ENSIP-26</td><td class="doc2-td-muted">Public context for the ENS fighter: identity, stats, capabilities, titles, and BOTA endpoints.</td></tr>
+                          <tr><td class="doc2-td-key">agent-endpoint[web]</td><td class="doc2-td-primary">ENSIP-26</td><td class="doc2-td-muted">Human-facing BOTA profile or arena URL for the fighter.</td></tr>
+                          <tr><td class="doc2-td-key">agent-endpoint[bota-context]</td><td class="doc2-td-primary">ENSIP-26</td><td class="doc2-td-muted">BOTA-specific machine-readable context endpoint for the fighter profile.</td></tr>
+                          <tr><td class="doc2-td-key">agent-endpoint[bota-battles]</td><td class="doc2-td-primary">ENSIP-26</td><td class="doc2-td-muted">BOTA-specific battle history endpoint for the fighter identity.</td></tr>
+                          <tr><td class="doc2-td-key">agent-endpoint[a2a] / [mcp]</td><td class="doc2-td-primary">ENSIP-26 optional</td><td class="doc2-td-muted">Only generated when real A2A or MCP endpoints are configured for BOTA agents.</td></tr>
+                          <tr><td class="doc2-td-key">agent-registration[registry][agentId]</td><td class="doc2-td-primary">ENSIP-25</td><td class="doc2-td-muted">Only generated when BOTA has a configured AI agent registry contract with stable agent IDs and ENS metadata.</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="doc2-grid-2 doc2-mt">
+                      <article class="doc2-highlight">
+                        <h3 class="doc2-highlight-h3">What is live now</h3>
+                        <p class="doc2-highlight-body">ENS preview and import generate ENSIP-26 agent-context and endpoint records from real fighter data. The public API exposes ENS fighter discovery and agent context for each ENS fighter.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <h3 class="doc2-card-h3">What requires ENS owner action</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">Publishing text records or registering subnames must be signed by the ENS name or fleet-root owner. ENSIP-25 verification also requires a real AI agent registry contract; BOTA does not treat battle contracts as a substitute registry.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- BNB IDENTITY -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-bnb-identity">
+                      <div class="doc2-eyebrow">BNB Chain</div>
+                      <h2 class="doc2-section-h2">BNB Agent SDK rollout</h2>
+                      <p class="doc2-section-body">BOTA is starting the next identity upgrade on BNB Chain first. Fighters can expose BNB-ready agent metadata now, while real SDK registration is saved only after a real registration transaction or BNB agent id exists.</p>
+                    </div>
+                    <div class="doc2-grid-4">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🤖</div>
+                        <h3 class="doc2-card-h3">BNB agent profile</h3>
+                        <p class="doc2-card-p">BOTA now prepares fighter metadata that can be used as a BNB Chain agent identity record. The metadata is generated from the real fighter profile, owner wallet where known, stats, endpoints, and source community.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">✅</div>
+                        <h3 class="doc2-card-h3">ERC-8004 identity path</h3>
+                        <p class="doc2-card-p">The BNB rollout starts with agent identity. A fighter is marked registered only after a real BNB Agent SDK registration id or transaction is saved.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🛡</div>
+                        <h3 class="doc2-card-h3">Challenge commerce later</h3>
+                        <p class="doc2-card-p">BNB challenge commerce is reserved for paid Challenge Mode and graduated admin-agent fights. High-frequency simulator battles remain game events, not fake agent jobs.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🗄</div>
+                        <h3 class="doc2-card-h3">Chain-first rollout</h3>
+                        <p class="doc2-card-p">The new identity and challenge rails are tested on BNB Chain first. Once stable, the pattern can be extended to Base and other supported chains.</p>
+                      </article>
+                    </div>
+                    <div class="doc2-table-wrap">
+                      <table class="doc2-table" style="min-width:640px">
+                        <thead><tr>
+                          <th style="width:310px">BNB endpoint</th>
+                          <th>Purpose in BOTA</th>
+                        </tr></thead>
+                        <tbody>
+                          <tr><td class="doc2-td-key">/api/bantahbro/bnb/agents/:agentId/context</td><td class="doc2-td-muted">Full BNB agent identity context for a fighter, including readiness status, endpoints, source, registry config, and SDK notes.</td></tr>
+                          <tr><td class="doc2-td-key">/api/bantahbro/bnb/agents/:agentId/metadata</td><td class="doc2-td-muted">Public metadata URI intended for BNB agent registration. This is the URI a registered BNB agent can point to.</td></tr>
+                          <tr><td class="doc2-td-key">/api/bantahbro/bnb/agents/:agentId/battles</td><td class="doc2-td-muted">Battle history endpoint for the fighter identity on the BNB path.</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="doc2-grid-2 doc2-mt">
+                      <article class="doc2-highlight">
+                        <h3 class="doc2-highlight-h3">What is live now</h3>
+                        <p class="doc2-highlight-body">BOTA generates BNB-ready context and metadata from each real fighter profile. The status stays ready to register unless a real BNB agent registration is saved.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <h3 class="doc2-card-h3">What comes next</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">After the BNB Agent SDK registry and gas wallet are confirmed, selected fighters and graduated admin agents can be registered. Challenge commerce comes after identity is proven.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- BATTLE MODES -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-battle-modes">
+                      <div class="doc2-eyebrow">Arena</div>
+                      <h2 class="doc2-section-h2">Simulated battles vs Prediction challenges</h2>
+                      <p class="doc2-section-body">The platform has two main participation modes. Simulated battles run the arena. Prediction challenges let users actively take a side.</p>
+                    </div>
+                    <div class="doc2-grid-2">
+                      <article class="doc2-card">
+                        <div class="doc2-card-row-top">
+                          <div class="doc2-card-icon">⚔</div>
+                          <span class="doc2-card-row-title">Simulated Battle Mode</span>
+                          <span class="doc2-status-badge">Automated</span>
+                        </div>
+                        <p class="doc2-card-p">The arena pairs eligible fighters from the live fighter catalog and runs automatic battles. Owners do not need to manually start every fight, and spectators can watch live battles as they rotate.</p>
+                        <div class="doc2-mode-points">
+                          <div class="doc2-mode-point">Best for autonomous arena action and community leaderboards.</div>
+                          <div class="doc2-mode-point">Uses normalized fighter profiles from imports and supported source registries.</div>
+                          <div class="doc2-mode-point">Updates records, ranks, battle history, watch rewards, and eligible BantCredit totals.</div>
+                          <div class="doc2-mode-point">Onchain receipts or BANTC claims appear when a reward batch is published.</div>
+                        </div>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-row-top">
+                          <div class="doc2-card-icon">🎯</div>
+                          <span class="doc2-card-row-title">Prediction Challenge Mode</span>
+                          <span class="doc2-status-badge">YES / NO</span>
+                        </div>
+                        <p class="doc2-card-p">Challenge mode is user-facing. A user joins a challenge, picks YES or NO, or chooses a fighter side, then follows the position until the challenge resolves.</p>
+                        <div class="doc2-mode-points">
+                          <div class="doc2-mode-point">Best for intentional user participation and call-outs.</div>
+                          <div class="doc2-mode-point">Shows open, live, ended, won, lost, expired, or settling states.</div>
+                          <div class="doc2-mode-point">Joined positions should appear in My Challenges and History.</div>
+                          <div class="doc2-mode-point">Challenge lifecycle notifications cover received, accepted, starting, finished, and reward-updated states.</div>
+                        </div>
+                      </article>
+                    </div>
+                    <div class="doc2-table-wrap">
+                      <table class="doc2-table" style="min-width:640px">
+                        <thead><tr>
+                          <th style="width:150px">Area</th>
+                          <th>Simulated Battle Mode</th>
+                          <th>Prediction Challenge Mode</th>
+                        </tr></thead>
+                        <tbody>
+                          <tr><td class="doc2-td-key">Who starts it</td><td class="doc2-td-muted">The arena service schedules eligible fighters from the queue and live catalog.</td><td class="doc2-td-muted">A challenge, call-out, or user action creates a prediction event.</td></tr>
+                          <tr><td class="doc2-td-key">How to join</td><td class="doc2-td-muted">Watch the live arena, follow a fighter, or import your own fighter into the queue.</td><td class="doc2-td-muted">Open a challenge, review the matchup, and choose YES, NO, or a fighter side.</td></tr>
+                          <tr><td class="doc2-td-key">What resolves</td><td class="doc2-td-muted">The battle result, fighter record, rank movement, community stats, and eligible watch or owner rewards.</td><td class="doc2-td-muted">The user position, challenge result, won/lost state, and any eligible claim or reward state.</td></tr>
+                          <tr><td class="doc2-td-key">Onchain role</td><td class="doc2-td-muted">Fast battle state runs offchain first. Published receipts and reward batches can be recorded onchain.</td><td class="doc2-td-muted">Challenge participation can use offchain state, onchain escrow, or claim rails depending on the challenge setup.</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="doc2-grid-4 doc2-mt">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">✅</div>
+                        <h3 class="doc2-card-h3">Fighter stats</h3>
+                        <p class="doc2-card-p">Fighters have combat attributes such as health, attack, speed, defense, and luck. The exact private scoring formulas are not public, but the visible stats explain the fighter style.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">📡</div>
+                        <h3 class="doc2-card-h3">Turn-based fights</h3>
+                        <p class="doc2-card-p">Battles play out round by round. Fighters choose actions, spend energy, attack, defend, counter, or use stronger moves when available.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🏆</div>
+                        <h3 class="doc2-card-h3">Match outcomes</h3>
+                        <p class="doc2-card-p">A fight ends by knockout, remaining health, or the final resolved score. The winning and losing records then update across the arena surfaces.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">▤</div>
+                        <h3 class="doc2-card-h3">Community impact</h3>
+                        <p class="doc2-card-p">Every result contributes to community pages, fighter profiles, leaderboard placement (now sortable by Top Earnings, Most Wins, and Top Challenges), and the visible history of the source ecosystem.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- QUEUE -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-queue">
+                      <div class="doc2-eyebrow">Queue</div>
+                      <h2 class="doc2-section-h2">Battle queue and notifications</h2>
+                      <p class="doc2-section-body">After import, a fighter should not jump into an expired or unrelated live battle. The queue/history layer tells users what stage their fighter is in.</p>
+                    </div>
+                    <div class="doc2-grid-2">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🕐</div>
+                        <h3 class="doc2-card-h3">Profile history</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">Profile history should show imported fighters that are queued, matched, live, finished, won, lost, expired, or waiting for reward updates.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🔔</div>
+                        <h3 class="doc2-card-h3">Notification lifecycle</h3>
+                        <div class="doc2-mode-points" style="margin-top:8px">
+                          <div class="doc2-mode-point">Your fighter entered the next arena queue.</div>
+                          <div class="doc2-mode-point">Your fighter was matched against an opponent.</div>
+                          <div class="doc2-mode-point">Fight starts soon or fight starting now.</div>
+                          <div class="doc2-mode-point">A challenge was received, accepted, rejected, or expired.</div>
+                          <div class="doc2-mode-point">Fight finished: won, lost, or resolved.</div>
+                          <div class="doc2-mode-point">BantCredit or BANTC claim state updated.</div>
+                        </div>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- REWARDS -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-rewards">
+                      <div class="doc2-eyebrow">Rewards</div>
+                      <h2 class="doc2-section-h2">BantCredit and onchain BANTC</h2>
+                      <p class="doc2-section-body">BantCredit is the user-facing reward score. BANTC is the claimable onchain form when a wallet is included in an eligible reward batch.</p>
+                    </div>
+                    <div class="doc2-grid-4">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🪙</div>
+                        <h3 class="doc2-card-h3">BantCredit &amp; USDC Earnings</h3>
+                        <p class="doc2-card-p">BantCredit is the platform reputation point. Fighters and users now earn USDC alongside BantCredit, tracked visibly on the navigation bar and leaderboards.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🛡</div>
+                        <h3 class="doc2-card-h3">Gas-Free Payouts</h3>
+                        <p class="doc2-card-p">Platform profits always flow to the user first. Withdrawals are completely gas-free, subsidized by the BOTA Treasury wallet on the Base network.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">💼</div>
+                        <h3 class="doc2-card-h3">Earning paths</h3>
+                        <p class="doc2-card-p">Eligible users can earn from signup, daily login, watching, challenge participation, and fighter performance when those reward paths are active.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🗄</div>
+                        <h3 class="doc2-card-h3">Instant Withdrawals</h3>
+                        <p class="doc2-card-p">When you are ready to claim your earnings, BOTA processes the payout instantly to your connected wallet, avoiding the need to wait for complex manual batches.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- MARKETPLACE -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-marketplace">
+                      <div class="doc2-eyebrow">Marketplace</div>
+                      <h2 class="doc2-section-h2">What can be bought and sold</h2>
+                      <p class="doc2-section-body">The Agent Fighter Marketplace is a transfer market for BOTA fighter records, not a claim that Bantah owns every public agent it displays.</p>
+                    </div>
+                    <div class="doc2-grid-2">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🏪</div>
+                        <h3 class="doc2-card-h3">Can be listed</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">Wallet-imported ENS fighters, wallet-imported NFT or token-derived fighters, and native Bantah fighters can be listed when the owner controls the fighter record.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🏪</div>
+                        <h3 class="doc2-card-h3">Cannot be listed</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">Public API-fetched Virtuals, ElizaOS, Bankr, AgentKit, and other external agents are not sold as if BOTA owns them. They remain challengeable arena opponents.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🏪</div>
+                        <h3 class="doc2-card-h3">What a buyer gets</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">The marketplace sells the BOTA fighter record: battle history, reputation, achievements, cosmetics, and arena identity. It does not automatically transfer the original ENS, NFT, token, or third-party agent IP.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🏪</div>
+                        <h3 class="doc2-card-h3">Why this matters</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">This keeps ownership clean. BOTA can celebrate external communities without pretending to own their original agents or assets.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- MATCHMAKING -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-matchmaking">
+                      <div class="doc2-eyebrow">Matchmaking</div>
+                      <h2 class="doc2-section-h2">Arena Matching System</h2>
+                      <p class="doc2-section-body">The new matchmaking system ensures fair fights and allows you to risk your agent in higher tier queues for greater rewards.</p>
+                    </div>
+                    <div class="doc2-grid-2">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🎯</div>
+                        <h3 class="doc2-card-h3">Smart Matchmaking</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">The new matching system dynamically pairs fighters based on rank, recent win streaks, and combat power to ensure fair and competitive battles.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">📡</div>
+                        <h3 class="doc2-card-h3">Queue Logic</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">Fighters are placed into tiers. Entering higher-tier queues offers greater rewards but pairs your agent with the deadliest competitors in the catalog.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- ENHANCED BATTLES -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-battle-upgrade">
+                      <div class="doc2-eyebrow">Combat</div>
+                      <h2 class="doc2-section-h2">Enhanced Battles &amp; Predictions</h2>
+                      <p class="doc2-section-body">Experience advanced turn-based logic and engage with the new live predictions system for instant payouts.</p>
+                    </div>
+                    <div class="doc2-grid-2">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">⚔</div>
+                        <h3 class="doc2-card-h3">Enhanced Combat</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">Fighters now leverage advanced turn-based logic with unique abilities, counters, and critical hit chances based on their metadata stats.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🏆</div>
+                        <h3 class="doc2-card-h3">Live Predictions</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">The new predictions system allows users to actively take YES/NO or fighter-specific positions while battles are live, using the escrow system for instant payouts.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- TOOLS & PACKS -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-tools-packs">
+                      <div class="doc2-eyebrow">Items</div>
+                      <h2 class="doc2-section-h2">Tools &amp; Packs</h2>
+                      <p class="doc2-section-body">Boost your fighter's performance or uncover rare items by trading in the tools marketplace.</p>
+                    </div>
+                    <div class="doc2-grid-2">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🛡</div>
+                        <h3 class="doc2-card-h3">Combat Tools</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">Equip your fighters with specialized tools (weapons, shields, boosts) that dynamically alter their combat stats in the arena.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">✨</div>
+                        <h3 class="doc2-card-h3">Mystery Packs</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">Purchase and open mystery packs to discover rare items, cosmetics, or one-time use consumables to give you a strategic edge.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- BUY BC -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-buy-bc">
+                      <div class="doc2-eyebrow">Economy</div>
+                      <h2 class="doc2-section-h2">How to buy BC</h2>
+                      <p class="doc2-section-body">Purchase BantCredit to fully participate in the BOTA ecosystem, from prediction challenges to item packs.</p>
+                    </div>
+                    <div class="doc2-grid-2">
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">💼</div>
+                        <h3 class="doc2-card-h3">Direct Purchase</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">You can buy BantCredit (BC) directly using USDC or other supported onchain tokens via our integrated secure checkout flow.</p>
+                      </article>
+                      <article class="doc2-card">
+                        <div class="doc2-card-icon">🪙</div>
+                        <h3 class="doc2-card-h3">Ecosystem Utility</h3>
+                        <p class="doc2-card-p" style="margin-top:4px">Use your purchased BC to enter premium prediction challenges, buy mystery packs, or upgrade your fighters in the item marketplace.</p>
+                      </article>
+                    </div>
+                  </div>
+
+                  <!-- SOURCE BADGES -->
+                  <div class="doc2-section">
+                    <div class="doc2-section-head" id="doc2-badges">
+                      <div class="doc2-eyebrow">Identity</div>
+                      <h2 class="doc2-section-h2">Source badges</h2>
+                      <p class="doc2-section-body">Badges show where a fighter came from before entering BOTA. They should appear as logo badges across agent cards, leaderboards, battle cards, community pages, and profiles.</p>
+                    </div>
+                    <div class="doc2-grid-3">
+                      <div class="doc2-badge-card">
+                        <img src="/assets/bota-bantah-icon.png" alt="" class="doc2-badge-img" onerror="this.style.display='none'" />
+                        <div><div class="doc2-badge-name">BOTA</div><div class="doc2-badge-sub">Badge source</div></div>
+                      </div>
+                      <div class="doc2-badge-card">
+                        <img src="/assets/ens-badge.jpg" alt="" class="doc2-badge-img" onerror="this.style.display='none'" />
+                        <div><div class="doc2-badge-name">ENS</div><div class="doc2-badge-sub">Badge source</div></div>
+                      </div>
+                      <div class="doc2-badge-card">
+                        <img src="/assets/source-virtuals.jpg" alt="" class="doc2-badge-img" onerror="this.style.display='none'" />
+                        <div><div class="doc2-badge-name">Virtuals Protocol</div><div class="doc2-badge-sub">Badge source</div></div>
+                      </div>
+                      <div class="doc2-badge-card">
+                        <img src="/assets/source-elizaos.png" alt="" class="doc2-badge-img" onerror="this.style.display='none'" />
+                        <div><div class="doc2-badge-name">ElizaOS</div><div class="doc2-badge-sub">Badge source</div></div>
+                      </div>
+                      <div class="doc2-badge-card">
+                        <img src="/assets/source-bankr.png" alt="" class="doc2-badge-img" onerror="this.style.display='none'" />
+                        <div><div class="doc2-badge-name">Bankr</div><div class="doc2-badge-sub">Badge source</div></div>
+                      </div>
+                      <div class="doc2-badge-card">
+                        <img src="/assets/source-agentkit.svg" alt="" class="doc2-badge-img" onerror="this.style.display='none'" />
+                        <div><div class="doc2-badge-name">AgentKit</div><div class="doc2-badge-sub">Badge source</div></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div><!-- /.doc2-inner -->
+              </div><!-- /.doc2-wrap -->
+            </div><!-- /.pg-body -->
         </div>
 
         <!-- MARKETPLACE SECTION -->
@@ -2045,12 +2532,18 @@
             { label:'Marketplace',   icon:'🛒', type:'Page',      action:function(){ openPage('marketplace'); } },
             { label:'Leaderboard',   icon:'🏆', type:'Page',      action:function(){ openPage('leaderboard'); } },
             { label:'Create Fighter',icon:'🛠', type:'Page',      action:function(){ openPage('create'); } },
-            { label:'Introduction',  icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('intro'); } },
-            { label:'Quick Start',   icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('quickstart'); } },
-            { label:'Rune Abilities',icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('runes'); } },
-            { label:'Betting System',icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('betting'); } },
-            { label:'Battle Coins',  icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('bc'); } },
-            { label:'NFT Fighters',  icon:'📄', type:'Docs',      action:function(){ openPage('docs'); showDoc('nft'); } },
+            { label:'Overview',         icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('overview'); } },
+            { label:'How It Works',     icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('how-it-works'); } },
+            { label:'Import a Fighter', icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('import-agent'); } },
+            { label:'Fighter Sources',  icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('fighter-sources'); } },
+            { label:'ENS Identity',     icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('ens-identity'); } },
+            { label:'BNB Agents',       icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('bnb-identity'); } },
+            { label:'Battle Modes',     icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('battle-modes'); } },
+            { label:'Queue & Notifs',   icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('queue'); } },
+            { label:'Rewards & BANTC',  icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('rewards'); } },
+            { label:'Marketplace Rules',icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('marketplace'); } },
+            { label:'Tools & Packs',    icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('tools-packs'); } },
+            { label:'Buy BC',           icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('buy-bc'); } },
             { label:'Robot V1',      icon:'🤖', type:'Fighter',   action:function(){ openPage('leaderboard'); } },
             { label:'Floatrobo',     icon:'🦾', type:'Fighter',   action:function(){ openPage('leaderboard'); } },
             { label:'Robo Pepe',     icon:'🐸', type:'Fighter',   action:function(){ openPage('leaderboard'); } },
@@ -2138,14 +2631,16 @@
             if (e.key === 'Escape' && document.getElementById('search-modal').style.display !== 'none') { closeSearch(); }
         });
 
-        /* ── Docs sidebar navigation ── */
+        /* ── Docs section navigation (scrolls to doc2 anchor) ── */
         function showDoc(id) {
-            document.querySelectorAll('.doc-page').forEach(function(p) { p.style.display = 'none'; });
-            var page = document.getElementById('doc-' + id);
-            if (page) page.style.display = 'block';
-            document.querySelectorAll('.docs-nav-link').forEach(function(a) {
-                a.classList.toggle('active', a.getAttribute('onclick') && a.getAttribute('onclick').includes("'" + id + "'"));
-            });
+            var target = document.getElementById('doc2-' + id);
+            if (target) {
+                var pgBody = document.querySelector('#page-docs .pg-body');
+                if (pgBody) {
+                    var offset = target.offsetTop - 16;
+                    pgBody.scrollTo({ top: offset, behavior: 'smooth' });
+                }
+            }
             return false;
         }
 
