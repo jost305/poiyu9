@@ -3332,6 +3332,18 @@
             background: linear-gradient(to top, rgba(12,12,28,0.95), transparent);
             z-index: 2;
         }
+        @keyframes ag-float {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-8px); }
+        }
+        .ag-card:nth-child(1) .ag-sprite, .ag-card:nth-child(1) .ag-sprite-fallback { animation-delay: 0s; }
+        .ag-card:nth-child(2) .ag-sprite, .ag-card:nth-child(2) .ag-sprite-fallback { animation-delay: -0.5s; }
+        .ag-card:nth-child(3) .ag-sprite, .ag-card:nth-child(3) .ag-sprite-fallback { animation-delay: -1s; }
+        .ag-card:nth-child(4) .ag-sprite, .ag-card:nth-child(4) .ag-sprite-fallback { animation-delay: -1.5s; }
+        .ag-card:nth-child(5) .ag-sprite, .ag-card:nth-child(5) .ag-sprite-fallback { animation-delay: -2s; }
+        .ag-card:nth-child(6) .ag-sprite, .ag-card:nth-child(6) .ag-sprite-fallback { animation-delay: -2.5s; }
+        .ag-card:nth-child(7) .ag-sprite, .ag-card:nth-child(7) .ag-sprite-fallback { animation-delay: -0.8s; }
+        .ag-card:nth-child(8) .ag-sprite, .ag-card:nth-child(8) .ag-sprite-fallback { animation-delay: -1.8s; }
         .ag-sprite {
             height: 105px;
             object-fit: contain;
@@ -3339,6 +3351,7 @@
             position: relative;
             z-index: 3;
             filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+            animation: ag-float 3s ease-in-out infinite;
         }
         .ag-sprite-fallback {
             font-size: 58px;
@@ -3348,6 +3361,7 @@
             justify-content: center;
             z-index: 3;
             position: relative;
+            animation: ag-float 3s ease-in-out infinite;
         }
 
         /* Rank badge — top-left large number */
