@@ -793,21 +793,25 @@
 
             <!-- MOBILE NAV FOOTER -->
             <div id="mobile-nav-footer">
-                <div class="nav-item active">
-                    <div class="nav-icon">⚔</div>
-                    <div class="nav-label">ARENA</div>
+                <div class="mob-nav-item active" data-mob-page="arena" onclick="closePage()">
+                    <div class="mob-nav-icon">⚔</div>
+                    <div class="mob-nav-label">ARENA</div>
                 </div>
-                <div class="nav-item">
-                    <div class="nav-icon">🤖</div>
-                    <div class="nav-label">ROSTER</div>
+                <div class="mob-nav-item" data-mob-page="marketplace" onclick="openPage('marketplace')">
+                    <div class="mob-nav-icon">🛒</div>
+                    <div class="mob-nav-label">MARKET</div>
                 </div>
-                <div class="nav-item">
-                    <div class="nav-icon">🎁</div>
-                    <div class="nav-label">LOOT</div>
+                <div class="mob-nav-item" data-mob-page="leaderboard" onclick="openPage('leaderboard')">
+                    <div class="mob-nav-icon">🏆</div>
+                    <div class="mob-nav-label">RANKS</div>
                 </div>
-                <div class="nav-item">
-                    <div class="nav-icon">🛒</div>
-                    <div class="nav-label">SHOP</div>
+                <div class="mob-nav-item" data-mob-page="agents" onclick="openPage('agents')">
+                    <div class="mob-nav-icon">🤖</div>
+                    <div class="mob-nav-label">AGENTS</div>
+                </div>
+                <div class="mob-nav-item" data-mob-page="profile" onclick="openPage('profile')">
+                    <div class="mob-nav-icon">👤</div>
+                    <div class="mob-nav-label">PROFILE</div>
                 </div>
             </div>
         </div>
@@ -3021,6 +3025,9 @@
             document.querySelectorAll('.tb-nav-item').forEach(function(a) {
                 a.classList.toggle('tb-nav-active', a.dataset.page === name);
             });
+            document.querySelectorAll('.mob-nav-item').forEach(function(el) {
+                el.classList.toggle('active', el.dataset.mobPage === name);
+            });
             document.body.classList.add('page-active');
         }
 
@@ -3031,6 +3038,9 @@
             });
             document.querySelectorAll('.tb-nav-item').forEach(function(a) {
                 a.classList.remove('tb-nav-active');
+            });
+            document.querySelectorAll('.mob-nav-item').forEach(function(el) {
+                el.classList.toggle('active', el.dataset.mobPage === 'arena');
             });
             _activePage = null;
             document.body.classList.remove('page-active');
