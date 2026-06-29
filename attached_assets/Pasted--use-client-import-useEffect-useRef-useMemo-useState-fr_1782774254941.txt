@@ -1,0 +1,1250 @@
+'use client'
+
+import { useEffect, useRef, useMemo, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  Bot,
+  BrainCircuit,
+  CheckCircle2,
+  Coins,
+  Cpu,
+  ExternalLink,
+  Gamepad2,
+  Globe2,
+  Image as ImageIcon,
+  Import as ImportIcon,
+  Loader2,
+  Search,
+  Shield,
+  Sparkles,
+  Swords,
+  Wallet,
+} from 'lucide-react'
+import { apiRequest } from '@/lib/queryClient'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { botaCharacterAlt, botaCharacterAvatar, BOTA_CHARACTER_AVATARS } from '@/lib/botaCharacterLayer'
+import { botaAppHref } from '@/lib/botaUrl'
+import { useAuth } from '@/hooks/useAuth'
+import { useToast } from '@/hooks/use-toast'
+import type {
+  BotaFighterProfile,
+  BotaFighterProfileImportRequest,
+} from '@shared/botaFighterProfile'
+import { getBotaDerivativeFighter } from '@shared/botaDerivativeFighter'
+
+type WalletAssetType = 'ai-agent' | 'nft' | 'ens' | 'token'
+
+type ImportFilter = WalletAssetType | 'all' | 'create'
+
+type WalletFighterAsset = {
+  id: string
+  type: WalletAssetType
+  name: string
+  subtitle: string
+  source: string
+  sourceIconUrl: string | null
+  chainId: string
+  contractAddress: string | null
+  tokenId: string | null
+  avatarUrl: string
+  brain: 'external' | 'elizaos-default'
+  fighter: BotaFighterProfileImportRequest
+}
+
+type WalletScanFeed = {
+  walletAddress: string | null
+  displayWallet: string
+  assets: WalletFighterAsset[]
+  counts: Partial<Record<WalletAssetType, number>>
+  scanner: {
+    mode: string
+    note: string
+  }
+  updatedAt: string
+}
+
+type ImportResponse = {
+  profile: BotaFighterProfile
+}
+
+type EnsPreviewResponse = {
+  asset: WalletFighterAsset
+  resolution: {
+    ensName: string
+    resolvedAddress: string | null
+    avatarUrl: string | null
+    textRecords: Record<string, string | null>
+  }
+  ensAgentIdentity?: EnsAgentIdentity
+  updatedAt: string
+}
+
+type EnsAgentIdentity = {
+  status: string
+  ensName: string
+  subname?: {
+    suggestedName?: string | null
+    configured?: boolean
+  }
+  registry?: {
+    verificationKey?: string | null
+    verified?: boolean
+  }
+  textRecords?: Record<string, string>
+}
+
+type ProfileBattleRow = {
+  id: string
+  battleId: string | null
+  title: string
+  status: 'queued' | 'live'
+  queueState?: 'waiting' | 'matched' | 'live'
+  agentId: string
+  agentName: string
+  opponentName: string | null
+  startsAt: string
+  endsAt: string
+  arenaUrl: string
+}
+
+type BotaProfileFeed = {
+  fighters: BotaFighterProfile[]
+  queue: ProfileBattleRow[]
+  liveBattles: ProfileBattleRow[]
+  queueWindow?: {
+    startsAt?: string | null
+    endsAt?: string | null
+  }
+  updatedAt: string
+}
+
+const assetFilters: Array<{ value: ImportFilter; label: string }> = [
+  { value: 'all', label: 'All' },
+  { value: 'ai-agent', label: 'Agents' },
+  { value: 'nft', label: 'NFTs' },
+  { value: 'ens', label: 'ENS' },
+  { value: 'token', label: 'Tokens' },
+]
+
+const DEFAULT_AVATAR_NAMES: Record<string, string> = {
+  [BOTA_CHARACTER_AVATARS[0]]: 'BantahBro',
+  [BOTA_CHARACTER_AVATARS[1]]: 'BantXBT',
+  [BOTA_CHARACTER_AVATARS[2]]: 'BantahSword',
+  [BOTA_CHARACTER_AVATARS[3]]: 'Emerald',
+  [BOTA_CHARACTER_AVATARS[4]]: 'Amethyst',
+  [BOTA_CHARACTER_AVATARS[5]]: 'Ruby',
+  [BOTA_CHARACTER_AVATARS[6]]: 'Silver',
+  [BOTA_CHARACTER_AVATARS[7]]: 'PEPEgrin',
+  [BOTA_CHARACTER_AVATARS[8]]: 'KINSMEN',
+  [BOTA_CHARACTER_AVATARS[9]]: 'PENGUXIMUS',
+  [BOTA_CHARACTER_AVATARS[10]]: 'MasterShiba',
+}
+
+const createStyleOptions = [
+  {
+    value: 'adaptive',
+    label: 'Adaptive',
+    agentClass: 'oracle',
+    archetype: 'oracle_duelist',
+    personality: 'adaptive',
+  },
+  {
+    value: 'berserker',
+    label: 'Berserker',
+    agentClass: 'berserker',
+    archetype: 'chaos_berserker',
+    personality: 'aggressive',
+  },
+  {
+    value: 'scout',
+    label: 'Scout',
+    agentClass: 'scout',
+    archetype: 'momentum_scout',
+    personality: 'opportunistic',
+  },
+] as const
+
+const sourceLogoMap: Record<string, string> = {
+  ElizaOS: '/assets/source-elizaos.png',
+  Bankr: '/assets/source-bankr.png',
+  'Bankr Bot': '/assets/source-bankr.png',
+  ENS: '/assets/ens-badge.jpg',
+  NFT: '/assets/bota-bantah-icon.png',
+  AgentKit: '/assets/source-agentkit.svg',
+  'Meme Token': '/assets/bota-bantah-icon.png',
+  'Virtuals Protocol': '/assets/source-virtuals.jpg',
+}
+
+function walletFromPrivyUser(user: unknown) {
+  const record = user as {
+    wallet?: { address?: string | null } | null
+    linkedAccounts?: Array<{ type?: string | null; address?: string | null }>
+  } | null
+
+  const directWallet = record?.wallet?.address
+  if (directWallet) return directWallet
+
+  const linkedWallet = record?.linkedAccounts?.find((account) =>
+    String(account.type || '').toLowerCase().includes('wallet'),
+  )?.address
+  return linkedWallet || ''
+}
+
+function assetTypeLabel(type: WalletAssetType) {
+  if (type === 'ai-agent') return 'AI Agent'
+  if (type === 'nft') return 'NFT'
+  if (type === 'ens') return 'ENS'
+  return 'Token'
+}
+
+function AssetTypeIcon({ type, size = 14 }: { type: WalletAssetType; size?: number }) {
+  if (type === 'ai-agent') return <BrainCircuit size={size} />
+  if (type === 'nft') return <ImageIcon size={size} />
+  if (type === 'ens') return <Globe2 size={size} />
+  return <Coins size={size} />
+}
+
+function SourceIcon({ asset }: { asset: WalletFighterAsset }) {
+  const src = asset.sourceIconUrl || sourceLogoMap[asset.source] || null
+  return (
+    <span className="grid size-5 shrink-0 place-items-center overflow-hidden rounded-full border border-border bg-background text-muted-foreground">
+      {src ? (
+        <img
+          src={src}
+          alt=""
+          className="h-full w-full object-cover"
+          loading="lazy"
+          onError={(event) => {
+            event.currentTarget.style.display = 'none'
+          }}
+        />
+      ) : (
+        <AssetTypeIcon type={asset.type} size={12} />
+      )}
+    </span>
+  )
+}
+
+function shortContract(asset: WalletFighterAsset) {
+  const value = asset.contractAddress || asset.fighter.ensName || asset.chainId
+  if (!value) return asset.chainId
+  return value.length > 14 ? `${value.slice(0, 6)}...${value.slice(-4)}` : value
+}
+
+function sourceLine(asset: WalletFighterAsset) {
+  const derivative = getBotaDerivativeFighter(asset.fighter.metadata)
+  if (derivative) return 'NFT'
+  if (asset.type === 'ens') return 'ENS'
+  if (asset.type === 'token') return 'Meme'
+  if (asset.type === 'nft') return 'NFT'
+  return asset.source
+}
+
+function identityForAsset(asset: WalletFighterAsset) {
+  const source = asset.source.toLowerCase()
+  const logoUrl = source.includes('virtual')
+    ? '/assets/source-virtuals.jpg'
+    : source.includes('bankr')
+      ? '/assets/source-bankr.png'
+      : source.includes('eliza')
+        ? '/assets/source-elizaos.png'
+        : source.includes('agentkit') || source.includes('agent kit')
+          ? '/assets/source-agentkit.svg'
+          : asset.type === 'ens'
+            ? '/assets/ens-badge.jpg'
+            : '/assets/bota-bantah-icon.png'
+  return {
+    label: asset.source,
+    logoUrl,
+    brainLabel: asset.source,
+  }
+}
+
+function characterSourceForAsset(asset: WalletFighterAsset) {
+  const derivative = getBotaDerivativeFighter(asset.fighter.metadata)
+  if (derivative) return derivative.species
+  const origin = asset.fighter.origin || asset.source || asset.type
+  if (asset.type === 'token') return 'meme-token'
+  if (asset.type === 'ai-agent' && asset.source.toLowerCase().includes('virtual')) return 'virtuals'
+  if (asset.type === 'ai-agent' && asset.source.toLowerCase().includes('game')) return 'game-sdk'
+  if (asset.type === 'ai-agent') return 'eliza'
+  return origin
+}
+
+function characterAvatarForAsset(asset: WalletFighterAsset) {
+  const derivative = getBotaDerivativeFighter(asset.fighter.metadata)
+  if (derivative && asset.fighter.avatarUrl) return asset.fighter.avatarUrl
+  return botaCharacterAvatar(`${asset.id}:${asset.name}`, characterSourceForAsset(asset))
+}
+
+function derivativeForAsset(asset: WalletFighterAsset | null) {
+  return asset ? getBotaDerivativeFighter(asset.fighter.metadata) : null
+}
+
+function ensAgentIdentityForAsset(asset: WalletFighterAsset | null): EnsAgentIdentity | null {
+  const identity = asset?.fighter.metadata?.ensAgentIdentity
+  if (!identity || typeof identity !== 'object' || Array.isArray(identity)) return null
+  return identity as EnsAgentIdentity
+}
+
+function ensIdentityStatusLabel(status: string) {
+  if (status === 'published') return 'Published'
+  if (status === 'ready_to_publish') return 'Ready'
+  if (status === 'ensip26_ready') return 'ENSIP-26 ready'
+  if (status === 'needs_registry') return 'Needs registry'
+  return status || 'Ready'
+}
+
+function QueueCountdown({ startsAt, title, arenaUrl }: { startsAt: string; title: string; arenaUrl?: string }) {
+  const [now, setNow] = useState(() => Date.now())
+  const { toast } = useToast()
+  const [notified, setNotified] = useState(false)
+  
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const startMs = new Date(startsAt).getTime()
+  const diff = startMs - now
+
+  useEffect(() => {
+    if (diff <= 0 && !notified) {
+      setNotified(true)
+      toast({
+        title: "Match Started!",
+        description: `Your match ${title} has begun in the Arena.`,
+      })
+    }
+  }, [diff, title, toast, notified])
+
+  if (diff <= 0) {
+    return (
+      <a
+        href={arenaUrl || botaAppHref('/bota?section=battles')}
+        className="flex items-center gap-1 rounded border border-green-500/30 bg-green-500/10 px-1.5 py-0.5 text-green-500 hover:bg-green-500/20 transition-colors"
+      >
+        <span className="animate-pulse">Join Live</span>
+        <ExternalLink size={10} />
+      </a>
+    )
+  }
+
+  const seconds = Math.floor(diff / 1000)
+  const m = Math.floor(seconds / 60)
+  const s = seconds % 60
+  return <span className="text-primary/80 font-mono tracking-tighter">in {m}:{s.toString().padStart(2, '0')}</span>
+}
+
+export default function UnifiedImportPage({ 
+  onNavigate,
+  defaultTab = 'import',
+}: { 
+  onNavigate?: (section: string) => void
+  defaultTab?: 'create' | 'import'
+}) {
+  const { isAuthenticated, isLoading: authLoading, login, user } = useAuth()
+  const connectedWallet = walletFromPrivyUser(user)
+  const ownScanWallet = connectedWallet.trim()
+  const [walletDraft, setWalletDraft] = useState(connectedWallet)
+  const [filter, setFilter] = useState<ImportFilter>(defaultTab === 'create' ? 'create' : 'all')
+  const [selectedAssetId, setSelectedAssetId] = useState<string>('')
+  const [createType, setCreateType] = useState<'new' | 'existing'>('new')
+  const [createAvatarUrl, setCreateAvatarUrl] = useState<string>(BOTA_CHARACTER_AVATARS[0])
+  const [selectedCreateAssetId, setSelectedCreateAssetId] = useState<string>('')
+  const [createName, setCreateName] = useState('')
+  const [createStyle, setCreateStyle] = useState(createStyleOptions[0].value)
+  const [createAutoAssign, setCreateAutoAssign] = useState(true)
+  const [ensDraft, setEnsDraft] = useState('')
+  const isCreateMode = filter === 'create'
+  const [ensPreviewAsset, setEnsPreviewAsset] = useState<WalletFighterAsset | null>(null)
+  const [importedProfile, setImportedProfile] = useState<BotaFighterProfile | null>(null)
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [createStatus, setCreateStatus] = useState<'idle' | 'pending' | 'success'>('idle')
+  const [deployStep, setDeployStep] = useState(0)
+  const deploySteps = ['Initializing...', 'Generating persona...', 'Compiling loadout...', 'Registering identity...']
+  const { toast } = useToast()
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    if (createStatus === 'pending') {
+      setDeployStep(0)
+      const interval = setInterval(() => {
+        setDeployStep(prev => (prev < deploySteps.length - 1 ? prev + 1 : prev))
+      }, 1000)
+      return () => clearInterval(interval)
+    }
+  }, [createStatus])
+
+  useEffect(() => {
+    if (!connectedWallet) return
+    setWalletDraft(connectedWallet)
+  }, [connectedWallet])
+
+  const scanQuery = useQuery<WalletScanFeed>({
+    queryKey: ['/api/bantahbro/fighter-assets/scan', { walletAddress: ownScanWallet }],
+    enabled: Boolean(isAuthenticated && ownScanWallet),
+  })
+  const profileQuery = useQuery<BotaProfileFeed>({
+    queryKey: ['/api/bantahbro/profile'],
+    queryFn: () => apiRequest('GET', '/api/bantahbro/profile'),
+    enabled: isAuthenticated,
+    staleTime: 10_000,
+    refetchInterval: 20_000,
+  })
+
+  const scannedAssets = scanQuery.data?.assets || []
+  const assets = useMemo(() => {
+    if (!ensPreviewAsset) return scannedAssets
+    const withoutPreview = scannedAssets.filter((asset) => asset.id !== ensPreviewAsset.id)
+    return [ensPreviewAsset, ...withoutPreview]
+  }, [ensPreviewAsset, scannedAssets])
+  const visibleAssets = useMemo(
+    () => assets.filter((asset) => filter === 'all' || asset.type === filter),
+    [assets, filter],
+  )
+
+  const selectedAsset = useMemo(() => {
+    if (isCreateMode) return null
+    return assets.find((asset) => asset.id === selectedAssetId) || visibleAssets[0] || assets[0] || null
+  }, [assets, selectedAssetId, visibleAssets, isCreateMode])
+
+  const selectedCreateAsset = useMemo(
+    () => assets.find((asset) => asset.id === selectedCreateAssetId) || assets[0] || null,
+    [assets, selectedCreateAssetId],
+  )
+
+  useEffect(() => {
+    if (!selectedAsset || selectedAsset.id === selectedAssetId) return
+    setSelectedAssetId(selectedAsset.id)
+  }, [selectedAsset, selectedAssetId])
+
+  useEffect(() => {
+    if (createType === 'existing' && !selectedCreateAssetId && assets[0]) {
+      setSelectedCreateAssetId(assets[0].id)
+    }
+  }, [createType, assets, selectedCreateAssetId])
+
+  const confettiRef = useRef<(() => void) | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    import('canvas-confetti').then((mod) => {
+      if (cancelled) return
+      const confetti = mod.default
+      confettiRef.current = () => {
+        confetti({ particleCount: 120, spread: 80, origin: { y: 0.55 }, colors: ['#7c3aed', '#a78bfa', '#facc15', '#34d399', '#f472b6'] })
+        setTimeout(() => confetti({ particleCount: 60, spread: 60, origin: { y: 0.5 }, angle: 60 }), 200)
+        setTimeout(() => confetti({ particleCount: 60, spread: 60, origin: { y: 0.5 }, angle: 120 }), 200)
+      }
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [])
+
+  const createMutation = useMutation({
+    mutationFn: async () => {
+      if (!isAuthenticated) throw new Error('Sign in to create a fighter.')
+      const name = createName.trim()
+      if (!name) throw new Error('Enter a fighter name.')
+      if (createType === 'existing' && !selectedCreateAsset) throw new Error('Select an existing asset to import.')
+
+      const selectedStyle = createStyleOptions.find((option) => option.value === createStyle)
+      if (!selectedStyle) throw new Error('Pick a style.')
+
+      const payload: BotaFighterProfileImportRequest = {
+        displayName: name,
+        origin: createType === 'existing' ? selectedCreateAsset?.fighter.origin || 'manual' : 'manual',
+        originId:
+          createType === 'existing'
+            ? selectedCreateAsset?.fighter.originId || selectedCreateAsset?.id
+            : undefined,
+        agentClass: selectedStyle.agentClass,
+        archetype: selectedStyle.archetype,
+        league: 'Open League',
+        walletAddress: ownScanWallet || selectedCreateAsset?.fighter.walletAddress || null,
+        avatarUrl: createType === 'new' ? createAvatarUrl : undefined,
+        metadata: {
+          ...(createType === 'existing' ? selectedCreateAsset?.fighter.metadata : {}),
+          importedFrom: createType === 'existing' ? 'create-existing' : 'manual-create',
+          selectedAssetId: createType === 'existing' ? selectedCreateAsset?.id : undefined,
+          personaStyle: selectedStyle.personality,
+          loadout: createAutoAssign ? 'auto' : 'manual',
+          ...(createType === 'new' ? {
+            characterAvatarUrl: createAvatarUrl,
+            sourceAvatarUrl: createAvatarUrl,
+          } : {}),
+        },
+      }
+
+      return apiRequest('POST', '/api/bantahbro/fighter-profiles/import', payload) as Promise<ImportResponse>
+    },
+    onMutate: () => {
+      setIsCreateDialogOpen(true)
+      setCreateStatus('pending')
+    },
+    onSuccess: (result) => {
+      setImportedProfile(result.profile)
+      setCreateStatus('success')
+      queryClient.invalidateQueries({ queryKey: ['/api/bantahbro/fighter-profiles'] })
+      queryClient.invalidateQueries({ queryKey: ['/api/bantahbro/profile'] })
+      queryClient.invalidateQueries({ queryKey: ['/api/bantahbro/agents-directory'] })
+      queryClient.invalidateQueries({ queryKey: ['/api/bantahbro/profile'] })
+      // Fire confetti on successful deploy
+      setTimeout(() => { confettiRef.current?.() }, 80)
+      toast({
+        title: 'Fighter deployed',
+        description: `${result.profile.displayName} entered your next Arena queue.`,
+      })
+    },
+    onError: (error: Error) => {
+      setCreateStatus('idle')
+      toast({
+        title: 'Deploy failed',
+        description: error.message,
+        variant: 'destructive',
+      })
+    },
+  })
+
+  const importMutation = useMutation({
+    mutationFn: async () => {
+      if (!isAuthenticated) throw new Error('Sign in to import this fighter.')
+      if (!selectedAsset) throw new Error('Choose an asset to import.')
+
+      const payload: BotaFighterProfileImportRequest = {
+        ...selectedAsset.fighter,
+        avatarUrl: characterAvatarForAsset(selectedAsset),
+        walletAddress: ownScanWallet || selectedAsset.fighter.walletAddress || null,
+        metadata: {
+          ...selectedAsset.fighter.metadata,
+          importedFrom: 'universal-wallet-importer',
+          selectedAssetId: selectedAsset.id,
+          sourceAvatarUrl: selectedAsset.avatarUrl,
+          characterAvatarUrl: characterAvatarForAsset(selectedAsset),
+        },
+      }
+
+      return apiRequest('POST', '/api/bantahbro/fighter-profiles/import', payload) as Promise<ImportResponse>
+    },
+    onSuccess: (result) => {
+      setImportedProfile(result.profile)
+      queryClient.invalidateQueries({ queryKey: ['/api/bantahbro/fighter-profiles'] })
+      queryClient.invalidateQueries({ queryKey: ['/api/bantahbro/profile'] })
+      queryClient.invalidateQueries({ queryKey: ['/api/bantahbro/agents-directory'] })
+      queryClient.invalidateQueries({ queryKey: ['/api/bantahbro/profile'] })
+      toast({
+        title: 'Fighter imported',
+        description: `${result.profile.displayName} entered your next Arena queue.`,
+      })
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Import failed',
+        description: error.message,
+        variant: 'destructive',
+      })
+    },
+  })
+
+  const ensPreviewMutation = useMutation({
+    mutationFn: async () => {
+      const name = ensDraft.trim()
+      if (!name) throw new Error('Enter an ENS name to preview.')
+      const params = new URLSearchParams({
+        name,
+      })
+      const wallet = ownScanWallet
+      if (wallet) params.set('walletAddress', wallet)
+      return apiRequest('GET', `/api/bantahbro/ens/preview?${params.toString()}`) as Promise<EnsPreviewResponse>
+    },
+    onSuccess: (result) => {
+      setEnsPreviewAsset(result.asset)
+      setSelectedAssetId(result.asset.id)
+      setFilter('ens')
+      setImportedProfile(null)
+      toast({
+        title: 'ENS preview ready',
+        description: result.resolution.resolvedAddress
+          ? `${result.resolution.ensName} resolved on Ethereum.`
+          : `${result.resolution.ensName} preview loaded. No resolver address found yet.`,
+      })
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'ENS preview failed',
+        description: error.message,
+        variant: 'destructive',
+      })
+    },
+  })
+
+  const handleScan = () => {
+    if (!isAuthenticated) {
+      login?.()
+      return
+    }
+    if (!ownScanWallet) {
+      toast({
+        title: 'Connect wallet',
+        description: 'Import scans only use the wallet connected to your signed-in profile.',
+        variant: 'destructive',
+      })
+      return
+    }
+    setImportedProfile(null)
+    setSelectedAssetId('')
+    setEnsPreviewAsset(null)
+  }
+
+  const handleEnsPreview = () => {
+    ensPreviewMutation.mutate()
+  }
+
+  const handleImport = () => {
+    if (!isAuthenticated) {
+      login?.()
+      return
+    }
+    importMutation.mutate()
+  }
+
+  const submitLabel = !isAuthenticated
+    ? 'Sign in to import'
+    : importMutation.isPending
+      ? 'Importing'
+      : 'Import as Fighter'
+  const selectedEnsAgentIdentity = ensAgentIdentityForAsset(selectedAsset)
+
+  return (
+    <div className="flex-1 overflow-hidden rounded bg-card flex flex-col">
+      <div className="relative flex shrink-0 items-end justify-center gap-6 border-b border-border bg-background px-4 pt-3">
+        <button
+          type="button"
+          onClick={() => setFilter('create')}
+          className={`text-sm pb-2 px-1 border-b-2 transition ${
+            isCreateMode
+              ? 'font-black text-primary border-primary'
+              : 'font-bold text-muted-foreground hover:text-foreground border-transparent'
+          }`}
+        >
+          Create Fighter
+        </button>
+        <button
+          type="button"
+          onClick={() => setFilter('all')}
+          className={`text-sm pb-2 px-1 border-b-2 transition ${
+            !isCreateMode
+              ? 'font-black text-primary border-primary'
+              : 'font-bold text-muted-foreground hover:text-foreground border-transparent'
+          }`}
+        >
+          Import Asset
+        </button>
+        <span className="absolute right-4 bottom-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground hidden sm:inline">
+          {isCreateMode ? 'Manual Fighter Creator' : 'Wallet Assets To Fighters'}
+        </span>
+      </div>
+
+      <div className="h-full overflow-y-auto p-2.5 pb-24 md:p-3 md:pb-6">
+        <div className="grid grid-cols-1 gap-3 xl:grid-cols-[minmax(0,1fr)_18rem]">
+          <section className="min-w-0 rounded bg-background order-1 xl:order-none">
+            {!isCreateMode && (
+            <div className="border-b border-border p-3">
+              <div className="flex flex-col gap-2 lg:flex-row lg:items-end">
+                <label className="min-w-0 flex-1 space-y-1">
+                  <span className="text-[11px] font-black uppercase tracking-wide text-muted-foreground">
+                    Wallet Scanner
+                  </span>
+                  <div className="flex items-center gap-2 rounded border border-border bg-card px-2 py-1.5">
+                    <Wallet size={15} className="shrink-0 text-primary" />
+                    <input
+                      value={ownScanWallet || walletDraft}
+                      readOnly
+                      placeholder="Connect wallet to scan"
+                      className="min-w-0 flex-1 bg-transparent text-sm font-bold text-foreground outline-none placeholder:text-muted-foreground"
+                    />
+                  </div>
+                </label>
+                <button
+                  type="button"
+                  onClick={handleScan}
+                  disabled={authLoading || (isAuthenticated && !ownScanWallet)}
+                  className="inline-flex items-center justify-center gap-2 rounded bg-primary px-3 py-2 text-xs font-black text-white disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {scanQuery.isFetching ? <Loader2 size={14} className="animate-spin" /> : <Search size={14} />}
+                  Scan Assets
+                </button>
+              </div>
+
+              <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                {assetFilters.map((item) => {
+                  const active = filter === item.value
+                  const count =
+                    item.value === 'all'
+                      ? assets.length
+                      : item.value === 'create'
+                        ? undefined
+                        : scanQuery.data?.counts?.[item.value] || 0
+                  return (
+                    <button
+                      key={item.value}
+                      type="button"
+                      onClick={() => setFilter(item.value)}
+                      className={`inline-flex items-center gap-1 rounded border px-2 py-1 text-[11px] font-black transition ${
+                        active
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-border bg-card text-foreground hover:border-primary/50'
+                      }`}
+                    >
+                      {item.value === 'all' ? (
+                        <Sparkles size={12} />
+                      ) : item.value === 'create' ? (
+                        <Bot size={12} />
+                      ) : (
+                        <AssetTypeIcon type={item.value} size={12} />
+                      )}
+                      {item.label}
+                      {count !== undefined ? <span className="text-muted-foreground">{count}</span> : null}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+            )}
+
+            <div className="grid grid-cols-1 gap-2 p-2.5 lg:grid-cols-2 2xl:grid-cols-3">
+              {isCreateMode ? (
+                <div className="col-span-full rounded border border-border bg-card p-2 xl:p-3 text-sm text-foreground">
+                  <div className="space-y-2 xl:space-y-3">
+                    <div className="flex items-end gap-2 xl:flex-col xl:items-stretch xl:gap-3">
+                      <div className="flex-1 min-w-0">
+                        <Input
+                          value={createName}
+                          onChange={(event) => setCreateName(event.target.value)}
+                          placeholder="Fighter name"
+                          className="h-8 xl:h-10 w-full"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2 rounded border border-border bg-background px-2.5 py-[7px] text-[11px] font-black text-foreground xl:px-3 xl:py-2 xl:text-xs shrink-0">
+                        <span>Loadout</span>
+                        <button
+                          type="button"
+                          onClick={() => setCreateAutoAssign((current) => !current)}
+                          className={`rounded-full px-2.5 py-0.5 text-[10px] font-black transition xl:px-3 xl:py-1 ${
+                            createAutoAssign
+                              ? 'bg-primary text-white'
+                              : 'border border-border bg-background text-foreground hover:border-primary/50'
+                          }`}
+                        >
+                          {createAutoAssign ? 'Auto' : 'Manual'}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 xl:block xl:space-y-3">
+                      <div>
+                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+                          Style
+                        </div>
+                        <div className="mt-1 flex gap-1 xl:mt-2 xl:gap-2">
+                          {createStyleOptions.map((option) => (
+                            <button
+                              key={option.value}
+                              type="button"
+                              onClick={() => setCreateStyle(option.value)}
+                              className={`rounded-full border px-2 py-0.5 text-[9px] font-black transition xl:px-3 xl:py-1.5 xl:text-[11px] ${
+                                createStyle === option.value
+                                  ? 'border-primary bg-primary/10 text-primary'
+                                  : 'border-border bg-background text-foreground hover:border-primary/50'
+                              }`}
+                            >
+                              {option.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={() => {
+                        if (!isAuthenticated) {
+                          login?.()
+                          return
+                        }
+                        createMutation.mutate()
+                      }}
+                      disabled={createMutation.isPending || !createName.trim() || (createType === 'existing' && !selectedCreateAsset)}
+                      className="w-full h-9 xl:h-10"
+                    >
+                      {createMutation.isPending ? 'Deploying…' : 'Deploy'}
+                    </Button>
+                  </div>
+                </div>
+              ) : scanQuery.isLoading ? (
+                <div className="col-span-full grid min-h-40 place-items-center rounded bg-card text-sm font-bold text-muted-foreground">
+                  <span className="inline-flex items-center gap-2">
+                    <Loader2 size={16} className="animate-spin" />
+                    Scanning wallet assets
+                  </span>
+                </div>
+              ) : visibleAssets.length ? (
+                visibleAssets.map((asset) => {
+                  const active = selectedAsset?.id === asset.id
+                  return (
+                    <button
+                      key={asset.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedAssetId(asset.id)
+                        setImportedProfile(null)
+                      }}
+                      className={`min-w-0 rounded border p-2 text-left transition ${
+                        active ? 'border-primary bg-primary/10' : 'border-border bg-card hover:border-primary/50'
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        <img
+                          src={characterAvatarForAsset(asset)}
+                          alt={botaCharacterAlt(asset.name)}
+                          className="size-14 shrink-0 rounded border border-border bg-background object-cover object-center p-0"
+                          loading="lazy"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <span className="truncate text-sm font-black text-foreground">{asset.name}</span>
+                            <SourceIcon asset={asset} />
+                          </div>
+                          <div className="mt-0.5 truncate text-xs text-muted-foreground">{asset.subtitle}</div>
+                          <div className="mt-1 flex flex-wrap items-center gap-1">
+                            <span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-[10px] font-bold text-foreground">
+                              <AssetTypeIcon type={asset.type} size={10} />
+                              {assetTypeLabel(asset.type)}
+                            </span>
+                            <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-bold text-foreground">
+                              {asset.source}
+                            </span>
+                            <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-bold text-muted-foreground">
+                              {asset.chainId}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-2 flex items-center justify-between gap-2 text-[11px]">
+                        <span className="truncate text-muted-foreground">{shortContract(asset)}</span>
+                        <span className="font-black text-primary">{sourceLine(asset)}</span>
+                      </div>
+                    </button>
+                  )
+                })
+              ) : (
+                <div className="col-span-full grid min-h-40 place-items-center rounded border border-border bg-card p-4 text-center">
+                  <div>
+                    <div className="text-sm font-black text-foreground">
+                      {ownScanWallet ? 'No real assets detected' : 'Connect wallet to scan'}
+                    </div>
+                    <div className="mt-1 text-xs text-muted-foreground">
+                      {ownScanWallet
+                        ? 'Only live wallet/indexer results appear here. No fallback imports are shown.'
+                        : 'Sign in and connect your wallet to find your importable fighters.'}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+
+          <aside className="space-y-2.5 order-2 xl:order-none">
+            {/* ── Fighter Preview Box ── */}
+            <section className="overflow-hidden rounded-xl bg-gradient-to-b from-background via-background to-card">
+              {/* Hero avatar area */}
+              <div className="relative flex flex-row items-center gap-4 bg-gradient-to-b from-primary/5 via-primary/[0.02] to-transparent px-4 pb-3 pt-4 xl:flex-col xl:gap-0 xl:pt-5">
+                <div className="relative">
+                  <div className="absolute -inset-1.5 animate-pulse rounded-full bg-primary/20 blur-md" />
+                  <img
+                    src={
+                      isCreateMode
+                        ? (createAvatarUrl || BOTA_CHARACTER_AVATARS[0])
+                        : selectedAsset
+                          ? characterAvatarForAsset(selectedAsset)
+                          : BOTA_CHARACTER_AVATARS[0]
+                    }
+                    alt={
+                      isCreateMode
+                        ? botaCharacterAlt(createName || 'New Fighter')
+                        : selectedAsset
+                          ? botaCharacterAlt(selectedAsset.name)
+                          : 'BOTA Fighter'
+                    }
+                    className="relative z-10 size-20 xl:size-28 rounded-xl border border-primary/30 xl:border-2 bg-background object-cover object-center transition-transform duration-300 hover:scale-105"
+                  />
+                  <span className="absolute -bottom-1 -right-1 z-20 grid size-5 xl:size-6 place-items-center rounded-full border-2 border-background bg-primary text-white">
+                    {isCreateMode ? <Bot size={10} className="xl:h-3 xl:w-3" /> : <Shield size={10} className="xl:h-3 xl:w-3" />}
+                  </span>
+                </div>
+
+                {/* Name */}
+                <div className="mt-0 max-w-full text-left xl:mt-3 xl:text-center">
+                  <div className="truncate text-base font-black tracking-tight text-foreground">
+                    {isCreateMode
+                      ? (createName.trim() || DEFAULT_AVATAR_NAMES[createAvatarUrl || BOTA_CHARACTER_AVATARS[0]] || 'New Fighter')
+                      : selectedAsset?.fighter.displayName || 'Select a Fighter'}
+                  </div>
+                  <div className="mt-0.5 text-[11px] font-bold text-primary">
+                    {isCreateMode
+                      ? (createStyleOptions.find(o => o.value === createStyle)?.label || 'Adaptive') + ' · Gen 1'
+                      : selectedAsset
+                        ? `${selectedAsset.fighter.league || 'Open League'}`
+                        : 'No asset selected'}
+                  </div>
+                </div>
+
+                {/* Tags */}
+                {!isCreateMode && selectedAsset && (
+                  <div className="mt-2 flex flex-wrap items-center justify-center gap-1">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-black text-primary">
+                      <AssetTypeIcon type={selectedAsset.type} size={10} />
+                      {assetTypeLabel(selectedAsset.type)}
+                    </span>
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold text-foreground">
+                      {selectedAsset.source}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Stats / Details */}
+              <div className="space-y-2 px-3 pb-3">
+                {/* ── Create mode: Template picker ── */}
+                {isCreateMode && createType === 'new' && (
+                  <div className="rounded-lg border border-border bg-background p-2">
+                    <div className="text-[10px] font-black uppercase tracking-[0.15em] text-muted-foreground">
+                      Pick Template
+                    </div>
+                    <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1 xl:grid xl:grid-cols-4 xl:overflow-visible xl:pb-0">
+                      {BOTA_CHARACTER_AVATARS.map((url) => (
+                        <button
+                          key={url}
+                          type="button"
+                          onClick={() => setCreateAvatarUrl(url)}
+                          className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-all shrink-0 w-10 xl:w-auto ${
+                            createAvatarUrl === url
+                              ? 'border-primary ring-2 ring-primary/30 shadow-[0_0_12px_rgba(var(--primary),0.35)]'
+                              : 'border-border opacity-60 hover:border-primary/50 hover:opacity-100'
+                          }`}
+                        >
+                          <img src={url} alt="Template" className="h-full w-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+
+                {/* ── Import mode: selected asset details ── */}
+                {!isCreateMode && selectedAsset && (
+                  <>
+                    <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                      <div className="rounded-lg bg-background px-2 py-1.5 border border-border">
+                        <div className="text-muted-foreground">Source</div>
+                        <div className="flex items-center gap-1.5 font-black text-foreground">
+                          <img
+                            src={identityForAsset(selectedAsset).logoUrl}
+                            alt=""
+                            className="h-4 w-4 rounded-full object-cover"
+                            loading="lazy"
+                          />
+                          <span className="truncate">{identityForAsset(selectedAsset).brainLabel}</span>
+                        </div>
+                      </div>
+                      <div className="rounded-lg bg-background px-2 py-1.5 border border-border">
+                        <div className="text-muted-foreground">Class</div>
+                        <div className="font-black text-foreground">
+                          {selectedAsset.fighter.agentClass || '—'}
+                        </div>
+                      </div>
+                      <div className="rounded-lg bg-background px-2 py-1.5 border border-border">
+                        <div className="text-muted-foreground">Archetype</div>
+                        <div className="truncate font-black text-foreground">
+                          {String(selectedAsset.fighter.archetype || '—').replace(/_/g, ' ')}
+                        </div>
+                      </div>
+                      <div className="rounded-lg bg-background px-2 py-1.5 border border-border">
+                        <div className="text-muted-foreground">Rank</div>
+                        <div className="font-black text-foreground">#{selectedAsset.fighter.rank || '-'}</div>
+                      </div>
+                    </div>
+
+                    {/* Derivative fighter details */}
+                    {derivativeForAsset(selectedAsset) ? (
+                      <div className="rounded-lg border border-primary/25 bg-primary/5 p-2 text-[11px]">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-black text-primary">
+                            {derivativeForAsset(selectedAsset)?.speciesLabel}
+                          </span>
+                          <span className="rounded bg-background px-1.5 py-0.5 font-black uppercase text-muted-foreground">
+                            {derivativeForAsset(selectedAsset)?.rarityTier}
+                          </span>
+                        </div>
+                        <div className="mt-1 text-muted-foreground">
+                          {derivativeForAsset(selectedAsset)?.collectionLabel} traits → BOTA fighter.
+                        </div>
+                        <div className="mt-2 grid grid-cols-3 gap-1">
+                          {Object.entries(derivativeForAsset(selectedAsset)?.stats || {}).slice(0, 6).map(([key, value]) => (
+                            <div key={key} className="rounded bg-background px-1.5 py-1">
+                              <div className="font-black text-foreground">{String(value)}</div>
+                              <div className="uppercase text-muted-foreground">{key}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {/* ENS Agent Identity */}
+                    {selectedEnsAgentIdentity ? (
+                      <div className="rounded-lg border border-primary/25 bg-primary/10 p-2 text-[11px]">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="font-black text-primary">ENS Agent Identity</div>
+                          <span className="rounded bg-background px-1.5 py-0.5 font-black uppercase text-muted-foreground">
+                            {ensIdentityStatusLabel(selectedEnsAgentIdentity.status)}
+                          </span>
+                        </div>
+                        <div className="mt-1 grid gap-1">
+                          <div className="flex min-w-0 items-center justify-between gap-2 rounded bg-background px-2 py-1">
+                            <span className="shrink-0 text-muted-foreground">ENSIP-26</span>
+                            <span className="truncate font-black text-foreground">agent-context</span>
+                          </div>
+                          {selectedEnsAgentIdentity.registry?.verificationKey ? (
+                            <div className="flex min-w-0 items-center justify-between gap-2 rounded bg-background px-2 py-1">
+                              <span className="shrink-0 text-muted-foreground">ENSIP-25</span>
+                              <span className="truncate font-black text-foreground" title={selectedEnsAgentIdentity.registry.verificationKey}>
+                                {selectedEnsAgentIdentity.registry.verified ? 'verified' : 'verification key ready'}
+                              </span>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {/* Source badges */}
+                    <div className="flex flex-wrap items-center gap-1">
+                      <span
+                        className="inline-grid h-6 w-6 place-items-center overflow-hidden rounded-full border border-primary/25 bg-primary/10"
+                        title={selectedAsset.source}
+                      >
+                        <img
+                          src={identityForAsset(selectedAsset).logoUrl}
+                          alt=""
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </span>
+                      {(selectedAsset.fighter.titles || []).slice(0, 2).map((title) => (
+                        <span key={title} className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-black text-primary">
+                          {title}
+                        </span>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {/* ── Action button ── */}
+                {!isCreateMode && (
+                  <button
+                    type="button"
+                    onClick={handleImport}
+                    disabled={authLoading || importMutation.isPending || !selectedAsset}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2.5 text-xs font-black text-white transition-all hover:bg-primary/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {importMutation.isPending ? <Loader2 size={14} className="animate-spin" /> : <ImportIcon size={14} />}
+                    {submitLabel}
+                  </button>
+                )}
+
+                {/* ── Success state ── */}
+                {importedProfile && (
+                  <div className="rounded-lg border border-green-500/30 bg-green-500/10 p-2.5">
+                    <div className="flex items-center gap-2 text-sm font-black text-green-500">
+                      <CheckCircle2 size={16} />
+                      Imported
+                    </div>
+                    <div className="mt-1 text-sm font-black text-foreground">{importedProfile.displayName}</div>
+                    <div className="mt-1 text-[11px] font-bold text-muted-foreground">
+                      Queued for the next Arena round.
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <a
+                        href={botaAppHref('/bota?section=battles')}
+                        onClick={(e) => {
+                          if (onNavigate) { e.preventDefault(); onNavigate('battles') }
+                        }}
+                        className="inline-flex items-center gap-1 rounded bg-primary px-2.5 py-1.5 text-xs font-black text-white hover:bg-primary/90"
+                      >
+                        Enter Arena <Swords size={12} />
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Your Queue (compact) ── */}
+                {isAuthenticated && (
+                  <div className="rounded-lg border border-border bg-background p-1.5 xl:p-2">
+                    <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                      <Swords size={11} className="text-primary" />
+                      Queue
+                    </div>
+                    <div className="mt-1 space-y-1 xl:mt-1.5">
+                      {profileQuery.isLoading ? (
+                        <div className="rounded bg-card px-2 py-1.5 text-[10px] font-bold text-muted-foreground">
+                          Loading…
+                        </div>
+                      ) : profileQuery.data?.queue?.length ? (
+                        profileQuery.data.queue.slice(0, 2).map((row) => (
+                          <div key={row.id} className="rounded border border-primary/20 bg-primary/5 px-2 py-1.5 text-[10px]">
+                            <div className="flex items-center justify-between font-black text-primary">
+                              <span className="truncate">{row.queueState === 'matched' ? 'Next match' : 'Waiting'}</span>
+                              {row.startsAt && row.queueState !== 'live' ? (
+                                <QueueCountdown startsAt={row.startsAt} title={row.title} arenaUrl={row.arenaUrl} />
+                              ) : row.queueState === 'live' ? (
+                                <a
+                                  href={row.arenaUrl || botaAppHref('/bota?section=battles')}
+                                  className="flex items-center gap-1 rounded border border-green-500/30 bg-green-500/10 px-1 py-0.5 text-green-500 hover:bg-green-500/20 transition-colors"
+                                >
+                                  <span className="animate-pulse">Live</span>
+                                  <ExternalLink size={9} />
+                                </a>
+                              ) : null}
+                            </div>
+                            <div className="mt-0.5 truncate font-bold text-foreground">
+                              {row.opponentName ? `${row.agentName} vs ${row.opponentName}` : row.agentName}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="rounded bg-card px-2 py-1.5 text-[10px] font-bold text-muted-foreground">
+                          No matches queued yet.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+          </aside>
+        </div>
+      </div>
+
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent
+          className="max-w-xs overflow-hidden p-0 border-border/60 bg-background shadow-none"
+        >
+          <div className="relative p-5">
+            <DialogHeader className="relative">
+              <DialogTitle className="flex items-center gap-2.5 text-base font-black tracking-tight text-foreground">
+                {createStatus === 'pending' ? (
+                  <>
+                    <img
+                      src="/2dgame/image/mascots/actions/bantah-punch-avatar-portrait.png"
+                      alt="BOTA"
+                      className="size-6 rounded-full object-cover animate-pulse"
+                    />
+                    Deploying Fighter...
+                  </>
+                ) : createStatus === 'success' ? (
+                  <>
+                    <CheckCircle2 size={22} className="text-green-500 animate-[bounce_0.5s_ease-out]" />
+                    Deployment Success
+                  </>
+                ) : (
+                  <>
+                    <Swords size={22} className="text-primary" />
+                    Create Fighter
+                  </>
+                )}
+              </DialogTitle>
+              <DialogDescription className="text-xs text-muted-foreground pt-1">
+                {createStatus === 'pending'
+                  ? 'Generating persona, compiling loadout, and registering identity for the Arena...'
+                  : createStatus === 'success'
+                  ? 'Your fighter has been registered and is queued for the next Arena round.'
+                  : 'Review your fighter deployment status.'}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="relative mt-5 space-y-3">
+              {createStatus === 'pending' ? (
+                <div className="flex flex-col items-center justify-center py-5">
+                  <div className="relative flex items-center justify-center size-16">
+                    <div className="absolute inset-0 rounded-full border-4 border-primary/20" />
+                    <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+                    <img
+                      src="/2dgame/image/mascots/actions/bantah-punch-avatar-portrait.png"
+                      alt="BOTA"
+                      className="size-8 rounded-full object-cover"
+                    />
+                  </div>
+                  <div className="mt-3 text-[10px] font-black uppercase tracking-widest text-primary animate-pulse">
+                    {deploySteps[deployStep]}
+                  </div>
+                </div>
+              ) : createStatus === 'success' && importedProfile ? (
+                <div className="rounded-lg border border-primary/30 bg-card p-3">
+                  <div className="flex items-center gap-3">
+                    <img 
+                      src={importedProfile.avatarUrl || botaCharacterAvatar(importedProfile.id, importedProfile.origin || 'manual')} 
+                      alt="Fighter Avatar" 
+                      className="size-12 rounded-full border-2 border-primary/50 object-cover"
+                    />
+                    <div>
+                      <div className="text-sm font-black tracking-tight text-foreground">{importedProfile.displayName}</div>
+                      <div className="mt-0.5 flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+                        <span className="flex size-1.5 rounded-full bg-green-500 animate-pulse" />
+                        Queued for Arena
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+
+            <div className="relative mt-5 flex flex-col gap-2 sm:flex-row sm:justify-end">
+              {createStatus !== 'pending' && (
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => setIsCreateDialogOpen(false)} 
+                  className="w-full sm:w-auto text-xs font-black border-border/50 hover:bg-muted/50"
+                >
+                  {createStatus === 'success' ? 'View Queue' : 'Close'}
+                </Button>
+              )}
+              {createStatus === 'success' && importedProfile ? (
+                <a
+                  href={botaAppHref('/bota?section=battles')}
+                  onClick={(e) => {
+                    if (onNavigate) {
+                      e.preventDefault()
+                      onNavigate('battles')
+                    }
+                  }}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-xs font-black text-white transition-all hover:bg-primary/90 sm:w-auto hover:scale-105 active:scale-95"
+                >
+                  <Gamepad2 size={14} />
+                  Enter Arena
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
