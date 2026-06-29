@@ -660,26 +660,24 @@ canvas { display: block; background: transparent; }
 
 /* ── Rune Cards ── */
 #rune-card-hand {
-    position: absolute;
-    bottom: 14px;
-    transform: translateX(-50%);
     display: flex;
     align-items: flex-end;
-    gap: 10px;
-    z-index: 15;
-    pointer-events: auto;
-    width: 460px;
+    gap: 8px;
+    padding: 6px 14px 0;
+    border-left: 1px solid var(--border2);
+    /* overflow-visible so hover lift doesn't clip */
+    overflow: visible;
+    flex-shrink: 0;
 }
 
 .rune-card {
     position: relative;
-    flex: 1;
-    min-width: 0;
+    width: 96px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    padding: 9px 6px 12px;
+    gap: 3px;
+    padding: 7px 5px 10px;
     background: linear-gradient(160deg, var(--surf-900) 0%, var(--bg-950) 100%);
     border: 1.5px solid rgba(139,92,246,0.3);
     border-radius: 9px;
@@ -689,10 +687,11 @@ canvas { display: block; background: transparent; }
     user-select: none;
     -webkit-user-select: none;
 }
-#rune-card-hand .rune-card:nth-child(1) { transform: translateY(5px) rotate(-2.5deg); }
-#rune-card-hand .rune-card:nth-child(2) { transform: translateY(1px) rotate(-0.8deg); }
-#rune-card-hand .rune-card:nth-child(3) { transform: translateY(1px) rotate(0.8deg); }
-#rune-card-hand .rune-card:nth-child(4) { transform: translateY(5px) rotate(2.5deg); }
+/* Fan tilt from bottom */
+#rune-card-hand .rune-card:nth-child(1) { transform: translateY(4px) rotate(-2deg); }
+#rune-card-hand .rune-card:nth-child(2) { transform: translateY(1px) rotate(-0.6deg); }
+#rune-card-hand .rune-card:nth-child(3) { transform: translateY(1px) rotate(0.6deg); }
+#rune-card-hand .rune-card:nth-child(4) { transform: translateY(4px) rotate(2deg); }
 
 .rune-card:hover,
 .rune-card:focus-visible {
@@ -931,7 +930,7 @@ canvas { display: block; background: transparent; }
     background: linear-gradient(180deg, var(--bg-850) 0%, var(--bg-950) 100%);
     border-top: 1px solid rgba(139,92,246,0.18);
     display: flex; align-items: stretch;
-    overflow: hidden;
+    overflow: visible;
     padding: 0;
     box-shadow: 0 -1px 20px rgba(0,0,0,0.4);
 }
