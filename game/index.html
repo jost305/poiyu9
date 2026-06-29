@@ -98,10 +98,10 @@
                         <span class="tb-mini-label">DMG</span>
                         <span class="tb-mini-val" id="total-damage">0</span>
                     </div>
-                    <div class="tb-mini-stat">
-                        <span class="tb-mini-label">HITS</span>
-                        <span class="tb-mini-val" id="tb-hits">0</span>
-                    </div>
+                    <button class="tb-notif-btn" onclick="openPage('notifications');return false" title="Notifications" data-page="notifications">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="tb-notif-badge">3</span>
+                    </button>
                     <button class="tb-pick-btn" onclick="openCpModal()">
                         ⚔ PICK FIGHTERS
                     </button>
@@ -1411,6 +1411,110 @@
             </div>
         </div>
 
+        <!-- NOTIFICATIONS SECTION -->
+        <div id="page-notifications" class="page-overlay bantahbro-next-ui dark" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">🔔 Notifications</h1>
+                    <p class="pg-subtitle">Activity, alerts &amp; arena updates</p>
+                </div>
+                <div class="notif-header-actions">
+                    <button class="notif-mark-all" onclick="markAllRead()">Mark all read</button>
+                    <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+                </div>
+            </div>
+            <div class="pg-body notif-body">
+                <div class="notif-tabs">
+                    <button class="notif-tab active" onclick="notifTab(this,'all')">All</button>
+                    <button class="notif-tab" onclick="notifTab(this,'battle')">Battle</button>
+                    <button class="notif-tab" onclick="notifTab(this,'reward')">Rewards</button>
+                    <button class="notif-tab" onclick="notifTab(this,'system')">System</button>
+                </div>
+                <div class="notif-list" id="notif-list">
+
+                    <!-- Unread -->
+                    <div class="notif-item notif-unread" data-type="battle">
+                        <div class="notif-icon-wrap notif-icon-battle">⚔</div>
+                        <div class="notif-content">
+                            <div class="notif-title">Your fighter entered the queue</div>
+                            <div class="notif-desc">Floatrobo is now #2 in the challenger queue. Next match in ~45s.</div>
+                            <div class="notif-time">Just now</div>
+                        </div>
+                        <div class="notif-dot"></div>
+                    </div>
+
+                    <div class="notif-item notif-unread" data-type="reward">
+                        <div class="notif-icon-wrap notif-icon-reward">💰</div>
+                        <div class="notif-content">
+                            <div class="notif-title">Bet payout received</div>
+                            <div class="notif-desc">You correctly predicted Robot V1 wins. <strong class="gold">+3,200 BC</strong> added to your wallet.</div>
+                            <div class="notif-time">2 min ago</div>
+                        </div>
+                        <div class="notif-dot"></div>
+                    </div>
+
+                    <div class="notif-item notif-unread" data-type="system">
+                        <div class="notif-icon-wrap notif-icon-system">🛡</div>
+                        <div class="notif-content">
+                            <div class="notif-title">New rune unlocked</div>
+                            <div class="notif-desc">You've reached 20 wins! The <strong>Phase Shift</strong> rune is now available.</div>
+                            <div class="notif-time">18 min ago</div>
+                        </div>
+                        <div class="notif-dot"></div>
+                    </div>
+
+                    <!-- Read -->
+                    <div class="notif-divider">Earlier</div>
+
+                    <div class="notif-item" data-type="battle">
+                        <div class="notif-icon-wrap notif-icon-battle">⚔</div>
+                        <div class="notif-content">
+                            <div class="notif-title">Match ended — Robot V1 wins</div>
+                            <div class="notif-desc">Robot V1 defeated Floatrobo in 1:12. King streak: <strong>4</strong>.</div>
+                            <div class="notif-time">34 min ago</div>
+                        </div>
+                    </div>
+
+                    <div class="notif-item" data-type="reward">
+                        <div class="notif-icon-wrap notif-icon-reward">💰</div>
+                        <div class="notif-content">
+                            <div class="notif-title">King treasury reward</div>
+                            <div class="notif-desc">Your fighter held the throne for 3 defenses. <strong class="gold">+8,750 BC</strong> from treasury.</div>
+                            <div class="notif-time">1 hr ago</div>
+                        </div>
+                    </div>
+
+                    <div class="notif-item" data-type="system">
+                        <div class="notif-icon-wrap notif-icon-system">🔧</div>
+                        <div class="notif-content">
+                            <div class="notif-title">Arena maintenance complete</div>
+                            <div class="notif-desc">The arena has been upgraded to v2.4. New shrine mechanics are now live.</div>
+                            <div class="notif-time">3 hr ago</div>
+                        </div>
+                    </div>
+
+                    <div class="notif-item" data-type="battle">
+                        <div class="notif-icon-wrap notif-icon-battle">👑</div>
+                        <div class="notif-content">
+                            <div class="notif-title">New king crowned</div>
+                            <div class="notif-desc">Sub-Zero has claimed the throne after defeating Toxicbot. Power: 2,450.</div>
+                            <div class="notif-time">5 hr ago</div>
+                        </div>
+                    </div>
+
+                    <div class="notif-item" data-type="reward">
+                        <div class="notif-icon-wrap notif-icon-reward">🎁</div>
+                        <div class="notif-content">
+                            <div class="notif-title">Daily login reward</div>
+                            <div class="notif-desc">Welcome back! You've received your daily reward of <strong class="gold">500 BC</strong>.</div>
+                            <div class="notif-time">Yesterday</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         <!-- SEARCH MODAL -->
         <div id="search-modal" class="search-modal-overlay" style="display:none" onclick="closeSearchOnBg(event)">
             <div class="search-modal-box">
@@ -1843,7 +1947,7 @@
         /* ── Page navigation ── */
         var _activePage = null;
 
-        var _pages = ['docs','marketplace','create','leaderboard'];
+        var _pages = ['docs','marketplace','create','leaderboard','notifications'];
 
         function openPage(name) {
             if (_activePage === name) { closePage(); return; }
@@ -1878,6 +1982,27 @@
         function lbTab(btn, period) {
             document.querySelectorAll('.lb-tab').forEach(function(b) { b.classList.remove('active'); });
             btn.classList.add('active');
+        }
+
+        /* ── Notifications ── */
+        function notifTab(btn, type) {
+            document.querySelectorAll('.notif-tab').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('.notif-item').forEach(function(el) {
+                el.style.display = (type === 'all' || el.dataset.type === type) ? 'flex' : 'none';
+            });
+            document.querySelectorAll('.notif-divider').forEach(function(el) {
+                el.style.display = type === 'all' ? 'block' : 'none';
+            });
+        }
+
+        function markAllRead() {
+            document.querySelectorAll('.notif-unread').forEach(function(el) {
+                el.classList.remove('notif-unread');
+            });
+            document.querySelectorAll('.notif-dot').forEach(function(el) { el.remove(); });
+            var badge = document.querySelector('.tb-notif-badge');
+            if (badge) badge.style.display = 'none';
         }
 
         /* ── Search ── */

@@ -1742,6 +1742,144 @@ body.page-active .page-overlay { bottom: 0; }
 }
 
 /* ══════════════════════════════════════════
+   NOTIFICATION BELL (topbar)
+══════════════════════════════════════════ */
+.tb-notif-btn {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px;
+    border-radius: 7px;
+    border: 1px solid rgba(139,92,246,0.25);
+    background: rgba(139,92,246,0.08);
+    color: var(--text2);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.tb-notif-btn:hover,
+.tb-notif-btn.tb-nav-active {
+    background: rgba(139,92,246,0.2);
+    border-color: rgba(139,92,246,0.5);
+    color: #fff;
+}
+.tb-notif-badge {
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--neon-red, #ef4444);
+    color: #fff;
+    font-size: 8px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+    border: 1.5px solid var(--bg-950, #050508);
+    pointer-events: none;
+}
+
+/* ══════════════════════════════════════════
+   NOTIFICATIONS SECTION
+══════════════════════════════════════════ */
+.notif-body { flex-direction: column !important; overflow: hidden; }
+
+.notif-header-actions { display: flex; align-items: center; gap: 10px; }
+.notif-mark-all {
+    background: transparent;
+    border: 1px solid var(--bb-border);
+    border-radius: 7px;
+    color: var(--bb-muted-foreground);
+    font-size: 11px; font-weight: 600;
+    padding: 6px 14px; cursor: pointer;
+    transition: all 0.15s; white-space: nowrap;
+}
+.notif-mark-all:hover { color: var(--bb-foreground); border-color: hsl(var(--bb-primary)); }
+
+.notif-tabs {
+    display: flex; align-items: center; gap: 4px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--bb-border);
+    flex-shrink: 0;
+    background: var(--bb-card);
+}
+.notif-tab {
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--bb-muted-foreground);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.8px;
+    cursor: pointer; transition: all 0.15s;
+}
+.notif-tab:hover { color: var(--bb-foreground); background: rgb(var(--bb-primary-rgb) / 0.1); }
+.notif-tab.active {
+    background: rgb(var(--bb-primary-rgb) / 0.18);
+    border-color: hsl(var(--bb-primary));
+    color: var(--bb-foreground);
+}
+
+.notif-list {
+    flex: 1; overflow-y: auto; padding: 8px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+}
+
+.notif-divider {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    color: var(--bb-muted-foreground);
+    text-transform: uppercase;
+    padding: 10px 4px 4px;
+    border-top: 1px solid var(--bb-border);
+    margin-top: 4px;
+}
+
+.notif-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.02);
+    transition: background 0.12s;
+    position: relative;
+}
+.notif-item:hover { background: rgba(255,255,255,0.05); }
+.notif-unread {
+    background: rgb(var(--bb-primary-rgb) / 0.06);
+    border-color: rgb(var(--bb-primary-rgb) / 0.18);
+}
+
+.notif-icon-wrap {
+    width: 36px; height: 36px; flex-shrink: 0;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+}
+.notif-icon-battle { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.2); }
+.notif-icon-reward  { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.2); }
+.notif-icon-system  { background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.2); }
+
+.notif-content { flex: 1; min-width: 0; }
+.notif-title {
+    font-size: 13px; font-weight: 600;
+    color: var(--bb-foreground);
+    margin-bottom: 3px; line-height: 1.3;
+}
+.notif-desc {
+    font-size: 12px; color: var(--bb-muted-foreground);
+    line-height: 1.5;
+}
+.notif-time {
+    font-size: 10px; color: var(--bb-muted-foreground);
+    margin-top: 5px; opacity: 0.7;
+}
+
+.notif-dot {
+    width: 8px; height: 8px; flex-shrink: 0;
+    border-radius: 50%;
+    background: hsl(var(--bb-primary));
+    margin-top: 4px;
+    box-shadow: 0 0 8px rgb(var(--bb-primary-rgb) / 0.6);
+}
+
+/* ══════════════════════════════════════════
    SEARCH BUTTON (topbar)
 ══════════════════════════════════════════ */
 .tb-search-btn {
