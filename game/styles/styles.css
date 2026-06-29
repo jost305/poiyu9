@@ -227,6 +227,161 @@ html.light .tb-theme-btn {
 }
 html.light .tb-theme-btn:hover { background: rgba(124,58,237,0.14); color: var(--neon-violet); }
 
+/* ── Search button ── */
+html.light .tb-search-btn { border-color: rgba(124,58,237,0.25); background: rgba(124,58,237,0.07); color: var(--text-secondary); }
+html.light .tb-search-btn:hover { background: rgba(124,58,237,0.16); border-color: rgba(124,58,237,0.45); color: var(--neon-purple); }
+
+/* ── Profile button ── */
+html.light .tb-profile-btn { border-color: rgba(124,58,237,0.3); background: rgba(124,58,237,0.08); }
+html.light .tb-profile-btn:hover,
+html.light .tb-profile-btn.tb-nav-active { border-color: var(--neon-purple); background: rgba(124,58,237,0.18); }
+
+/* ══════════════════════════════════════════
+   LIGHT MODE — PAGE OVERLAY ELEMENT FIXES
+   (hardcoded rgba darks that don't use CSS vars)
+══════════════════════════════════════════ */
+
+/* ── Notifications ── */
+html.light .notif-item {
+    background: rgba(0,0,0,0.02);
+    border-color: rgba(124,58,237,0.1);
+}
+html.light .notif-item:hover { background: rgba(124,58,237,0.06); }
+html.light .notif-divider { color: var(--text-muted); }
+html.light .notif-mark-all {
+    background: rgba(124,58,237,0.08);
+    border-color: rgba(124,58,237,0.2);
+    color: var(--neon-purple);
+}
+html.light .notif-mark-all:hover { background: rgba(124,58,237,0.16); }
+html.light .notif-tab { color: var(--text-muted); }
+html.light .notif-tab:hover { color: var(--text-primary); background: rgba(124,58,237,0.08); }
+html.light .notif-tab.active { background: rgba(124,58,237,0.14); color: var(--neon-purple); border-color: rgba(124,58,237,0.35); }
+
+/* ── Leaderboard ── */
+html.light .lb-row { border-bottom-color: rgba(0,0,0,0.06); }
+html.light .lb-row-gold  { background: rgba(217,119,6,0.05); }
+html.light .lb-row-silver { background: rgba(107,114,128,0.05); }
+html.light .lb-row-bronze { background: rgba(180,100,50,0.04); }
+html.light .lb-status-idle {
+    background: rgba(0,0,0,0.05);
+    border-color: rgba(0,0,0,0.1);
+    color: var(--text-muted);
+}
+html.light .lb-pct-high { background: rgba(22,163,74,0.12); color: var(--neon-green); }
+html.light .lb-pct-med  { background: rgba(217,119,6,0.12); color: var(--neon-gold); }
+html.light .lb-pct-low  { background: rgba(220,38,38,0.1); color: var(--neon-red); }
+html.light .lb-status-king  { background: rgba(217,119,6,0.12); color: var(--neon-gold); border-color: rgba(217,119,6,0.3); }
+html.light .lb-status-queue { background: rgba(37,99,235,0.1); color: var(--neon-blue); border-color: rgba(37,99,235,0.25); }
+
+/* ── Docs page ── */
+html.light .doc2-card {
+    background: rgba(0,0,0,0.03);
+    border-color: rgba(124,58,237,0.12);
+}
+html.light .doc2-card:hover { background: rgba(124,58,237,0.05); border-color: rgba(124,58,237,0.22); }
+html.light .doc2-highlight { background: rgba(124,58,237,0.05); border-color: rgba(124,58,237,0.15); }
+html.light .doc2-step { background: rgba(0,0,0,0.03); border-color: rgba(124,58,237,0.1); }
+html.light .doc2-td-key { color: var(--text-primary); }
+html.light .doc2-td-muted { color: var(--text-secondary); }
+html.light .doc2-mode-card { background: rgba(0,0,0,0.03); border-color: rgba(124,58,237,0.12); }
+html.light .doc2-mode-point { color: var(--text-secondary); }
+html.light table.doc2-table th { background: rgba(0,0,0,0.04); color: var(--text-muted); border-color: rgba(0,0,0,0.08); }
+html.light table.doc2-table td { border-color: rgba(0,0,0,0.06); }
+html.light table.doc2-table tr:hover td { background: rgba(124,58,237,0.04); }
+
+/* ── Marketplace page ── */
+html.light .mkt-card {
+    background: rgba(0,0,0,0.03);
+    border-color: rgba(124,58,237,0.12);
+}
+html.light .mkt-card:hover { border-color: rgba(124,58,237,0.3); background: rgba(124,58,237,0.04); }
+html.light .mkt-card-badge { background: rgba(0,0,0,0.06); color: var(--text-muted); }
+html.light .mkt-filter-btn { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.1); color: var(--text-secondary); }
+html.light .mkt-filter-btn:hover,
+html.light .mkt-filter-btn.active { background: rgba(124,58,237,0.12); border-color: rgba(124,58,237,0.35); color: var(--neon-purple); }
+
+/* ── Create / Agents pages ── */
+html.light .create-section { background: rgba(0,0,0,0.03); border-color: rgba(124,58,237,0.12); }
+html.light .cps-card { background: rgba(0,0,0,0.03); border-color: rgba(124,58,237,0.12); }
+html.light .cps-card:hover,
+html.light .cps-card.selected { border-color: var(--neon-purple); background: rgba(124,58,237,0.06); }
+html.light .agents-card { background: rgba(0,0,0,0.03); border-color: rgba(124,58,237,0.12); }
+html.light .agents-card:hover { border-color: rgba(124,58,237,0.3); }
+
+/* ══════════════════════════════════════════
+   LIGHT MODE — PROFILE PAGE FIXES
+   (all profile elements use hardcoded rgba darks)
+══════════════════════════════════════════ */
+html.light .prof-stat-card {
+    background: rgba(0,0,0,0.03);
+    border-color: rgba(124,58,237,0.15);
+}
+html.light .prof-stat-card:hover { border-color: rgba(124,58,237,0.32); }
+html.light .prof-tabs { border-bottom-color: rgba(0,0,0,0.1); }
+html.light .prof-tab { color: var(--text-muted); }
+html.light .prof-tab:hover { color: var(--text-primary); }
+html.light .prof-tab.active { color: var(--neon-purple); border-bottom-color: var(--neon-purple); }
+html.light .prof-tab-claim { color: var(--neon-gold); }
+html.light .prof-tab-claim.active { color: var(--neon-gold); border-bottom-color: var(--neon-gold); }
+html.light .prof-cta-btn {
+    background: rgba(124,58,237,0.08);
+    border-color: rgba(124,58,237,0.3);
+    color: var(--neon-purple);
+}
+html.light .prof-cta-btn:hover { background: rgba(124,58,237,0.16); border-color: var(--neon-purple); }
+html.light .prof-claim-desc {
+    background: rgba(0,0,0,0.03);
+    border-color: rgba(0,0,0,0.08);
+    color: var(--text-secondary);
+}
+html.light .prof-claim-rows {
+    background: rgba(0,0,0,0.03);
+    border-color: rgba(0,0,0,0.08);
+}
+html.light .prof-claim-row {
+    border-bottom-color: rgba(0,0,0,0.06);
+    color: var(--text-secondary);
+}
+html.light .prof-claim-icon { background: rgba(217,119,6,0.08); border-color: rgba(217,119,6,0.2); }
+html.light .prof-claim-badge {
+    background: rgba(0,0,0,0.05);
+    border-color: rgba(0,0,0,0.1);
+    color: var(--text-muted);
+}
+html.light .prof-claim-btn {
+    background: rgba(217,119,6,0.08);
+    border-color: rgba(217,119,6,0.25);
+    color: var(--neon-gold);
+}
+html.light .prof-claim-btn:not([disabled]):hover { background: rgba(217,119,6,0.16); }
+html.light .prof-settings-section {
+    background: rgba(0,0,0,0.03);
+    border-color: rgba(124,58,237,0.12);
+}
+html.light .prof-settings-heading {
+    border-bottom-color: rgba(0,0,0,0.08);
+    color: var(--text-muted);
+}
+html.light .prof-settings-label { color: var(--text-secondary); }
+html.light .prof-settings-val { color: var(--text-primary); }
+html.light .prof-settings-btn {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(0,0,0,0.12);
+    color: var(--text-secondary);
+}
+html.light .prof-settings-btn.danger {
+    background: rgba(220,38,38,0.06);
+    border-color: rgba(220,38,38,0.22);
+    color: var(--neon-red);
+}
+html.light .prof-settings-btn.danger:hover { background: rgba(220,38,38,0.12); border-color: rgba(220,38,38,0.4); }
+html.light .prof-toggle-slider { background: rgba(0,0,0,0.18); }
+html.light input:checked + .prof-toggle-slider { background: var(--neon-purple); }
+html.light .prof-empty-title { color: var(--text-primary); }
+html.light .prof-empty-body { color: var(--text-muted); }
+html.light .prof-muted { color: var(--text-muted); }
+
 /* ── Global animations ── */
 @keyframes glow {
     0%   { box-shadow: 0 0 10px rgba(139,92,246,0.3); }
