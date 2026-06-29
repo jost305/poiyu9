@@ -1,0 +1,194 @@
+⚔
+MK
+ARENA
+♛
+KING OF THE HILL
+The Throne Awaits
+
+BC Earned
+450,000 BC 🗃
+FIGHTERS
+12,842 LIVE
+Docs
+Marketplace
+Leaderboard
+Create
+DMG
+0
+HITS
+0
+⚔ PICK FIGHTERS
+⛶
+🔊
+⚙
+🏆
+CHALLENGER QUEUE
+NEXT TO FIGHT
+1
+P1
+0xA12F...B7C9
+Robot V1
+2,450 Power
+100%
+2
+P2
+0xB34E...C8D1
+Floatrobo
+2,310 Power
+100%
+3
+??
+0xC56D...D2E4
+Robo Pepe
+2,180 Power
+4
+??
+0xD78F...E3F5
+Crimsonbot
+2,050 Power
+5
+??
+0xE91A...F4G6
+Toxicbot
+1,980 Power
+VIEW FULL QUEUE ›
+▲
+LIVE PREDICTIONS
+WHO WILL BE THE NEXT KING?
+00:45
+P1
+Robot V1
+52%
+6.2x
+P2
+Floatrobo
+48%
+3.1x
+A3
+Robo Pepe
+15%
+4.8x
+A4
+Crimsonbot
+10%
+7.2x
+TOTAL POOL: 128,450 BC
+PLACE BET
+VS
+P1
+P2
+CURRENT KING
+SZ
+Sub-Zero
+KING OF THE HILL
+♛
+0 WINS
+DEFENDED
+0 TIMES
+EARNED
++0 BC
+HEALTH
+100%
+POWER
+2,450
+🧪
+🛡️
+🌩️
+🔒
+BATTLE FEED
+LIVE
+💥
+Critical Hit! −1,250 HP
+00:05
+⚔
+Floatrobo used Iron Slash
+00:06
+⚔
+Robot V1 used Shadow Strike
+00:07
+⚡
+Round Start!
+00:09
+♛
+challenger.sol has challenged the King!
+00:12
+ARENA MAP
+♛
+SHRINE STATUS
+✦
+00:45
+✦
+01:12
+✦
+00:30
+✦
+01:05
+Challenger
+challenger.sol
+Lv 68
+HP
+6,780 / 8,200
+86%
+ENERGY
+120 / 200
+60%
+ATK
+480
+DEF
+310
+SPD
+128
+CRIT
+35%
+EVA
+22%
+🏆 Leaderboard
+Top fighters ranked by performance
+
+✕ Back to Arena
+All Time
+This Week
+This Month
+LIVE
+Updates every 30s
+#	Fighter	Owner	Wins	Losses	Win %	BC Earned	Power	Status
+🥇
+🤖
+Robot V1
+Lv 82
+0xA12F…B7C9	247	38	86.7%	1,240,000 BC	2,450	👑 KING
+🥈
+🦾
+Floatrobo
+Lv 68
+0xB34E…C8D1	198	52	79.2%	890,000 BC	2,310	⏳ QUEUE
+🥉
+🐸
+Robo Pepe
+Lv 55
+0xC56D…D2E4	162	71	69.5%	605,000 BC	2,180	💤 IDLE
+4
+🦀
+Crimsonbot
+Lv 49
+0xD78F…E3F5	131	88	59.8%	412,000 BC	2,050	⏳ QUEUE
+5
+💀
+Toxicbot
+Lv 44
+0xE91A…F4G6	109	102	51.7%	298,000 BC	1,980	💤 IDLE
+6
+👹
+Voidbot
+Lv 38
+0xF02B…G5H7	87	93	48.3%	201,000 BC	1,820	💤 IDLE
+7
+⚡
+Fury Man
+Lv 31
+0xA88C…I9J2	64	71	47.4%	138,000 BC	1,650	⏳ QUEUE
+8
+🌪
+StormBot
+Lv 22
+0xB11D…K3L5	41	59	41.0%	72,000 BC	1,430	💤 IDLE

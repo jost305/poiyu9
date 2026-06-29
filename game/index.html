@@ -1847,6 +1847,7 @@
             document.querySelectorAll('.tb-nav-item').forEach(function(a) {
                 a.classList.toggle('tb-nav-active', a.dataset.page === name);
             });
+            document.body.classList.add('page-active');
         }
 
         function closePage() {
@@ -1858,6 +1859,7 @@
                 a.classList.remove('tb-nav-active');
             });
             _activePage = null;
+            document.body.classList.remove('page-active');
         }
 
         /* ── Leaderboard tabs ── */

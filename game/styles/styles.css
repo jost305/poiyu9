@@ -1248,6 +1248,10 @@ canvas { display: block; background: transparent; }
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+/* Hide bottom bar on non-arena pages, extend overlay to fill the gap */
+body.page-active #bottom-panel { display: none; }
+body.page-active .page-overlay { bottom: 0; }
+
 /* Mobile: panels hidden so overlay fills full width */
 @media (max-width: 800px) {
     .page-overlay {
