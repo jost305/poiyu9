@@ -53,6 +53,10 @@
 ══════════════════════════════════════════ -->
             <div id="top-bar">
                 <div class="tb-left">
+                    <button id="mob-back-btn" onclick="closePage()" aria-label="Back to Arena">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        Back
+                    </button>
                     <div class="tb-logo">
                         <img src="images/bota-logo.jpg" alt="BOTA" class="logo-img" />
                         <div class="logo-text">
@@ -80,7 +84,6 @@
                     </div>
                     <div class="tb-vdivider"></div>
                     <nav class="tb-nav" id="tb-nav">
-                        <a href="#" class="tb-nav-item" data-page="docs" onclick="openPage('docs');return false">Docs</a>
                         <a href="#" class="tb-nav-item" data-page="marketplace" onclick="openPage('marketplace');return false">Marketplace</a>
                         <a href="#" class="tb-nav-item" data-page="leaderboard" onclick="openPage('leaderboard');return false">Leaderboard</a>
                         <a href="#" class="tb-nav-item" data-page="agents" onclick="openPage('agents');return false">Agents</a>
@@ -88,13 +91,16 @@
                     </nav>
                 </div>
                 <div class="tb-right">
-                    <div class="tb-mini-stat">
-                        <span class="tb-mini-label">DMG</span>
-                        <span class="tb-mini-val" id="total-damage">0</span>
-                    </div>
+                    <button class="tb-docs-btn" onclick="openPage('docs');return false" title="Docs" data-page="docs">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </button>
                     <button class="tb-notif-btn" onclick="openPage('notifications');return false" title="Notifications" data-page="notifications">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                         <span class="tb-notif-badge">3</span>
+                    </button>
+                    <button class="tb-profile-btn" onclick="openPage('profile');return false" title="My Profile" data-page="profile">
+                        <span class="tb-profile-avatar">👤</span>
+                        <span class="tb-profile-dot"></span>
                     </button>
                     <button class="tb-pick-btn" onclick="openCpModal()">
                         ⚔ PICK FIGHTERS
@@ -791,21 +797,25 @@
 
             <!-- MOBILE NAV FOOTER -->
             <div id="mobile-nav-footer">
-                <div class="nav-item active">
-                    <div class="nav-icon">⚔</div>
-                    <div class="nav-label">ARENA</div>
+                <div class="mob-nav-item active" data-mob-page="arena" onclick="closePage()">
+                    <div class="mob-nav-icon">⚔</div>
+                    <div class="mob-nav-label">ARENA</div>
                 </div>
-                <div class="nav-item">
-                    <div class="nav-icon">🤖</div>
-                    <div class="nav-label">ROSTER</div>
+                <div class="mob-nav-item" data-mob-page="marketplace" onclick="openPage('marketplace')">
+                    <div class="mob-nav-icon">🛒</div>
+                    <div class="mob-nav-label">MARKET</div>
                 </div>
-                <div class="nav-item">
-                    <div class="nav-icon">🎁</div>
-                    <div class="nav-label">LOOT</div>
+                <div class="mob-nav-item" data-mob-page="leaderboard" onclick="openPage('leaderboard')">
+                    <div class="mob-nav-icon">🏆</div>
+                    <div class="mob-nav-label">RANKS</div>
                 </div>
-                <div class="nav-item">
-                    <div class="nav-icon">🛒</div>
-                    <div class="nav-label">SHOP</div>
+                <div class="mob-nav-item" data-mob-page="agents" onclick="openPage('agents')">
+                    <div class="mob-nav-icon">🤖</div>
+                    <div class="mob-nav-label">AGENTS</div>
+                </div>
+                <div class="mob-nav-item" data-mob-page="profile" onclick="openPage('profile')">
+                    <div class="mob-nav-icon">👤</div>
+                    <div class="mob-nav-label">PROFILE</div>
                 </div>
             </div>
         </div>
@@ -1427,9 +1437,9 @@
                         </select>
                     </div>
                 </div>
-                <div class="mkt-grid">
+                <div class="mkt-grid" id="mkt-grid">
                     <!-- Fighter cards -->
-                    <div class="mkt-card" data-type="fighters">
+                    <div class="mkt-card" data-type="fighters" onclick="openMktDetail('robot-v1')">
                         <div class="mkt-card-badge">FIGHTER</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#1a0a2e,#2d1b4e)">
                             <span style="font-size:52px;line-height:1">🤖</span>
@@ -1443,11 +1453,11 @@
                             <div class="mkt-card-power">PWR <strong class="gold">2,450</strong></div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">12,000 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
-                    <div class="mkt-card" data-type="fighters">
+                    <div class="mkt-card" data-type="fighters" onclick="openMktDetail('floatrobo')">
                         <div class="mkt-card-badge mkt-badge-hot">🔥 HOT</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a1a2e,#1b3d4e)">
                             <span style="font-size:52px;line-height:1">🦾</span>
@@ -1461,11 +1471,11 @@
                             <div class="mkt-card-power">PWR <strong class="gold">2,310</strong></div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">9,500 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
-                    <div class="mkt-card" data-type="fighters">
+                    <div class="mkt-card" data-type="fighters" onclick="openMktDetail('robo-pepe')">
                         <div class="mkt-card-badge mkt-badge-rare">💎 RARE</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#1a2e0a,#2e4e1b)">
                             <span style="font-size:52px;line-height:1">🐸</span>
@@ -1479,16 +1489,16 @@
                             <div class="mkt-card-power">PWR <strong class="gold">2,180</strong></div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">22,000 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
-                    <div class="mkt-card" data-type="fighters">
+                    <div class="mkt-card" data-type="fighters" onclick="openMktDetail('crimsonbot')">
+                        <div class="mkt-card-badge">FIGHTER</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#2e0a0a,#4e1b1b)">
                             <span style="font-size:52px;line-height:1">🦀</span>
                         </div>
                         <div class="mkt-card-body">
-                            <div class="mkt-card-badge mkt-badge-inline">FIGHTER</div>
                             <div class="mkt-card-name">Crimsonbot</div>
                             <div class="mkt-card-owner">0xD78F…E3F5</div>
                             <div class="mkt-card-stats">
@@ -1497,7 +1507,7 @@
                             <div class="mkt-card-power">PWR <strong class="gold">2,050</strong></div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">7,800 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
@@ -1516,7 +1526,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mkt-card" data-type="runes">
+                    <div class="mkt-card" data-type="runes" onclick="openMktDetail('thunder-rune')">
                         <div class="mkt-card-badge mkt-badge-rune">RUNE</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a102e,#1b2560)">
                             <span style="font-size:52px;line-height:1">⚡</span>
@@ -1526,7 +1536,7 @@
                             <div class="mkt-card-owner">Steal 10–35 BC on hit</div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">3,200 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
@@ -1544,7 +1554,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mkt-card" data-type="runes">
+                    <div class="mkt-card" data-type="runes" onclick="openMktDetail('iron-shield-rune')">
                         <div class="mkt-card-badge mkt-badge-rune">RUNE</div>
                         <div class="mkt-card-img" style="background:linear-gradient(135deg,#0a2e1a,#1b6035)">
                             <span style="font-size:52px;line-height:1">🛡</span>
@@ -1554,10 +1564,15 @@
                             <div class="mkt-card-owner">Absorbs next incoming hit</div>
                             <div class="mkt-card-footer">
                                 <span class="mkt-price">2,600 BC</span>
-                                <button class="mkt-buy-btn">Buy Now</button>
+                                <button class="mkt-buy-btn" onclick="event.stopPropagation()">Buy Now</button>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- DETAIL PANEL (rendered by JS) -->
+                <div class="mkt-detail-panel" id="mkt-detail" style="display:none">
+                    <div class="mkt-detail-inner" id="mkt-detail-inner"></div>
                 </div>
             </div>
         </div>
@@ -2311,6 +2326,172 @@
             </div>
         </div>
 
+        <!-- PROFILE PAGE -->
+        <div id="page-profile" class="page-overlay bantahbro-next-ui dark" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">👤 My Profile</h1>
+                    <p class="pg-subtitle">Your arena identity &amp; rewards</p>
+                </div>
+                <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+            </div>
+            <div class="pg-body prof-body">
+
+                <!-- Stats row -->
+                <div class="prof-stats-row">
+                    <div class="prof-stat-card">
+                        <div class="prof-stat-val" id="prof-stat-agents">0</div>
+                        <div class="prof-stat-label">My Agents</div>
+                    </div>
+                    <div class="prof-stat-card">
+                        <div class="prof-stat-val" id="prof-stat-queue">0</div>
+                        <div class="prof-stat-label">Queue</div>
+                    </div>
+                    <div class="prof-stat-card">
+                        <div class="prof-stat-val" id="prof-stat-bc">0</div>
+                        <div class="prof-stat-label">BantCredit</div>
+                    </div>
+                    <div class="prof-stat-card">
+                        <div class="prof-stat-val" id="prof-stat-bantc">0</div>
+                        <div class="prof-stat-label">BANTC claim</div>
+                    </div>
+                    <div class="prof-stat-card">
+                        <div class="prof-stat-val gold" id="prof-stat-usdc">$0</div>
+                        <div class="prof-stat-label">Earned USDC</div>
+                    </div>
+                </div>
+
+                <!-- Tab nav -->
+                <div class="prof-tabs" id="prof-tabs">
+                    <button class="prof-tab active" onclick="profTab(this,'my-agents')">My Agents</button>
+                    <button class="prof-tab" onclick="profTab(this,'queue')">Queue</button>
+                    <button class="prof-tab" onclick="profTab(this,'battle-history')">Battle History</button>
+                    <button class="prof-tab" onclick="profTab(this,'packs')">Packs</button>
+                    <button class="prof-tab" onclick="profTab(this,'runes')">Runes</button>
+                    <button class="prof-tab" onclick="profTab(this,'inv-history')">Inv. History</button>
+                    <button class="prof-tab prof-tab-claim" onclick="profTab(this,'claim')">Claim</button>
+                    <button class="prof-tab" onclick="profTab(this,'settings')">Settings</button>
+                </div>
+
+                <!-- Panels -->
+                <div class="prof-panels">
+
+                    <div class="prof-panel active" id="prof-panel-my-agents">
+                        <div class="prof-empty">
+                            <div class="prof-empty-icon">🤖</div>
+                            <div class="prof-empty-title">No agents yet</div>
+                            <div class="prof-empty-body">Import a fighter or connect a wallet with eligible assets to get your first agent.</div>
+                            <button class="prof-cta-btn" onclick="closePage();openPage('create')">+ Import Agent</button>
+                        </div>
+                    </div>
+
+                    <div class="prof-panel" id="prof-panel-queue">
+                        <div class="prof-empty">
+                            <div class="prof-empty-icon">⏳</div>
+                            <div class="prof-empty-title">Nothing in queue</div>
+                            <div class="prof-empty-body">Your fighters will appear here once they enter the challenger queue.</div>
+                        </div>
+                    </div>
+
+                    <div class="prof-panel" id="prof-panel-battle-history">
+                        <div class="prof-empty">
+                            <div class="prof-empty-icon">⚔</div>
+                            <div class="prof-empty-title">No battles yet</div>
+                            <div class="prof-empty-body">Your match history will appear here after your first fight.</div>
+                        </div>
+                    </div>
+
+                    <div class="prof-panel" id="prof-panel-packs">
+                        <div class="prof-empty">
+                            <div class="prof-empty-icon">📦</div>
+                            <div class="prof-empty-title">No packs owned</div>
+                            <div class="prof-empty-body">Visit the Marketplace to buy item packs for your fighters.</div>
+                            <button class="prof-cta-btn" onclick="closePage();openPage('marketplace')">Browse Marketplace</button>
+                        </div>
+                    </div>
+
+                    <div class="prof-panel" id="prof-panel-runes">
+                        <div class="prof-empty">
+                            <div class="prof-empty-icon">⚡</div>
+                            <div class="prof-empty-title">No runes equipped</div>
+                            <div class="prof-empty-body">Runes modify battle mechanics and grant special abilities. Pick them up from the Marketplace.</div>
+                            <button class="prof-cta-btn" onclick="closePage();openPage('marketplace')">Browse Runes</button>
+                        </div>
+                    </div>
+
+                    <div class="prof-panel" id="prof-panel-inv-history">
+                        <div class="prof-empty">
+                            <div class="prof-empty-icon">📋</div>
+                            <div class="prof-empty-title">No inventory history</div>
+                            <div class="prof-empty-body">Item purchases, transfers, and uses will be recorded here.</div>
+                        </div>
+                    </div>
+
+                    <div class="prof-panel" id="prof-panel-claim">
+                        <div class="prof-claim-wrap">
+                            <div class="prof-claim-header">
+                                <div class="prof-claim-icon">⚡</div>
+                                <div>
+                                    <div class="prof-claim-title">BANTC Claim</div>
+                                    <div class="prof-claim-subtitle">Onchain token from eligible BantCredit batches</div>
+                                </div>
+                            </div>
+                            <div class="prof-claim-badge-row">
+                                <span class="prof-claim-badge">No eligible batch</span>
+                            </div>
+                            <div class="prof-claim-desc">When a reward batch is published that includes your wallet, you can claim BANTC here. Payouts are gas-free on Base.</div>
+                            <div class="prof-claim-rows">
+                                <div class="prof-claim-row"><span>Your BantCredit</span><span class="gold">0 BC</span></div>
+                                <div class="prof-claim-row"><span>Claimable BANTC</span><span class="prof-muted">—</span></div>
+                                <div class="prof-claim-row"><span>Next batch</span><span class="prof-muted">TBA</span></div>
+                            </div>
+                            <button class="prof-claim-btn" disabled>Claim BANTC</button>
+                        </div>
+                    </div>
+
+                    <div class="prof-panel" id="prof-panel-settings">
+                        <div class="prof-settings-wrap">
+                            <div class="prof-settings-section">
+                                <div class="prof-settings-heading">Wallet</div>
+                                <div class="prof-settings-row">
+                                    <span class="prof-settings-label">Connected address</span>
+                                    <span class="prof-settings-val gold">0xA12F…B7C9</span>
+                                </div>
+                                <div class="prof-settings-row">
+                                    <span class="prof-settings-label">Network</span>
+                                    <span class="prof-settings-val">Base Mainnet</span>
+                                </div>
+                                <button class="prof-settings-btn danger">Disconnect Wallet</button>
+                            </div>
+                            <div class="prof-settings-section">
+                                <div class="prof-settings-heading">Notifications</div>
+                                <div class="prof-settings-toggle-row">
+                                    <span class="prof-settings-label">Battle results</span>
+                                    <label class="prof-toggle"><input type="checkbox" checked><span class="prof-toggle-slider"></span></label>
+                                </div>
+                                <div class="prof-settings-toggle-row">
+                                    <span class="prof-settings-label">Queue updates</span>
+                                    <label class="prof-toggle"><input type="checkbox" checked><span class="prof-toggle-slider"></span></label>
+                                </div>
+                                <div class="prof-settings-toggle-row">
+                                    <span class="prof-settings-label">Reward claims</span>
+                                    <label class="prof-toggle"><input type="checkbox" checked><span class="prof-toggle-slider"></span></label>
+                                </div>
+                            </div>
+                            <div class="prof-settings-section">
+                                <div class="prof-settings-heading">Display</div>
+                                <div class="prof-settings-toggle-row">
+                                    <span class="prof-settings-label">Dark mode</span>
+                                    <label class="prof-toggle"><input type="checkbox" checked onchange="toggleTheme()"><span class="prof-toggle-slider"></span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /prof-panels -->
+            </div><!-- /pg-body -->
+        </div><!-- /page-profile -->
+
         <!-- SEARCH MODAL -->
         <div id="search-modal" class="search-modal-overlay" style="display:none" onclick="closeSearchOnBg(event)">
             <div class="search-modal-box">
@@ -2832,7 +3013,7 @@
         /* ── Page navigation ── */
         var _activePage = null;
 
-        var _pages = ['docs','marketplace','create','leaderboard','agents','notifications'];
+        var _pages = ['docs','marketplace','create','leaderboard','agents','notifications','profile'];
 
         function openPage(name) {
             if (_activePage === name) { closePage(); return; }
@@ -2848,6 +3029,9 @@
             document.querySelectorAll('.tb-nav-item').forEach(function(a) {
                 a.classList.toggle('tb-nav-active', a.dataset.page === name);
             });
+            document.querySelectorAll('.mob-nav-item').forEach(function(el) {
+                el.classList.toggle('active', el.dataset.mobPage === name);
+            });
             document.body.classList.add('page-active');
         }
 
@@ -2859,8 +3043,20 @@
             document.querySelectorAll('.tb-nav-item').forEach(function(a) {
                 a.classList.remove('tb-nav-active');
             });
+            document.querySelectorAll('.mob-nav-item').forEach(function(el) {
+                el.classList.toggle('active', el.dataset.mobPage === 'arena');
+            });
             _activePage = null;
             document.body.classList.remove('page-active');
+        }
+
+        /* ── Profile tabs ── */
+        function profTab(btn, panel) {
+            document.querySelectorAll('.prof-tab').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('.prof-panel').forEach(function(el) { el.classList.remove('active'); });
+            var target = document.getElementById('prof-panel-' + panel);
+            if (target) target.classList.add('active');
         }
 
         /* ── Leaderboard tabs ── */
@@ -3016,6 +3212,231 @@
             document.querySelectorAll('.mkt-card').forEach(function(c) {
                 c.style.display = (type === 'all' || c.dataset.type === type) ? 'flex' : 'none';
             });
+        }
+
+        /* ── Marketplace detail data ── */
+        var MKT_DATA = {
+            'robot-v1': {
+                type: 'fighter',
+                badge: 'FIGHTER', badgeClass: '',
+                icon: '🤖', bg: 'linear-gradient(135deg,#1a0a2e,#3d1b7e)',
+                name: 'Robot V1', owner: '0xA12F…B7C9',
+                atk: 480, def: 310, spd: 128, pwr: 2450,
+                wins: 247, losses: 38,
+                price: '12,000 BC',
+                runes: ['⚡ Thunder Rune', '🛡 Iron Shield Rune'],
+                history: [
+                    { result: 'WIN',  vs: 'Floatrobo',    time: '34 min ago', bc: '+4,200 BC' },
+                    { result: 'WIN',  vs: 'Toxicbot',     time: '1 hr ago',   bc: '+3,800 BC' },
+                    { result: 'LOSS', vs: 'Robo Pepe',    time: '3 hr ago',   bc: '—' },
+                    { result: 'WIN',  vs: 'Crimsonbot',   time: '5 hr ago',   bc: '+2,950 BC' }
+                ],
+                desc: 'The arena\'s reigning champion. Built for sustained combat with balanced offense and a near-impenetrable shield rune setup. Robot V1 has held the King crown for 4 consecutive defenses.'
+            },
+            'floatrobo': {
+                type: 'fighter',
+                badge: '🔥 HOT', badgeClass: 'mkt-badge-hot',
+                icon: '🦾', bg: 'linear-gradient(135deg,#0a1a2e,#1b4e7e)',
+                name: 'Floatrobo', owner: '0xB34E…C8D1',
+                atk: 390, def: 420, spd: 155, pwr: 2310,
+                wins: 198, losses: 52,
+                price: '9,500 BC',
+                runes: ['🛡 Iron Shield Rune'],
+                history: [
+                    { result: 'LOSS', vs: 'Robot V1',   time: '34 min ago', bc: '—' },
+                    { result: 'WIN',  vs: 'Robo Pepe',  time: '2 hr ago',   bc: '+3,100 BC' },
+                    { result: 'WIN',  vs: 'Toxicbot',   time: '4 hr ago',   bc: '+2,700 BC' },
+                    { result: 'WIN',  vs: 'Crimsonbot', time: '6 hr ago',   bc: '+2,500 BC' }
+                ],
+                desc: 'High-defence specialist with exceptional speed. Floatrobo\'s shield loadout makes it nearly impossible to burst down. Currently the #2 ranked fighter and trending on the marketplace.'
+            },
+            'robo-pepe': {
+                type: 'fighter',
+                badge: '💎 RARE', badgeClass: 'mkt-badge-rare',
+                icon: '🐸', bg: 'linear-gradient(135deg,#1a2e0a,#2e7e1b)',
+                name: 'Robo Pepe', owner: '0xC56D…D2E4',
+                atk: 510, def: 280, spd: 200, pwr: 2180,
+                wins: 162, losses: 61,
+                price: '22,000 BC',
+                runes: ['⚡ Thunder Rune'],
+                history: [
+                    { result: 'WIN',  vs: 'Robot V1',    time: '3 hr ago',  bc: '+6,400 BC' },
+                    { result: 'LOSS', vs: 'Floatrobo',   time: '5 hr ago',  bc: '—' },
+                    { result: 'WIN',  vs: 'Crimsonbot',  time: '7 hr ago',  bc: '+3,200 BC' },
+                    { result: 'WIN',  vs: 'Toxicbot',    time: '10 hr ago', bc: '+2,800 BC' }
+                ],
+                desc: 'Rare glass cannon with the highest ATK and SPD in the arena. Robo Pepe\'s Thunder Rune turns every hit into a BC drain, making it lethal in short matches. Rare listing — only 1 available.'
+            },
+            'crimsonbot': {
+                type: 'fighter',
+                badge: 'FIGHTER', badgeClass: '',
+                icon: '🦀', bg: 'linear-gradient(135deg,#2e0a0a,#7e1b1b)',
+                name: 'Crimsonbot', owner: '0xD78F…E3F5',
+                atk: 460, def: 340, spd: 140, pwr: 2050,
+                wins: 114, losses: 79,
+                price: '7,800 BC',
+                runes: [],
+                history: [
+                    { result: 'LOSS', vs: 'Robo Pepe',  time: '7 hr ago',   bc: '—' },
+                    { result: 'WIN',  vs: 'Toxicbot',   time: '9 hr ago',   bc: '+2,200 BC' },
+                    { result: 'LOSS', vs: 'Robot V1',   time: '12 hr ago',  bc: '—' },
+                    { result: 'WIN',  vs: 'Floatrobo',  time: '15 hr ago',  bc: '+2,600 BC' }
+                ],
+                desc: 'A solid mid-tier fighter with no runes equipped — making it great value for buyers who want to equip their own loadout. Strong ATK with decent DEF. No active rune slot overhead.'
+            },
+            'thunder-rune': {
+                type: 'rune',
+                badge: 'RUNE', badgeClass: 'mkt-badge-rune',
+                icon: '⚡', bg: 'linear-gradient(135deg,#0a102e,#1b2560)',
+                name: 'Thunder Rune',
+                price: '3,200 BC',
+                runeType: 'Offense + BC Steal',
+                tier: 'Rare',
+                effect: 'On every successful hit, drains 10–35 BC directly from the opponent\'s treasury and adds it to yours.',
+                mechanics: [
+                    'Activates on each landed hit (including normal attacks)',
+                    'Steal amount scales with the attacker\'s current ATK stat',
+                    'Does not trigger on blocked or shielded hits',
+                    'Stacks additively with other BC drain effects',
+                    'Lasts the full match duration — no charge or cooldown'
+                ],
+                compatible: 'All fighters',
+                equipped: 12,
+                owned: 3,
+                desc: 'The most popular offensive rune in the arena. Thunder Rune turns sustained fighters into economic weapons — every hit chips away at the opponent\'s BC while padding your own. Pairs especially well with high-ATK fighters like Robo Pepe.'
+            },
+            'iron-shield-rune': {
+                type: 'rune',
+                badge: 'RUNE', badgeClass: 'mkt-badge-rune',
+                icon: '🛡', bg: 'linear-gradient(135deg,#0a2e1a,#1b6035)',
+                name: 'Iron Shield Rune',
+                price: '2,600 BC',
+                runeType: 'Defense',
+                tier: 'Uncommon',
+                effect: 'Creates a gold barrier that absorbs the next incoming hit entirely. Lasts 5 seconds from activation.',
+                mechanics: [
+                    'Automatically activates when fighter\'s HP drops below 40%',
+                    'Absorbs one hit completely — no HP damage taken',
+                    'Shield lasts 5 seconds then expires if unused',
+                    'One-use per battle — cannot reactivate',
+                    'Works against all damage types including crits'
+                ],
+                compatible: 'All fighters',
+                equipped: 18,
+                owned: 5,
+                desc: 'The most reliable survival rune. Iron Shield turns a near-death moment into a second wind — one absorbed hit can mean the difference between a comeback win and a loss. Standard equipment for any defensive loadout.'
+            }
+        };
+
+        function openMktDetail(id) {
+            var d = MKT_DATA[id];
+            if (!d) return;
+            var html = '';
+            if (d.type === 'fighter') {
+                var winPct = Math.round(d.wins / (d.wins + d.losses) * 100);
+                var atkPct = Math.round(d.atk / 600 * 100);
+                var defPct = Math.round(d.def / 600 * 100);
+                var spdPct = Math.round(d.spd / 250 * 100);
+                var runesHtml = d.runes.length
+                    ? d.runes.map(function(r){ return '<span class="mkt-d-rune-tag">' + r + '</span>'; }).join('')
+                    : '<span class="mkt-d-rune-tag mkt-d-rune-none">No runes equipped</span>';
+                var histHtml = d.history.map(function(h) {
+                    var win = h.result === 'WIN';
+                    return '<div class="mkt-d-hist-row">' +
+                        '<span class="mkt-d-hist-result ' + (win ? 'win' : 'loss') + '">' + h.result + '</span>' +
+                        '<span class="mkt-d-hist-vs">vs ' + h.vs + '</span>' +
+                        '<span class="mkt-d-hist-bc ' + (win ? 'gold' : 'mkt-d-muted') + '">' + h.bc + '</span>' +
+                        '<span class="mkt-d-hist-time mkt-d-muted">' + h.time + '</span>' +
+                        '</div>';
+                }).join('');
+                html = '<div class="mkt-d-hero" style="background:' + d.bg + '">' +
+                    '<div class="mkt-d-hero-icon">' + d.icon + '</div>' +
+                    '<div class="mkt-d-hero-info">' +
+                        '<div class="mkt-d-hero-badge' + (d.badgeClass ? ' ' + d.badgeClass : '') + '">' + d.badge + '</div>' +
+                        '<div class="mkt-d-hero-name">' + d.name + '</div>' +
+                        '<div class="mkt-d-hero-owner">Owner: ' + d.owner + '</div>' +
+                    '</div>' +
+                    '<div class="mkt-d-hero-pwr"><div class="mkt-d-pwr-val gold">' + d.pwr.toLocaleString() + '</div><div class="mkt-d-pwr-label">PWR</div></div>' +
+                '</div>' +
+                '<div class="mkt-d-body">' +
+                    '<div class="mkt-d-col">' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">Stats</div>' +
+                            '<div class="mkt-d-stat-row"><span class="mkt-d-stat-label">⚡ Attack</span><div class="mkt-d-bar-wrap"><div class="mkt-d-bar mkt-d-bar-atk" style="width:' + atkPct + '%"></div></div><span class="mkt-d-stat-val">' + d.atk + '</span></div>' +
+                            '<div class="mkt-d-stat-row"><span class="mkt-d-stat-label">🛡 Defence</span><div class="mkt-d-bar-wrap"><div class="mkt-d-bar mkt-d-bar-def" style="width:' + defPct + '%"></div></div><span class="mkt-d-stat-val">' + d.def + '</span></div>' +
+                            '<div class="mkt-d-stat-row"><span class="mkt-d-stat-label">💨 Speed</span><div class="mkt-d-bar-wrap"><div class="mkt-d-bar mkt-d-bar-spd" style="width:' + spdPct + '%"></div></div><span class="mkt-d-stat-val">' + d.spd + '</span></div>' +
+                        '</div>' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">Record</div>' +
+                            '<div class="mkt-d-record-row">' +
+                                '<div class="mkt-d-record-stat"><div class="mkt-d-record-val green">' + d.wins + '</div><div class="mkt-d-record-label">Wins</div></div>' +
+                                '<div class="mkt-d-record-stat"><div class="mkt-d-record-val red">' + d.losses + '</div><div class="mkt-d-record-label">Losses</div></div>' +
+                                '<div class="mkt-d-record-stat"><div class="mkt-d-record-val gold">' + winPct + '%</div><div class="mkt-d-record-label">Win Rate</div></div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">Equipped Runes</div><div class="mkt-d-runes">' + runesHtml + '</div></div>' +
+                        '<div class="mkt-d-section mkt-d-desc-section"><div class="mkt-d-section-title">About</div><div class="mkt-d-desc">' + d.desc + '</div></div>' +
+                    '</div>' +
+                    '<div class="mkt-d-col mkt-d-col-right">' +
+                        '<div class="mkt-d-buy-panel">' +
+                            '<div class="mkt-d-buy-label">Listed Price</div>' +
+                            '<div class="mkt-d-buy-price gold">' + d.price + '</div>' +
+                            '<button class="mkt-d-buy-btn">⚔ Buy Now</button>' +
+                            '<button class="mkt-d-offer-btn">Make Offer</button>' +
+                            '<div class="mkt-d-buy-note">Gas-free on Base · Instant transfer</div>' +
+                        '</div>' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">Recent Battles</div><div class="mkt-d-history">' + histHtml + '</div></div>' +
+                    '</div>' +
+                '</div>';
+            } else if (d.type === 'rune') {
+                var mechHtml = d.mechanics.map(function(m){ return '<div class="mkt-d-mech-item">▸ ' + m + '</div>'; }).join('');
+                html = '<div class="mkt-d-hero" style="background:' + d.bg + '">' +
+                    '<div class="mkt-d-hero-icon">' + d.icon + '</div>' +
+                    '<div class="mkt-d-hero-info">' +
+                        '<div class="mkt-d-hero-badge mkt-badge-rune">RUNE</div>' +
+                        '<div class="mkt-d-hero-name">' + d.name + '</div>' +
+                        '<div class="mkt-d-hero-owner">' + d.runeType + ' · ' + d.tier + '</div>' +
+                    '</div>' +
+                    '<div class="mkt-d-hero-pwr"><div class="mkt-d-pwr-val" style="color:#13c66b">' + d.tier + '</div><div class="mkt-d-pwr-label">Tier</div></div>' +
+                '</div>' +
+                '<div class="mkt-d-body">' +
+                    '<div class="mkt-d-col">' +
+                        '<div class="mkt-d-section mkt-d-effect-section">' +
+                            '<div class="mkt-d-section-title">Effect</div>' +
+                            '<div class="mkt-d-effect-box">' + d.icon + ' ' + d.effect + '</div>' +
+                        '</div>' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">Mechanics</div><div class="mkt-d-mechs">' + mechHtml + '</div></div>' +
+                        '<div class="mkt-d-section"><div class="mkt-d-section-title">About</div><div class="mkt-d-desc">' + d.desc + '</div></div>' +
+                    '</div>' +
+                    '<div class="mkt-d-col mkt-d-col-right">' +
+                        '<div class="mkt-d-buy-panel">' +
+                            '<div class="mkt-d-buy-label">Listed Price</div>' +
+                            '<div class="mkt-d-buy-price gold">' + d.price + '</div>' +
+                            '<button class="mkt-d-buy-btn">⚡ Buy Now</button>' +
+                            '<div class="mkt-d-buy-note">Gas-free on Base · Instant transfer</div>' +
+                        '</div>' +
+                        '<div class="mkt-d-section">' +
+                            '<div class="mkt-d-section-title">Details</div>' +
+                            '<div class="mkt-d-info-row"><span class="mkt-d-muted">Compatible with</span><span>' + d.compatible + '</span></div>' +
+                            '<div class="mkt-d-info-row"><span class="mkt-d-muted">Currently equipped by</span><span>' + d.equipped + ' fighters</span></div>' +
+                            '<div class="mkt-d-info-row"><span class="mkt-d-muted">Available in market</span><span>' + d.owned + ' listings</span></div>' +
+                            '<div class="mkt-d-info-row"><span class="mkt-d-muted">Type</span><span>' + d.runeType + '</span></div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }
+            var backBar = '<div class="mkt-d-back-bar">' +
+                '<button class="mkt-d-back-btn" onclick="closeMktDetail()">← Back</button>' +
+                '<span class="mkt-d-breadcrumb">Marketplace → <strong>' + d.name + '</strong></span>' +
+                '</div>';
+            document.getElementById('mkt-detail-inner').innerHTML = backBar + html;
+            document.getElementById('mkt-grid').style.display = 'none';
+            document.getElementById('mkt-detail').style.display = 'flex';
+            document.querySelector('.mkt-filters').style.display = 'none';
+        }
+
+        function closeMktDetail() {
+            document.getElementById('mkt-detail').style.display = 'none';
+            document.getElementById('mkt-grid').style.display = 'grid';
+            document.querySelector('.mkt-filters').style.display = 'flex';
         }
 
         /* ── Create fighter ── */
