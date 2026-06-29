@@ -1797,9 +1797,9 @@
 
                     <!-- Robot V1 -->
                     <div class="ag-card" data-status="king" data-name="robot v1">
-                        <div class="ag-card-header" style="background:linear-gradient(135deg,#1a0a2e,#3d1b7e)">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#1a0a2e,#3d1b7e,#1a0a2e)">
                             <span class="ag-status-badge ag-badge-king">👑 KING</span>
-                            <div class="ag-rank">#1</div>
+                            <div class="ag-rank ag-rank-1">#1</div>
                             <img src="images/fighters/char04/left/stand/0.png" class="ag-sprite" alt="Robot V1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
                             <div class="ag-sprite-fallback" style="display:none">🤖</div>
                         </div>
@@ -1809,13 +1809,19 @@
                                     <div class="ag-name">Robot V1</div>
                                     <div class="ag-meta">Lv 82 · 0xA12F…B7C9</div>
                                 </div>
-                                <div class="ag-pwr">2,450 <span>PWR</span></div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">2,450</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
                             </div>
                             <div class="ag-stats">
-                                <div class="ag-stat"><span class="ag-stat-val green">247</span><span class="ag-stat-lbl">Wins</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">38</span><span class="ag-stat-lbl">Losses</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val gold">86.7%</span><span class="ag-stat-lbl">Win %</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">1.24M</span><span class="ag-stat-lbl">BC</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">247</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">38</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">1.24M BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>86.7%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:86.7%"></div></div>
                             </div>
                             <button class="ag-challenge-btn" onclick="openChallengeModal('Robot V1','char04','👑 KING')">⚔ Challenge</button>
                         </div>
@@ -1823,9 +1829,9 @@
 
                     <!-- Floatrobo -->
                     <div class="ag-card" data-status="queue" data-name="floatrobo">
-                        <div class="ag-card-header" style="background:linear-gradient(135deg,#0a1a2e,#1b3d7e)">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#0a1a2e,#1b3d7e,#0a1a2e)">
                             <span class="ag-status-badge ag-badge-queue">⏳ QUEUE</span>
-                            <div class="ag-rank">#2</div>
+                            <div class="ag-rank ag-rank-2">#2</div>
                             <img src="images/fighters/floatrobo/left/stand/0.png" class="ag-sprite" alt="Floatrobo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
                             <div class="ag-sprite-fallback" style="display:none">🦾</div>
                         </div>
@@ -1835,13 +1841,19 @@
                                     <div class="ag-name">Floatrobo</div>
                                     <div class="ag-meta">Lv 68 · 0xB34E…C8D1</div>
                                 </div>
-                                <div class="ag-pwr">2,310 <span>PWR</span></div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">2,310</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
                             </div>
                             <div class="ag-stats">
-                                <div class="ag-stat"><span class="ag-stat-val green">198</span><span class="ag-stat-lbl">Wins</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">52</span><span class="ag-stat-lbl">Losses</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val gold">79.2%</span><span class="ag-stat-lbl">Win %</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">890K</span><span class="ag-stat-lbl">BC</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">198</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">52</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">890K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>79.2%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:79.2%"></div></div>
                             </div>
                             <button class="ag-challenge-btn" onclick="openChallengeModal('Floatrobo','floatrobo','⏳ QUEUE')">⚔ Challenge</button>
                         </div>
@@ -1849,9 +1861,9 @@
 
                     <!-- Robo Pepe -->
                     <div class="ag-card" data-status="idle" data-name="robo pepe">
-                        <div class="ag-card-header" style="background:linear-gradient(135deg,#1a2e0a,#2e7e1b)">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#1a2e0a,#2e7e1b,#1a2e0a)">
                             <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
-                            <div class="ag-rank">#3</div>
+                            <div class="ag-rank ag-rank-3">#3</div>
                             <img src="images/fighters/robopepe/left/stand/0.png" class="ag-sprite" alt="Robo Pepe" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
                             <div class="ag-sprite-fallback" style="display:none">🐸</div>
                         </div>
@@ -1861,13 +1873,19 @@
                                     <div class="ag-name">Robo Pepe</div>
                                     <div class="ag-meta">Lv 55 · 0xC56D…D2E4</div>
                                 </div>
-                                <div class="ag-pwr">2,180 <span>PWR</span></div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">2,180</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
                             </div>
                             <div class="ag-stats">
-                                <div class="ag-stat"><span class="ag-stat-val green">162</span><span class="ag-stat-lbl">Wins</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">71</span><span class="ag-stat-lbl">Losses</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val gold">69.5%</span><span class="ag-stat-lbl">Win %</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">605K</span><span class="ag-stat-lbl">BC</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">162</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">71</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">605K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>69.5%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:69.5%"></div></div>
                             </div>
                             <button class="ag-challenge-btn" onclick="openChallengeModal('Robo Pepe','robopepe','💤 IDLE')">⚔ Challenge</button>
                         </div>
@@ -1875,7 +1893,7 @@
 
                     <!-- Crimsonbot -->
                     <div class="ag-card" data-status="queue" data-name="crimsonbot">
-                        <div class="ag-card-header" style="background:linear-gradient(135deg,#2e0a0a,#7e1b1b)">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#2e0a0a,#7e1b1b,#2e0a0a)">
                             <span class="ag-status-badge ag-badge-queue">⏳ QUEUE</span>
                             <div class="ag-rank">#4</div>
                             <img src="images/fighters/crimsonbot/left/stand/0.png" class="ag-sprite" alt="Crimsonbot" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
@@ -1887,13 +1905,19 @@
                                     <div class="ag-name">Crimsonbot</div>
                                     <div class="ag-meta">Lv 49 · 0xD78F…E3F5</div>
                                 </div>
-                                <div class="ag-pwr">2,050 <span>PWR</span></div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">2,050</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
                             </div>
                             <div class="ag-stats">
-                                <div class="ag-stat"><span class="ag-stat-val green">131</span><span class="ag-stat-lbl">Wins</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">88</span><span class="ag-stat-lbl">Losses</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val gold">59.8%</span><span class="ag-stat-lbl">Win %</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">412K</span><span class="ag-stat-lbl">BC</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">131</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">88</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">412K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>59.8%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:59.8%"></div></div>
                             </div>
                             <button class="ag-challenge-btn" onclick="openChallengeModal('Crimsonbot','crimsonbot','⏳ QUEUE')">⚔ Challenge</button>
                         </div>
@@ -1901,7 +1925,7 @@
 
                     <!-- Toxicbot -->
                     <div class="ag-card" data-status="idle" data-name="toxicbot">
-                        <div class="ag-card-header" style="background:linear-gradient(135deg,#0a2e1a,#1b7e4a)">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#0a2e1a,#1b7e4a,#0a2e1a)">
                             <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
                             <div class="ag-rank">#5</div>
                             <img src="images/fighters/toxicbot/left/stand/0.png" class="ag-sprite" alt="Toxicbot" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
@@ -1913,13 +1937,19 @@
                                     <div class="ag-name">Toxicbot</div>
                                     <div class="ag-meta">Lv 44 · 0xE91A…F4G6</div>
                                 </div>
-                                <div class="ag-pwr">1,980 <span>PWR</span></div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">1,980</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
                             </div>
                             <div class="ag-stats">
-                                <div class="ag-stat"><span class="ag-stat-val green">109</span><span class="ag-stat-lbl">Wins</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">102</span><span class="ag-stat-lbl">Losses</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val gold">51.7%</span><span class="ag-stat-lbl">Win %</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">298K</span><span class="ag-stat-lbl">BC</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">109</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">102</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">298K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>51.7%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:51.7%"></div></div>
                             </div>
                             <button class="ag-challenge-btn" onclick="openChallengeModal('Toxicbot','toxicbot','💤 IDLE')">⚔ Challenge</button>
                         </div>
@@ -1927,7 +1957,7 @@
 
                     <!-- Voidbot -->
                     <div class="ag-card" data-status="idle" data-name="voidbot">
-                        <div class="ag-card-header" style="background:linear-gradient(135deg,#1a0a2e,#4a1b7e)">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#1a0a2e,#4a1b7e,#1a0a2e)">
                             <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
                             <div class="ag-rank">#6</div>
                             <div class="ag-sprite-fallback" style="display:flex">👹</div>
@@ -1938,13 +1968,19 @@
                                     <div class="ag-name">Voidbot</div>
                                     <div class="ag-meta">Lv 38 · 0xF02B…G5H7</div>
                                 </div>
-                                <div class="ag-pwr">1,820 <span>PWR</span></div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">1,820</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
                             </div>
                             <div class="ag-stats">
-                                <div class="ag-stat"><span class="ag-stat-val green">87</span><span class="ag-stat-lbl">Wins</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">93</span><span class="ag-stat-lbl">Losses</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val gold">48.3%</span><span class="ag-stat-lbl">Win %</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">201K</span><span class="ag-stat-lbl">BC</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">87</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">93</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">201K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>48.3%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:48.3%"></div></div>
                             </div>
                             <button class="ag-challenge-btn" onclick="openChallengeModal('Voidbot','voidbot','💤 IDLE')">⚔ Challenge</button>
                         </div>
@@ -1952,7 +1988,7 @@
 
                     <!-- Fury Man -->
                     <div class="ag-card" data-status="queue" data-name="fury man">
-                        <div class="ag-card-header" style="background:linear-gradient(135deg,#2e2a0a,#7e6e1b)">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#2e2a0a,#7e6e1b,#2e2a0a)">
                             <span class="ag-status-badge ag-badge-queue">⏳ QUEUE</span>
                             <div class="ag-rank">#7</div>
                             <div class="ag-sprite-fallback" style="display:flex">⚡</div>
@@ -1963,13 +1999,19 @@
                                     <div class="ag-name">Fury Man</div>
                                     <div class="ag-meta">Lv 31 · 0xA88C…I9J2</div>
                                 </div>
-                                <div class="ag-pwr">1,650 <span>PWR</span></div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">1,650</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
                             </div>
                             <div class="ag-stats">
-                                <div class="ag-stat"><span class="ag-stat-val green">64</span><span class="ag-stat-lbl">Wins</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">71</span><span class="ag-stat-lbl">Losses</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val gold">47.4%</span><span class="ag-stat-lbl">Win %</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">138K</span><span class="ag-stat-lbl">BC</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">64</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">71</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">138K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>47.4%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:47.4%"></div></div>
                             </div>
                             <button class="ag-challenge-btn" onclick="openChallengeModal('Fury Man','furyman','⏳ QUEUE')">⚔ Challenge</button>
                         </div>
@@ -1977,7 +2019,7 @@
 
                     <!-- StormBot -->
                     <div class="ag-card" data-status="idle" data-name="stormbot">
-                        <div class="ag-card-header" style="background:linear-gradient(135deg,#0a2e2e,#1b7e7e)">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#0a2e2e,#1b7e7e,#0a2e2e)">
                             <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
                             <div class="ag-rank">#8</div>
                             <div class="ag-sprite-fallback" style="display:flex">🌪</div>
@@ -1988,13 +2030,19 @@
                                     <div class="ag-name">StormBot</div>
                                     <div class="ag-meta">Lv 22 · 0xB11D…K3L5</div>
                                 </div>
-                                <div class="ag-pwr">1,430 <span>PWR</span></div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">1,430</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
                             </div>
                             <div class="ag-stats">
-                                <div class="ag-stat"><span class="ag-stat-val green">41</span><span class="ag-stat-lbl">Wins</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">59</span><span class="ag-stat-lbl">Losses</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val gold">41.0%</span><span class="ag-stat-lbl">Win %</span></div>
-                                <div class="ag-stat"><span class="ag-stat-val">72K</span><span class="ag-stat-lbl">BC</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">41</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">59</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">72K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>41.0%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:41.0%"></div></div>
                             </div>
                             <button class="ag-challenge-btn" onclick="openChallengeModal('StormBot','stormbot','💤 IDLE')">⚔ Challenge</button>
                         </div>
@@ -3165,19 +3213,33 @@
         </script>
 
         <style>
-        /* ── Agents grid ── */
+        /* ── Agents page layout ── */
+        #page-agents .pg-body {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        /* Filter bar */
         .ag-filters {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 18px 24px 0;
+            padding: 20px 28px 16px;
+            border-bottom: 1px solid rgba(139,92,246,0.1);
             flex-wrap: wrap;
+            background: rgba(5,5,24,0.6);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(12px);
         }
         .ag-filter {
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid rgba(139,92,246,0.25);
-            background: rgba(139,92,246,0.08);
+            padding: 7px 16px;
+            border-radius: 99px;
+            border: 1px solid rgba(139,92,246,0.2);
+            background: transparent;
             color: var(--text-secondary);
             font-size: 0.78rem;
             font-weight: 600;
@@ -3185,116 +3247,284 @@
             transition: all .15s;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            letter-spacing: .02em;
         }
-        .ag-filter:hover { background: rgba(139,92,246,0.18); color: #fff; }
-        .ag-filter.active { background: var(--neon-purple); color: #fff; border-color: transparent; }
-        .ag-filter-count { background: rgba(255,255,255,0.2); border-radius: 99px; padding: 1px 7px; font-size: 0.7rem; }
-        .ag-search-wrap { margin-left: auto; }
+        .ag-filter:hover { border-color: rgba(139,92,246,0.5); color: #fff; background: rgba(139,92,246,0.1); }
+        .ag-filter.active {
+            background: linear-gradient(135deg,rgba(139,92,246,0.9),rgba(59,130,246,0.8));
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(139,92,246,0.35);
+        }
+        .ag-filter-count {
+            background: rgba(255,255,255,0.18);
+            border-radius: 99px;
+            padding: 1px 8px;
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+        .ag-search-wrap { margin-left: auto; position: relative; }
+        .ag-search-wrap::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            pointer-events: none;
+        }
         .ag-search {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.06);
             border: 1px solid rgba(139,92,246,0.2);
-            border-radius: 20px;
+            border-radius: 99px;
             color: #fff;
             font-size: 0.82rem;
-            padding: 6px 16px;
-            width: 190px;
+            padding: 7px 16px 7px 34px;
+            width: 210px;
             outline: none;
+            transition: border-color .15s, background .15s;
         }
         .ag-search::placeholder { color: var(--text-muted); }
-        .ag-search:focus { border-color: var(--neon-purple); }
+        .ag-search:focus { border-color: var(--neon-purple); background: rgba(139,92,246,0.08); }
+
+        /* Fighter grid */
         .ag-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 18px;
-            padding: 18px 24px 32px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 24px 28px 40px;
         }
+
+        /* Fighter card */
         .ag-card {
             display: flex;
             flex-direction: column;
-            border-radius: 18px;
+            border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(139,92,246,0.18);
-            background: rgba(10,10,26,0.92);
-            transition: transform .18s, box-shadow .18s;
+            border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(12,12,28,0.95);
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s;
+            cursor: default;
         }
-        .ag-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(139,92,246,0.25); }
+        .ag-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(139,92,246,0.3);
+            border-color: rgba(139,92,246,0.35);
+        }
+
+        /* Card image banner */
         .ag-card-header {
             position: relative;
-            height: 130px;
+            height: 160px;
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: center;
             overflow: hidden;
+            padding-bottom: 8px;
+        }
+        .ag-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 60px;
+            background: linear-gradient(to top, rgba(12,12,28,0.95), transparent);
+            z-index: 2;
         }
         .ag-sprite {
-            height: 110px;
+            height: 130px;
             object-fit: contain;
             image-rendering: pixelated;
             position: relative;
-            z-index: 1;
+            z-index: 3;
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6));
+            transition: transform .2s;
         }
+        .ag-card:hover .ag-sprite { transform: scale(1.06) translateY(-4px); }
         .ag-sprite-fallback {
-            font-size: 56px;
+            font-size: 72px;
             line-height: 1;
+            display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1;
+            z-index: 3;
+            position: relative;
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5));
+            transition: transform .2s;
         }
-        .ag-status-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 0.62rem;
-            font-weight: 700;
-            padding: 3px 9px;
-            border-radius: 99px;
-            letter-spacing: .05em;
-            z-index: 2;
-        }
-        .ag-badge-king { background: rgba(251,191,36,0.25); color: #FBBF24; border: 1px solid rgba(251,191,36,0.4); }
-        .ag-badge-queue { background: rgba(139,92,246,0.25); color: #A78BFA; border: 1px solid rgba(139,92,246,0.4); }
-        .ag-badge-idle { background: rgba(100,116,139,0.25); color: #94A3B8; border: 1px solid rgba(100,116,139,0.3); }
+        .ag-card:hover .ag-sprite-fallback { transform: scale(1.06) translateY(-4px); }
+
+        /* Rank badge — top-left large number */
         .ag-rank {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: rgba(255,255,255,0.5);
-            z-index: 2;
+            top: 12px;
+            left: 14px;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: rgba(255,255,255,0.12);
+            z-index: 4;
+            line-height: 1;
+            letter-spacing: -.04em;
         }
-        .ag-card-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
-        .ag-card-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-        .ag-name { font-size: 0.95rem; font-weight: 700; color: #fff; }
-        .ag-meta { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
-        .ag-pwr { font-size: 0.85rem; font-weight: 700; color: var(--neon-purple); text-align: right; white-space: nowrap; }
-        .ag-pwr span { font-size: 0.62rem; color: var(--text-muted); display: block; }
+        .ag-rank-1 { color: rgba(251,191,36,0.35); }
+        .ag-rank-2 { color: rgba(148,163,184,0.3); }
+        .ag-rank-3 { color: rgba(205,127,50,0.3); }
+
+        /* Status pill — top-right */
+        .ag-status-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 99px;
+            letter-spacing: .06em;
+            z-index: 4;
+            text-transform: uppercase;
+        }
+        .ag-badge-king {
+            background: rgba(251,191,36,0.15);
+            color: #FBBF24;
+            border: 1px solid rgba(251,191,36,0.5);
+            box-shadow: 0 0 12px rgba(251,191,36,0.2);
+        }
+        .ag-badge-queue {
+            background: rgba(139,92,246,0.15);
+            color: #c4b5fd;
+            border: 1px solid rgba(139,92,246,0.5);
+        }
+        .ag-badge-idle {
+            background: rgba(71,85,105,0.2);
+            color: #94a3b8;
+            border: 1px solid rgba(71,85,105,0.4);
+        }
+
+        /* Card body */
+        .ag-card-body {
+            padding: 16px 18px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            flex: 1;
+        }
+
+        /* Title row */
+        .ag-card-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .ag-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -.01em;
+        }
+        .ag-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+        .ag-pwr-chip {
+            background: rgba(139,92,246,0.15);
+            border: 1px solid rgba(139,92,246,0.3);
+            border-radius: 10px;
+            padding: 4px 10px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .ag-pwr-val {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--neon-purple);
+            display: block;
+            line-height: 1;
+        }
+        .ag-pwr-lbl {
+            font-size: 0.58rem;
+            color: var(--text-muted);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        /* Stats — clean 2-col pairs */
         .ag-stats {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 4px;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
-        .ag-stat { display: flex; flex-direction: column; align-items: center; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 5px 4px; }
-        .ag-stat-val { font-size: 0.78rem; font-weight: 700; color: #fff; }
+        .ag-stat {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .ag-stat-lbl {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .ag-stat-val {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #fff;
+        }
         .ag-stat-val.green { color: var(--neon-green); }
         .ag-stat-val.gold { color: var(--neon-gold); }
-        .ag-stat-lbl { font-size: 0.58rem; color: var(--text-muted); margin-top: 2px; }
+
+        /* Win rate bar */
+        .ag-winbar-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .ag-winbar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+        }
+        .ag-winbar-label span:first-child { color: var(--text-muted); }
+        .ag-winbar-label span:last-child { color: var(--neon-gold); font-weight: 700; }
+        .ag-winbar-track {
+            height: 5px;
+            border-radius: 99px;
+            background: rgba(255,255,255,0.07);
+            overflow: hidden;
+        }
+        .ag-winbar-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+            transition: width .4s ease;
+        }
+
+        /* Challenge button */
         .ag-challenge-btn {
             width: 100%;
-            padding: 9px;
-            border-radius: 10px;
+            padding: 11px;
+            border-radius: 12px;
             border: none;
-            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
             color: #fff;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             font-weight: 700;
             cursor: pointer;
-            letter-spacing: .04em;
-            transition: opacity .15s, transform .1s;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            transition: opacity .15s, transform .12s, box-shadow .15s;
+            box-shadow: 0 4px 20px rgba(124,58,237,0.3);
             margin-top: auto;
         }
-        .ag-challenge-btn:hover { opacity: .85; transform: scale(1.02); }
+        .ag-challenge-btn:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(124,58,237,0.5);
+        }
+        .ag-challenge-btn:active { transform: scale(0.98); }
 
         /* ── Challenge modal ── */
         .chall-overlay {
