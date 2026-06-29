@@ -220,6 +220,25 @@ html.light .sr-type { color: rgba(124,58,237,0.9); background: rgba(124,58,237,0
 .tb-theme-btn:hover { background: rgba(123,79,245,0.2); color: var(--purple2); }
 .tb-theme-btn.spinning { transform: rotate(360deg); }
 
+/* Mobile back button — hidden on desktop, shown by mobile media query */
+#mob-back-btn {
+    display: none;
+    align-items: center; gap: 5px;
+    padding: 0 10px 0 4px;
+    height: 30px;
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 6px;
+    color: rgba(200,190,240,0.85);
+    font-size: 12px; font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+}
+#mob-back-btn:active { background: rgba(139,92,246,0.22); color: #fff; }
+
 html.light .tb-theme-btn {
     background: rgba(0,0,0,0.04);
     border-color: rgba(124,58,237,0.2);
@@ -1581,6 +1600,14 @@ html.light .trollbox-input-row { background: rgba(0,0,0,0.03); }
     .tb-center, .tb-king-title { display: none; }
     .tb-right { gap: 6px; }
     .tb-docs-btn, .tb-pick-btn { display: none; }
+
+    /* ─── Mobile back button ─── */
+    body:not(.page-active) #mob-back-btn { display: none; }
+    body.page-active .tb-logo { display: none; }
+    body.page-active #mob-back-btn { display: flex; }
+
+    /* ─── Hide all page headers on mobile ─── */
+    .pg-header { display: none !important; }
 
     /* ─── Mobile arena bottom strip ─── */
     #mobile-bottom {
