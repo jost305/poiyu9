@@ -483,11 +483,29 @@
                     </div>
 
                     <!-- BATTLE FEED -->
+                    <!-- TROLLBOX CHAT -->
                     <div class="panel-section rp-feed-section">
-                        <div class="rp-section-hdr">
-                            BATTLE FEED <span class="live-badge">LIVE</span>
+                        <div class="trollbox">
+                            <div class="trollbox-hdr">
+                                <span class="trollbox-title">TrollBox</span>
+                                <span class="live-badge">LIVE</span>
+                            </div>
+                            <div class="trollbox-msgs" id="trollbox-msgs"></div>
+                            <div class="trollbox-input-row">
+                                <input
+                                    id="trollbox-input"
+                                    class="trollbox-input"
+                                    type="text"
+                                    placeholder="Say something..."
+                                    maxlength="120"
+                                    autocomplete="off"
+                                    onkeydown="if(event.key==='Enter')sendTrollMsg()"
+                                />
+                                <button class="trollbox-send" onclick="sendTrollMsg()" title="Send">↑</button>
+                            </div>
                         </div>
-                        <div id="battle-feed"></div>
+                        <!-- hidden feed kept for JS battle events -->
+                        <div id="battle-feed" style="display:none"></div>
                     </div>
 
                     <!-- ARENA MAP + SHRINE -->
@@ -2167,26 +2185,89 @@
                 setTimeout(scaleArena, 0);
                 setTimeout(scaleArena, 200);
 
-                /* ── Battle Feed ── */
+                /* ── Battle Feed (also mirrors to TrollBox) ── */
                 function addFeed(icon, text, time, cls) {
+                    /* keep hidden feed for legacy compat */
                     var feed = $("battle-feed");
-                    if (!feed) return;
-                    var d = document.createElement("div");
-                    d.className = "feed-row " + (cls || "");
-                    d.innerHTML =
-                        '<span class="fr-icon">' +
-                        icon +
-                        "</span>" +
-                        '<span class="fr-text">' +
-                        text +
-                        "</span>" +
-                        '<span class="fr-time">' +
-                        (time || "now") +
-                        "</span>";
-                    feed.insertBefore(d, feed.firstChild);
-                    if (feed.children.length > 10)
-                        feed.removeChild(feed.lastChild);
+                    if (feed) {
+                        var d = document.createElement("div");
+                        d.className = "feed-row " + (cls || "");
+                        d.innerHTML = '<span class="fr-icon">' + icon + '</span><span class="fr-text">' + text + '</span><span class="fr-time">' + (time || "now") + '</span>';
+                        feed.insertBefore(d, feed.firstChild);
+                        if (feed.children.length > 10) feed.removeChild(feed.lastChild);
+                    }
+                    /* mirror to trollbox as system event */
+                    var sysClass = cls === 'feed-crit' ? 'tb-sys-crit' : cls === 'feed-win' ? 'tb-sys-win' : '';
+                    _tbAddSystem(icon, text, time || "now", sysClass);
                 }
+
+                /* ══════════════════════════════════════════
+                   TROLLBOX
+                ══════════════════════════════════════════ */
+                var _TB_COLORS = ['#a78bfa','#60a5fa','#34d399','#f472b6','#fbbf24','#f87171','#38bdf8','#a3e635','#fb923c','#c084fc'];
+                var _tbUserColor = {};
+                function _tbColor(name) {
+                    if (!_tbUserColor[name]) {
+                        _tbUserColor[name] = _TB_COLORS[Object.keys(_tbUserColor).length % _TB_COLORS.length];
+                    }
+                    return _tbUserColor[name];
+                }
+                function _tbNow() {
+                    var d = new Date(); return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+                }
+                function _tbScroll() {
+                    var el = $("trollbox-msgs");
+                    if (el) el.scrollTop = el.scrollHeight;
+                }
+                function _tbAppend(node) {
+                    var el = $("trollbox-msgs");
+                    if (!el) return;
+                    el.appendChild(node);
+                    if (el.children.length > 60) el.removeChild(el.firstChild);
+                    _tbScroll();
+                }
+                function _tbAddMsg(user, text, own) {
+                    var row = document.createElement('div');
+                    row.className = 'tb-msg' + (own ? ' tb-msg-own' : '');
+                    row.innerHTML = '<div class="tb-msg-meta"><span class="tb-msg-user" style="color:' + _tbColor(user) + '">' + user + '</span><span class="tb-msg-time">' + _tbNow() + '</span></div><div class="tb-msg-text">' + _tbEsc(text) + '</div>';
+                    _tbAppend(row);
+                }
+                function _tbAddSystem(icon, text, time, extra) {
+                    var row = document.createElement('div');
+                    row.className = 'tb-sys ' + (extra || '');
+                    row.innerHTML = '<span class="tb-sys-icon">' + icon + '</span><span class="tb-sys-text">' + _tbEsc(text) + '</span><span class="tb-sys-time">' + time + '</span>';
+                    _tbAppend(row);
+                }
+                function _tbEsc(s) {
+                    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                }
+                window.sendTrollMsg = function() {
+                    var inp = $("trollbox-input");
+                    if (!inp) return;
+                    var text = inp.value.trim();
+                    if (!text) return;
+                    _tbAddMsg('You', text, true);
+                    inp.value = '';
+                    inp.focus();
+                };
+                /* pre-populate with mock chat messages */
+                (function() {
+                    var seed = [
+                        { u:'0xA12F',       t:'LFG Robot V1!! 🔥' },
+                        { u:'vitalik.eth',  t:'floatrobo is actually cracked rn' },
+                        { u:'anon_punter',  t:'putting 5k BC on the underdog' },
+                        { u:'bantahking',   t:'who\'s betting on Crimsonbot?' },
+                        { u:'0xB34E',       t:'my fighter finally made the queue 🫡' },
+                        { u:'agent_watcher',t:'that shadow strike combo was clean' },
+                        { u:'degen_punter', t:'CRITICAL HIT LESSGOOO 💥' },
+                        { u:'0xF9C1',       t:'when does next match start?' },
+                        { u:'bantahking',   t:'~3 mins, queue is filling up' },
+                        { u:'vitalik.eth',  t:'arena map looking spicy today' },
+                        { u:'anon_punter',  t:'gg wp last round' },
+                        { u:'0xA12F',       t:'Robot V1 never loses at home arena 👑' },
+                    ];
+                    seed.forEach(function(m) { _tbAddMsg(m.u, m.t, false); });
+                })();
 
                 /* ── Predictions ── */
                 function updatePredictions(p1hp, p2hp) {

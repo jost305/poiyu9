@@ -1011,13 +1011,9 @@ canvas { display: block; background: transparent; }
     color: #fff;
 }
 
-/* ── Battle Feed ── */
+/* ── Battle Feed (hidden, kept for JS compat) ── */
+#battle-feed { display: none; }
 .rp-feed-section { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-#battle-feed {
-    padding: 0 6px;
-    display: flex; flex-direction: column; gap: 1px;
-    overflow: hidden; flex: 1;
-}
 .feed-row {
     display: flex; align-items: flex-start; gap: 5px;
     padding: 5px 7px;
@@ -1038,6 +1034,127 @@ canvas { display: block; background: transparent; }
 .fr-text { flex: 1; font-size: 10px; color: var(--text-secondary); line-height: 1.3; }
 .feed-win .fr-text { color: var(--neon-gold); font-weight: 600; }
 .fr-time { font-size: 8px; color: var(--text3); flex-shrink: 0; font-variant-numeric: tabular-nums; padding-top: 1px; }
+
+/* ══════════════════════════════════════════
+   TROLLBOX CHAT
+══════════════════════════════════════════ */
+.trollbox {
+    display: flex; flex-direction: column;
+    flex: 1; overflow: hidden;
+}
+.trollbox-hdr {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 10px 5px;
+    border-bottom: 1px solid var(--border2);
+    flex-shrink: 0;
+}
+.trollbox-title {
+    font-family: var(--font-display);
+    font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    color: var(--text2); text-transform: uppercase;
+}
+.trollbox-msgs {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 6px 6px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(139,92,246,0.2) transparent;
+}
+.trollbox-msgs::-webkit-scrollbar { width: 2px; }
+.trollbox-msgs::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.25); border-radius: 2px; }
+
+/* Chat message row */
+.tb-msg {
+    display: flex; flex-direction: column;
+    padding: 3px 6px 3px 7px;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+    transition: background 0.1s;
+    animation: tbMsgIn 0.18s ease;
+    flex-shrink: 0;
+}
+@keyframes tbMsgIn { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform: translateY(0); } }
+.tb-msg:hover { background: rgba(255,255,255,0.025); }
+.tb-msg-own { border-left-color: rgba(139,92,246,0.5); background: rgba(139,92,246,0.06); }
+.tb-msg-meta { display: flex; align-items: baseline; gap: 5px; }
+.tb-msg-user {
+    font-size: 10px; font-weight: 700;
+    line-height: 1; flex-shrink: 0;
+    cursor: default;
+}
+.tb-msg-time { font-size: 8px; color: var(--text3); font-variant-numeric: tabular-nums; }
+.tb-msg-text {
+    font-size: 11px; color: var(--text-secondary);
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+/* System event inside trollbox */
+.tb-sys {
+    display: flex; align-items: center; gap: 5px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    border-left: 2px solid rgba(139,92,246,0.3);
+    background: rgba(139,92,246,0.06);
+    animation: tbMsgIn 0.18s ease;
+    flex-shrink: 0;
+}
+.tb-sys-crit { border-left-color: rgba(239,68,68,0.6); background: rgba(239,68,68,0.07); }
+.tb-sys-win  { border-left-color: rgba(251,191,36,0.5); background: rgba(251,191,36,0.06); }
+.tb-sys-icon { font-size: 9px; flex-shrink: 0; }
+.tb-sys-text { font-size: 10px; color: var(--text3); flex: 1; line-height: 1.3; }
+.tb-sys-crit .tb-sys-text { color: rgba(239,68,68,0.85); font-weight: 600; }
+.tb-sys-win  .tb-sys-text { color: var(--neon-gold); font-weight: 600; }
+.tb-sys-time { font-size: 8px; color: var(--text3); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+
+/* Input row */
+.trollbox-input-row {
+    display: flex; align-items: center; gap: 4px;
+    padding: 5px 6px;
+    border-top: 1px solid var(--border2);
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.18);
+}
+.trollbox-input {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-primary);
+    font-size: 11px; font-family: var(--font-ui);
+    padding: 5px 8px;
+    outline: none;
+    min-width: 0;
+    transition: border-color 0.12s;
+}
+.trollbox-input::placeholder { color: var(--text3); }
+.trollbox-input:focus { border-color: rgba(139,92,246,0.55); }
+.trollbox-send {
+    width: 28px; height: 28px;
+    background: rgba(139,92,246,0.2);
+    border: 1px solid rgba(139,92,246,0.35);
+    border-radius: 5px;
+    color: var(--neon-violet);
+    font-size: 13px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.12s, color 0.12s;
+}
+.trollbox-send:hover { background: rgba(139,92,246,0.38); color: #fff; }
+
+/* Light mode overrides */
+html.light .trollbox-input {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(124,58,237,0.2);
+    color: var(--text-primary);
+}
+html.light .trollbox-input:focus { border-color: rgba(124,58,237,0.5); }
+html.light .trollbox-input-row { background: rgba(0,0,0,0.03); }
 
 /* ── Arena Map + Shrine ── */
 .rp-bottom-section { margin-top: auto; border-top: 1px solid var(--border2); padding: 8px 0; }
