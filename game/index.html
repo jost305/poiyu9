@@ -3614,63 +3614,62 @@
         .chall-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,10,0.75);
-            backdrop-filter: blur(6px);
+            background: rgba(0,0,10,0.8);
+            backdrop-filter: blur(4px);
             z-index: 5000;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 16px;
         }
         .chall-box {
-            background: linear-gradient(145deg, #0e0e22, #12122a);
+            background: #0e0e22;
             border: 1px solid rgba(139,92,246,0.3);
-            border-radius: 22px;
-            padding: 28px;
+            border-radius: 0;
+            padding: 18px;
             width: 100%;
-            max-width: 520px;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+            max-width: 420px;
         }
-        .chall-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
-        .chall-eyebrow { font-size: 0.68rem; font-weight: 700; letter-spacing: .12em; color: var(--neon-purple); text-transform: uppercase; margin-bottom: 4px; }
-        .chall-title { font-size: 1.35rem; font-weight: 800; color: #fff; }
-        .chall-opponent-status { font-size: 0.75rem; color: var(--text-secondary); margin-top: 3px; }
-        .chall-close { background: rgba(255,255,255,0.07); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .chall-close:hover { background: rgba(255,255,255,0.15); }
-        .chall-vs-row { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 22px; background: rgba(255,255,255,0.03); border-radius: 16px; padding: 18px; }
-        .chall-fighter-preview { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
-        .chall-fighter-avatar { font-size: 40px; line-height: 1; }
-        .chall-fighter-label { font-size: 0.82rem; font-weight: 700; color: #fff; text-align: center; }
-        .chall-fighter-sub { font-size: 0.65rem; color: var(--text-muted); }
-        .chall-vs-badge { font-size: 1.1rem; font-weight: 900; color: var(--neon-purple); background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); border-radius: 50%; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .chall-section-label { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
-        .chall-picker { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+        .chall-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+        .chall-eyebrow { font-size: 0.62rem; font-weight: 700; letter-spacing: .12em; color: var(--neon-purple); text-transform: uppercase; margin-bottom: 2px; }
+        .chall-title { font-size: 1.05rem; font-weight: 800; color: #fff; }
+        .chall-opponent-status { font-size: 0.68rem; color: var(--text-secondary); margin-top: 2px; }
+        .chall-close { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: #fff; width: 26px; height: 26px; border-radius: 0; cursor: pointer; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .chall-close:hover { background: rgba(255,255,255,0.14); }
+        .chall-vs-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 12px; }
+        .chall-fighter-preview { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        .chall-fighter-avatar { font-size: 28px; line-height: 1; }
+        .chall-fighter-label { font-size: 0.75rem; font-weight: 700; color: #fff; text-align: center; }
+        .chall-fighter-sub { font-size: 0.6rem; color: var(--text-muted); }
+        .chall-vs-badge { font-size: 0.78rem; font-weight: 900; color: var(--neon-purple); background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.3); border-radius: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .chall-section-label { font-size: 0.62rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+        .chall-picker { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
         .chall-pick-opt {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 7px 13px;
-            border-radius: 10px;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 0;
             border: 1px solid rgba(139,92,246,0.2);
-            background: rgba(139,92,246,0.07);
+            background: rgba(139,92,246,0.06);
             color: var(--text-secondary);
-            font-size: 0.78rem;
+            font-size: 0.73rem;
             font-weight: 600;
             cursor: pointer;
             transition: all .15s;
         }
-        .chall-pick-opt:hover:not(:disabled) { border-color: var(--neon-purple); color: #fff; background: rgba(139,92,246,0.18); }
-        .chall-pick-opt.selected { border-color: var(--neon-purple); background: rgba(139,92,246,0.25); color: #fff; }
-        .chall-pick-opt:disabled { cursor: not-allowed; }
-        .chall-pick-icon { font-size: 1rem; }
-        .chall-stake-row { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+        .chall-pick-opt:hover:not(:disabled) { border-color: var(--neon-purple); color: #fff; background: rgba(139,92,246,0.16); }
+        .chall-pick-opt.selected { border-color: var(--neon-purple); background: rgba(139,92,246,0.22); color: #fff; }
+        .chall-pick-opt:disabled { cursor: not-allowed; opacity: .45; }
+        .chall-pick-icon { font-size: 0.9rem; }
+        .chall-stake-row { display: flex; gap: 5px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
         .chall-stake-preset {
-            padding: 6px 13px;
-            border-radius: 8px;
+            padding: 5px 10px;
+            border-radius: 0;
             border: 1px solid rgba(139,92,246,0.2);
-            background: rgba(139,92,246,0.07);
+            background: rgba(139,92,246,0.06);
             color: var(--text-secondary);
-            font-size: 0.78rem;
+            font-size: 0.73rem;
             font-weight: 600;
             cursor: pointer;
             transition: all .15s;
@@ -3678,45 +3677,48 @@
         .chall-stake-preset:hover { border-color: var(--neon-purple); color: #fff; }
         .chall-stake-input {
             flex: 1;
-            min-width: 90px;
-            padding: 7px 12px;
-            border-radius: 8px;
+            min-width: 80px;
+            padding: 5px 10px;
+            border-radius: 0;
             border: 1px solid rgba(139,92,246,0.25);
             background: rgba(255,255,255,0.05);
             color: #fff;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             outline: none;
         }
         .chall-stake-input:focus { border-color: var(--neon-purple); }
-        .chall-message-wrap { margin-bottom: 20px; }
+        .chall-message-wrap { margin-bottom: 14px; }
         .chall-message-input {
             width: 100%;
-            padding: 9px 14px;
-            border-radius: 10px;
+            padding: 7px 10px;
+            border-radius: 0;
             border: 1px solid rgba(139,92,246,0.2);
             background: rgba(255,255,255,0.04);
             color: #fff;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             outline: none;
+            box-sizing: border-box;
         }
         .chall-message-input::placeholder { color: var(--text-muted); }
         .chall-message-input:focus { border-color: var(--neon-purple); }
-        .chall-footer { display: flex; gap: 10px; justify-content: flex-end; }
-        .chall-cancel-btn { padding: 10px 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--text-secondary); font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+        .chall-footer { display: flex; gap: 8px; justify-content: flex-end; }
+        .chall-cancel-btn { padding: 7px 16px; border-radius: 0; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; cursor: pointer; }
         .chall-cancel-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
         .chall-send-btn {
-            padding: 10px 24px;
-            border-radius: 10px;
+            padding: 7px 18px;
+            border-radius: 0;
             border: none;
             background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
             color: #fff;
-            font-size: 0.82rem;
+            font-size: 0.75rem;
             font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
             cursor: pointer;
             transition: opacity .15s;
         }
         .chall-send-btn:disabled { opacity: .35; cursor: not-allowed; }
-        .chall-send-btn:not(:disabled):hover { opacity: .85; }
+        .chall-send-btn:not(:disabled):hover { opacity: .82; }
         </style>
     </body>
 </html>
