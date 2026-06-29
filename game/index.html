@@ -1817,7 +1817,7 @@
                     <div class="ag-card" data-status="king" data-name="robot v1">
                         <div class="ag-card-header" style="background:linear-gradient(160deg,#1a0a2e,#3d1b7e,#1a0a2e)">
                             <span class="ag-status-badge ag-badge-king">👑 KING</span>
-                            <div class="ag-rank ag-rank-1">#1</div>
+                            <div class="ag-rank ag-rank-1">#1 <span class="ag-rank-price">$245.00</span></div>
                             <img src="images/fighters/char04/left/stand/0.png" class="ag-sprite" alt="Robot V1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
                             <div class="ag-sprite-fallback" style="display:none">🤖</div>
                         </div>
@@ -1849,7 +1849,7 @@
                     <div class="ag-card" data-status="queue" data-name="floatrobo">
                         <div class="ag-card-header" style="background:linear-gradient(160deg,#0a1a2e,#1b3d7e,#0a1a2e)">
                             <span class="ag-status-badge ag-badge-queue">⏳ QUEUE</span>
-                            <div class="ag-rank ag-rank-2">#2</div>
+                            <div class="ag-rank ag-rank-2">#2 <span class="ag-rank-price">$189.50</span></div>
                             <img src="images/fighters/floatrobo/left/stand/0.png" class="ag-sprite" alt="Floatrobo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
                             <div class="ag-sprite-fallback" style="display:none">🦾</div>
                         </div>
@@ -1881,7 +1881,7 @@
                     <div class="ag-card" data-status="idle" data-name="robo pepe">
                         <div class="ag-card-header" style="background:linear-gradient(160deg,#1a2e0a,#2e7e1b,#1a2e0a)">
                             <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
-                            <div class="ag-rank ag-rank-3">#3</div>
+                            <div class="ag-rank ag-rank-3">#3 <span class="ag-rank-price">$142.00</span></div>
                             <img src="images/fighters/robopepe/left/stand/0.png" class="ag-sprite" alt="Robo Pepe" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
                             <div class="ag-sprite-fallback" style="display:none">🐸</div>
                         </div>
@@ -1913,7 +1913,7 @@
                     <div class="ag-card" data-status="queue" data-name="crimsonbot">
                         <div class="ag-card-header" style="background:linear-gradient(160deg,#2e0a0a,#7e1b1b,#2e0a0a)">
                             <span class="ag-status-badge ag-badge-queue">⏳ QUEUE</span>
-                            <div class="ag-rank">#4</div>
+                            <div class="ag-rank">#4 <span class="ag-rank-price">$98.75</span></div>
                             <img src="images/fighters/crimsonbot/left/stand/0.png" class="ag-sprite" alt="Crimsonbot" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
                             <div class="ag-sprite-fallback" style="display:none">🦀</div>
                         </div>
@@ -1945,7 +1945,7 @@
                     <div class="ag-card" data-status="idle" data-name="toxicbot">
                         <div class="ag-card-header" style="background:linear-gradient(160deg,#0a2e1a,#1b7e4a,#0a2e1a)">
                             <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
-                            <div class="ag-rank">#5</div>
+                            <div class="ag-rank">#5 <span class="ag-rank-price">$76.20</span></div>
                             <img src="images/fighters/toxicbot/left/stand/0.png" class="ag-sprite" alt="Toxicbot" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
                             <div class="ag-sprite-fallback" style="display:none">💀</div>
                         </div>
@@ -1977,7 +1977,7 @@
                     <div class="ag-card" data-status="idle" data-name="voidbot">
                         <div class="ag-card-header" style="background:linear-gradient(160deg,#1a0a2e,#4a1b7e,#1a0a2e)">
                             <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
-                            <div class="ag-rank">#6</div>
+                            <div class="ag-rank">#6 <span class="ag-rank-price">$54.00</span></div>
                             <div class="ag-sprite-fallback" style="display:flex">👹</div>
                         </div>
                         <div class="ag-card-body">
@@ -2008,7 +2008,7 @@
                     <div class="ag-card" data-status="queue" data-name="fury man">
                         <div class="ag-card-header" style="background:linear-gradient(160deg,#2e2a0a,#7e6e1b,#2e2a0a)">
                             <span class="ag-status-badge ag-badge-queue">⏳ QUEUE</span>
-                            <div class="ag-rank">#7</div>
+                            <div class="ag-rank">#7 <span class="ag-rank-price">$38.50</span></div>
                             <div class="ag-sprite-fallback" style="display:flex">⚡</div>
                         </div>
                         <div class="ag-card-body">
@@ -2039,7 +2039,7 @@
                     <div class="ag-card" data-status="idle" data-name="stormbot">
                         <div class="ag-card-header" style="background:linear-gradient(160deg,#0a2e2e,#1b7e7e,#0a2e2e)">
                             <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
-                            <div class="ag-rank">#8</div>
+                            <div class="ag-rank">#8 <span class="ag-rank-price">$21.00</span></div>
                             <div class="ag-sprite-fallback" style="display:flex">🌪</div>
                         </div>
                         <div class="ag-card-body">
@@ -3428,12 +3428,16 @@
             animation: ag-float 3s ease-in-out infinite;
         }
 
-        /* Rank badge — top-left large number */
+        /* Rank badge — top-left */
         .ag-rank {
             position: absolute;
-            top: 12px;
-            left: 14px;
-            font-size: 1.6rem;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+            font-size: 1.4rem;
             font-weight: 900;
             color: rgba(255,255,255,0.12);
             z-index: 4;
@@ -3443,6 +3447,17 @@
         .ag-rank-1 { color: rgba(251,191,36,0.35); }
         .ag-rank-2 { color: rgba(148,163,184,0.3); }
         .ag-rank-3 { color: rgba(205,127,50,0.3); }
+        .ag-rank-price {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: .02em;
+            color: rgba(255,255,255,0.75);
+            background: rgba(0,0,0,0.45);
+            padding: 2px 5px;
+            border-radius: 2px;
+            display: block;
+            line-height: 1.2;
+        }
 
         /* Status pill — top-right */
         .ag-status-badge {
