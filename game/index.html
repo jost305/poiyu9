@@ -83,6 +83,7 @@
                         <a href="#" class="tb-nav-item" data-page="docs" onclick="openPage('docs');return false">Docs</a>
                         <a href="#" class="tb-nav-item" data-page="marketplace" onclick="openPage('marketplace');return false">Marketplace</a>
                         <a href="#" class="tb-nav-item" data-page="leaderboard" onclick="openPage('leaderboard');return false">Leaderboard</a>
+                        <a href="#" class="tb-nav-item" data-page="agents" onclick="openPage('agents');return false">Agents</a>
                         <a href="#" class="tb-nav-item tb-nav-create" data-page="create" onclick="openPage('create');return false">Create</a>
                     </nav>
                 </div>
@@ -99,20 +100,6 @@
                         ⚔ PICK FIGHTERS
                     </button>
                     <button
-                        class="tb-icon-btn"
-                        title="Fullscreen"
-                        onclick="toggleFullscreen()"
-                    >
-                        ⛶
-                    </button>
-                    <button
-                        class="tb-icon-btn"
-                        title="Sound"
-                        onclick="toggleSound()"
-                    >
-                        🔊
-                    </button>
-                    <button
                         class="tb-theme-btn"
                         id="theme-toggle-btn"
                         title="Toggle light/dark mode"
@@ -120,7 +107,6 @@
                     >
                         🌙
                     </button>
-                    <button class="tb-icon-btn" title="Settings">⚙</button>
                 </div>
             </div>
 
@@ -479,7 +465,6 @@
                             <span class="top3-status top3-idle">💤</span>
                         </div>
 
-                        <button class="top3-view-all" onclick="openPage('leaderboard');return false">View Full Leaderboard ›</button>
                     </div>
 
                     <!-- BATTLE FEED -->
@@ -508,43 +493,6 @@
                         <div id="battle-feed" style="display:none"></div>
                     </div>
 
-                    <!-- ARENA MAP + SHRINE -->
-                    <div class="panel-section rp-bottom-section">
-                        <div class="rp-two-col">
-                            <div class="rp-map-block">
-                                <div class="rp-sub-hdr">ARENA MAP</div>
-                                <div class="arena-map">
-                                    <div class="am-ring am-ring-1"></div>
-                                    <div class="am-ring am-ring-2"></div>
-                                    <div class="am-ring am-ring-3"></div>
-                                    <div class="am-dot am-p1" id="am-p1"></div>
-                                    <div class="am-dot am-p2" id="am-p2"></div>
-                                    <div class="am-center">♛</div>
-                                </div>
-                            </div>
-                            <div class="shrine-block">
-                                <div class="rp-sub-hdr">SHRINE STATUS</div>
-                                <div class="shrine-list">
-                                    <div class="shrine-row">
-                                        <span class="shrine-gem gem-p">✦</span
-                                        ><span class="shrine-time">00:45</span>
-                                    </div>
-                                    <div class="shrine-row">
-                                        <span class="shrine-gem gem-b">✦</span
-                                        ><span class="shrine-time">01:12</span>
-                                    </div>
-                                    <div class="shrine-row">
-                                        <span class="shrine-gem gem-r">✦</span
-                                        ><span class="shrine-time">00:30</span>
-                                    </div>
-                                    <div class="shrine-row">
-                                        <span class="shrine-gem gem-g">✦</span
-                                        ><span class="shrine-time">01:05</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!-- /right-panel -->
             </div>
@@ -879,10 +827,6 @@
                 <div class="nav-item">
                     <div class="nav-icon">🛒</div>
                     <div class="nav-label">SHOP</div>
-                </div>
-                <div class="nav-item">
-                    <div class="nav-icon">⚙</div>
-                    <div class="nav-label">SETTINGS</div>
                 </div>
             </div>
         </div>
@@ -1788,6 +1732,373 @@
             </div>
         </div>
 
+        <!-- AGENTS SECTION -->
+        <div id="page-agents" class="page-overlay bantahbro-next-ui dark" style="display:none">
+            <div class="pg-header">
+                <div class="pg-header-inner">
+                    <h1 class="pg-title">🤖 Agents</h1>
+                    <p class="pg-subtitle">All fighters on the platform — filter, explore, and send a challenge</p>
+                </div>
+                <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+            </div>
+            <div class="pg-body">
+                <!-- Filter + stats bar -->
+                <div class="ag-topbar">
+                    <div class="ag-filters">
+                        <button class="ag-filter active" onclick="agFilter(this,'all')">All <span class="ag-filter-count">8</span></button>
+                        <button class="ag-filter" onclick="agFilter(this,'king')">👑 King</button>
+                        <button class="ag-filter" onclick="agFilter(this,'active')">⚡ Active</button>
+                        <button class="ag-filter" onclick="agFilter(this,'queue')">⏳ In Queue</button>
+                        <button class="ag-filter" onclick="agFilter(this,'idle')">💤 Idle</button>
+                        <div class="ag-search-wrap">
+                            <input type="text" class="ag-search" placeholder="Search fighters…" oninput="agSearch(this.value)" />
+                        </div>
+                    </div>
+                    <div class="ag-platform-stats">
+                        <div class="ag-pstat">
+                            <span class="ag-pstat-val">8,656</span>
+                            <span class="ag-pstat-lbl">Total Sales</span>
+                        </div>
+                        <div class="ag-pstat-divider"></div>
+                        <div class="ag-pstat">
+                            <span class="ag-pstat-val">15.016 <em>/ 0.15629</em></span>
+                            <span class="ag-pstat-lbl">Total Volume</span>
+                        </div>
+                        <div class="ag-pstat-divider"></div>
+                        <div class="ag-pstat">
+                            <span class="ag-pstat-val">4,257</span>
+                            <span class="ag-pstat-lbl">BOTA Sold</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fighter grid -->
+                <div class="ag-grid" id="ag-grid">
+
+                    <!-- Robot V1 -->
+                    <div class="ag-card" data-status="king" data-name="robot v1">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#1a0a2e,#3d1b7e,#1a0a2e)">
+                            <span class="ag-status-badge ag-badge-king">👑 KING</span>
+                            <div class="ag-rank ag-rank-1">#1 <span class="ag-rank-price">$245.00</span></div>
+                            <img src="images/fighters/char04/left/stand/0.png" class="ag-sprite" alt="Robot V1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+                            <div class="ag-sprite-fallback" style="display:none">🤖</div>
+                        </div>
+                        <div class="ag-card-body">
+                            <div class="ag-card-title-row">
+                                <div>
+                                    <div class="ag-name">Robot V1</div>
+                                    <div class="ag-meta">Lv 82 · 0xA12F…B7C9</div>
+                                </div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">2,450</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
+                            </div>
+                            <div class="ag-stats">
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">247</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">38</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">1.24M BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>86.7%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:86.7%"></div></div>
+                            </div>
+                            <button class="ag-challenge-btn" onclick="openChallengeModal('Robot V1','char04','👑 KING')">⚔ Challenge</button>
+                        </div>
+                    </div>
+
+                    <!-- Floatrobo -->
+                    <div class="ag-card" data-status="queue" data-name="floatrobo">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#0a1a2e,#1b3d7e,#0a1a2e)">
+                            <span class="ag-status-badge ag-badge-queue">⏳ QUEUE</span>
+                            <div class="ag-rank ag-rank-2">#2 <span class="ag-rank-price">$189.50</span></div>
+                            <img src="images/fighters/floatrobo/left/stand/0.png" class="ag-sprite" alt="Floatrobo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+                            <div class="ag-sprite-fallback" style="display:none">🦾</div>
+                        </div>
+                        <div class="ag-card-body">
+                            <div class="ag-card-title-row">
+                                <div>
+                                    <div class="ag-name">Floatrobo</div>
+                                    <div class="ag-meta">Lv 68 · 0xB34E…C8D1</div>
+                                </div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">2,310</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
+                            </div>
+                            <div class="ag-stats">
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">198</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">52</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">890K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>79.2%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:79.2%"></div></div>
+                            </div>
+                            <button class="ag-challenge-btn" onclick="openChallengeModal('Floatrobo','floatrobo','⏳ QUEUE')">⚔ Challenge</button>
+                        </div>
+                    </div>
+
+                    <!-- Robo Pepe -->
+                    <div class="ag-card" data-status="idle" data-name="robo pepe">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#1a2e0a,#2e7e1b,#1a2e0a)">
+                            <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
+                            <div class="ag-rank ag-rank-3">#3 <span class="ag-rank-price">$142.00</span></div>
+                            <img src="images/fighters/robopepe/left/stand/0.png" class="ag-sprite" alt="Robo Pepe" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+                            <div class="ag-sprite-fallback" style="display:none">🐸</div>
+                        </div>
+                        <div class="ag-card-body">
+                            <div class="ag-card-title-row">
+                                <div>
+                                    <div class="ag-name">Robo Pepe</div>
+                                    <div class="ag-meta">Lv 55 · 0xC56D…D2E4</div>
+                                </div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">2,180</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
+                            </div>
+                            <div class="ag-stats">
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">162</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">71</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">605K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>69.5%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:69.5%"></div></div>
+                            </div>
+                            <button class="ag-challenge-btn" onclick="openChallengeModal('Robo Pepe','robopepe','💤 IDLE')">⚔ Challenge</button>
+                        </div>
+                    </div>
+
+                    <!-- Crimsonbot -->
+                    <div class="ag-card" data-status="queue" data-name="crimsonbot">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#2e0a0a,#7e1b1b,#2e0a0a)">
+                            <span class="ag-status-badge ag-badge-queue">⏳ QUEUE</span>
+                            <div class="ag-rank">#4 <span class="ag-rank-price">$98.75</span></div>
+                            <img src="images/fighters/crimsonbot/left/stand/0.png" class="ag-sprite" alt="Crimsonbot" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+                            <div class="ag-sprite-fallback" style="display:none">🦀</div>
+                        </div>
+                        <div class="ag-card-body">
+                            <div class="ag-card-title-row">
+                                <div>
+                                    <div class="ag-name">Crimsonbot</div>
+                                    <div class="ag-meta">Lv 49 · 0xD78F…E3F5</div>
+                                </div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">2,050</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
+                            </div>
+                            <div class="ag-stats">
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">131</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">88</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">412K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>59.8%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:59.8%"></div></div>
+                            </div>
+                            <button class="ag-challenge-btn" onclick="openChallengeModal('Crimsonbot','crimsonbot','⏳ QUEUE')">⚔ Challenge</button>
+                        </div>
+                    </div>
+
+                    <!-- Toxicbot -->
+                    <div class="ag-card" data-status="idle" data-name="toxicbot">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#0a2e1a,#1b7e4a,#0a2e1a)">
+                            <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
+                            <div class="ag-rank">#5 <span class="ag-rank-price">$76.20</span></div>
+                            <img src="images/fighters/toxicbot/left/stand/0.png" class="ag-sprite" alt="Toxicbot" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+                            <div class="ag-sprite-fallback" style="display:none">💀</div>
+                        </div>
+                        <div class="ag-card-body">
+                            <div class="ag-card-title-row">
+                                <div>
+                                    <div class="ag-name">Toxicbot</div>
+                                    <div class="ag-meta">Lv 44 · 0xE91A…F4G6</div>
+                                </div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">1,980</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
+                            </div>
+                            <div class="ag-stats">
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">109</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">102</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">298K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>51.7%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:51.7%"></div></div>
+                            </div>
+                            <button class="ag-challenge-btn" onclick="openChallengeModal('Toxicbot','toxicbot','💤 IDLE')">⚔ Challenge</button>
+                        </div>
+                    </div>
+
+                    <!-- Voidbot -->
+                    <div class="ag-card" data-status="idle" data-name="voidbot">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#1a0a2e,#4a1b7e,#1a0a2e)">
+                            <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
+                            <div class="ag-rank">#6 <span class="ag-rank-price">$54.00</span></div>
+                            <div class="ag-sprite-fallback" style="display:flex">👹</div>
+                        </div>
+                        <div class="ag-card-body">
+                            <div class="ag-card-title-row">
+                                <div>
+                                    <div class="ag-name">Voidbot</div>
+                                    <div class="ag-meta">Lv 38 · 0xF02B…G5H7</div>
+                                </div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">1,820</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
+                            </div>
+                            <div class="ag-stats">
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">87</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">93</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">201K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>48.3%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:48.3%"></div></div>
+                            </div>
+                            <button class="ag-challenge-btn" onclick="openChallengeModal('Voidbot','voidbot','💤 IDLE')">⚔ Challenge</button>
+                        </div>
+                    </div>
+
+                    <!-- Fury Man -->
+                    <div class="ag-card" data-status="queue" data-name="fury man">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#2e2a0a,#7e6e1b,#2e2a0a)">
+                            <span class="ag-status-badge ag-badge-queue">⏳ QUEUE</span>
+                            <div class="ag-rank">#7 <span class="ag-rank-price">$38.50</span></div>
+                            <div class="ag-sprite-fallback" style="display:flex">⚡</div>
+                        </div>
+                        <div class="ag-card-body">
+                            <div class="ag-card-title-row">
+                                <div>
+                                    <div class="ag-name">Fury Man</div>
+                                    <div class="ag-meta">Lv 31 · 0xA88C…I9J2</div>
+                                </div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">1,650</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
+                            </div>
+                            <div class="ag-stats">
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">64</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">71</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">138K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>47.4%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:47.4%"></div></div>
+                            </div>
+                            <button class="ag-challenge-btn" onclick="openChallengeModal('Fury Man','furyman','⏳ QUEUE')">⚔ Challenge</button>
+                        </div>
+                    </div>
+
+                    <!-- StormBot -->
+                    <div class="ag-card" data-status="idle" data-name="stormbot">
+                        <div class="ag-card-header" style="background:linear-gradient(160deg,#0a2e2e,#1b7e7e,#0a2e2e)">
+                            <span class="ag-status-badge ag-badge-idle">💤 IDLE</span>
+                            <div class="ag-rank">#8 <span class="ag-rank-price">$21.00</span></div>
+                            <div class="ag-sprite-fallback" style="display:flex">🌪</div>
+                        </div>
+                        <div class="ag-card-body">
+                            <div class="ag-card-title-row">
+                                <div>
+                                    <div class="ag-name">StormBot</div>
+                                    <div class="ag-meta">Lv 22 · 0xB11D…K3L5</div>
+                                </div>
+                                <div class="ag-pwr-chip">
+                                    <span class="ag-pwr-val">1,430</span>
+                                    <span class="ag-pwr-lbl">PWR</span>
+                                </div>
+                            </div>
+                            <div class="ag-stats">
+                                <div class="ag-stat"><span class="ag-stat-lbl">Wins</span><span class="ag-stat-val green">41</span></div>
+                                <div class="ag-stat"><span class="ag-stat-lbl">Losses</span><span class="ag-stat-val">59</span></div>
+                                <div class="ag-stat" style="grid-column:1/-1"><span class="ag-stat-lbl">Earnings</span><span class="ag-stat-val gold">72K BC</span></div>
+                            </div>
+                            <div class="ag-winbar-wrap">
+                                <div class="ag-winbar-label"><span>Win Rate</span><span>41.0%</span></div>
+                                <div class="ag-winbar-track"><div class="ag-winbar-fill" style="width:41.0%"></div></div>
+                            </div>
+                            <button class="ag-challenge-btn" onclick="openChallengeModal('StormBot','stormbot','💤 IDLE')">⚔ Challenge</button>
+                        </div>
+                    </div>
+
+                </div><!-- /#ag-grid -->
+            </div>
+        </div>
+
+        <!-- CHALLENGE MODAL -->
+        <div id="challenge-modal" class="chall-overlay" style="display:none" onclick="closeChallengeOnBg(event)">
+            <div class="chall-box">
+                <div class="chall-header">
+                    <div>
+                        <div class="chall-eyebrow">Send a Challenge</div>
+                        <div class="chall-title" id="chall-title">Challenge Robot V1</div>
+                        <div class="chall-opponent-status" id="chall-status"></div>
+                    </div>
+                    <button class="chall-close" onclick="closeChallengeModal()">✕</button>
+                </div>
+
+                <div class="chall-vs-row">
+                    <!-- Opponent -->
+                    <div class="chall-fighter-preview" id="chall-opponent-preview">
+                        <div class="chall-fighter-avatar" id="chall-opp-avatar">🤖</div>
+                        <div class="chall-fighter-label" id="chall-opp-name">Robot V1</div>
+                        <div class="chall-fighter-sub">Opponent</div>
+                    </div>
+                    <div class="chall-vs-badge">VS</div>
+                    <!-- Your fighter -->
+                    <div class="chall-fighter-preview">
+                        <div class="chall-fighter-avatar" id="chall-your-avatar">❓</div>
+                        <div class="chall-fighter-label" id="chall-your-name">Pick yours</div>
+                        <div class="chall-fighter-sub">Your fighter</div>
+                    </div>
+                </div>
+
+                <div class="chall-section-label">Pick your fighter</div>
+                <div class="chall-picker" id="chall-picker">
+                    <button class="chall-pick-opt" onclick="selectChallengeFighter('char04','Robot V1','🤖')" data-key="char04">
+                        <span class="chall-pick-icon">🤖</span> Robot V1
+                    </button>
+                    <button class="chall-pick-opt" onclick="selectChallengeFighter('floatrobo','Floatrobo','🦾')" data-key="floatrobo">
+                        <span class="chall-pick-icon">🦾</span> Floatrobo
+                    </button>
+                    <button class="chall-pick-opt" onclick="selectChallengeFighter('robopepe','Robo Pepe','🐸')" data-key="robopepe">
+                        <span class="chall-pick-icon">🐸</span> Robo Pepe
+                    </button>
+                    <button class="chall-pick-opt" onclick="selectChallengeFighter('crimsonbot','Crimsonbot','🦀')" data-key="crimsonbot">
+                        <span class="chall-pick-icon">🦀</span> Crimsonbot
+                    </button>
+                    <button class="chall-pick-opt" onclick="selectChallengeFighter('toxicbot','Toxicbot','💀')" data-key="toxicbot">
+                        <span class="chall-pick-icon">💀</span> Toxicbot
+                    </button>
+                </div>
+
+                <div class="chall-section-label">Stake (BC)</div>
+                <div class="chall-stake-row">
+                    <button class="chall-stake-preset" onclick="setStake(500)">500</button>
+                    <button class="chall-stake-preset" onclick="setStake(1000)">1K</button>
+                    <button class="chall-stake-preset" onclick="setStake(5000)">5K</button>
+                    <button class="chall-stake-preset" onclick="setStake(10000)">10K</button>
+                    <input type="number" id="chall-stake-input" class="chall-stake-input" value="1000" min="100" step="100" />
+                </div>
+
+                <div class="chall-message-wrap">
+                    <input type="text" id="chall-message" class="chall-message-input" placeholder="Add a trash-talk message (optional)…" maxlength="80" />
+                </div>
+
+                <div class="chall-footer">
+                    <button class="chall-cancel-btn" onclick="closeChallengeModal()">Cancel</button>
+                    <button class="chall-send-btn" id="chall-send-btn" onclick="sendChallenge()" disabled>⚔ Send Challenge</button>
+                </div>
+            </div>
+        </div>
+
         <!-- LEADERBOARD SECTION -->
         <div id="page-leaderboard" class="page-overlay bantahbro-next-ui dark" style="display:none">
             <div class="pg-header">
@@ -2542,7 +2853,7 @@
         /* ── Page navigation ── */
         var _activePage = null;
 
-        var _pages = ['docs','marketplace','create','leaderboard','notifications'];
+        var _pages = ['docs','marketplace','create','leaderboard','agents','notifications'];
 
         function openPage(name) {
             if (_activePage === name) { closePage(); return; }
@@ -2605,6 +2916,7 @@
             { label:'Docs',          icon:'📖', type:'Page',      action:function(){ openPage('docs'); } },
             { label:'Marketplace',   icon:'🛒', type:'Page',      action:function(){ openPage('marketplace'); } },
             { label:'Leaderboard',   icon:'🏆', type:'Page',      action:function(){ openPage('leaderboard'); } },
+            { label:'Agents',        icon:'🤖', type:'Page',      action:function(){ openPage('agents'); } },
             { label:'Create Fighter',icon:'🛠', type:'Page',      action:function(){ openPage('create'); } },
             { label:'Overview',         icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('overview'); } },
             { label:'How It Works',     icon:'📄', type:'Docs', action:function(){ openPage('docs'); showDoc('how-it-works'); } },
@@ -2801,6 +3113,574 @@
         function mintFighter() {
             alert('Minting coming soon — connect your wallet to proceed.');
         }
+
+        /* ── Agents page filter ── */
+        function agFilter(btn, type) {
+            document.querySelectorAll('.ag-filter').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('.ag-card').forEach(function(c) {
+                var match = type === 'all' || c.dataset.status === type ||
+                    (type === 'active' && (c.dataset.status === 'king' || c.dataset.status === 'queue'));
+                c.style.display = match ? 'flex' : 'none';
+            });
+        }
+
+        function agSearch(val) {
+            var q = val.toLowerCase().trim();
+            document.querySelectorAll('.ag-card').forEach(function(c) {
+                c.style.display = (!q || c.dataset.name.includes(q)) ? 'flex' : 'none';
+            });
+        }
+
+        /* ── Challenge modal ── */
+        var _challengeTarget = null;
+        var _challengeYourFighter = null;
+
+        function openChallengeModal(name, key, status) {
+            _challengeTarget = { name: name, key: key };
+            _challengeYourFighter = null;
+            document.getElementById('chall-title').textContent = 'Challenge ' + name;
+            document.getElementById('chall-status').textContent = status;
+            document.getElementById('chall-opp-name').textContent = name;
+            var emojiMap = { char04:'🤖', floatrobo:'🦾', robopepe:'🐸', crimsonbot:'🦀', toxicbot:'💀', voidbot:'👹', furyman:'⚡', stormbot:'🌪' };
+            document.getElementById('chall-opp-avatar').textContent = emojiMap[key] || '🤖';
+            document.getElementById('chall-your-avatar').textContent = '❓';
+            document.getElementById('chall-your-name').textContent = 'Pick yours';
+            document.querySelectorAll('.chall-pick-opt').forEach(function(b) {
+                b.classList.remove('selected');
+                b.disabled = b.dataset.key === key;
+                b.style.opacity = b.dataset.key === key ? '0.35' : '';
+            });
+            document.getElementById('chall-send-btn').disabled = true;
+            document.getElementById('chall-message').value = '';
+            document.getElementById('chall-stake-input').value = '1000';
+            document.getElementById('challenge-modal').style.display = 'flex';
+        }
+
+        function closeChallengeModal() {
+            document.getElementById('challenge-modal').style.display = 'none';
+        }
+
+        function closeChallengeOnBg(e) {
+            if (e.target === document.getElementById('challenge-modal')) closeChallengeModal();
+        }
+
+        function selectChallengeFighter(key, name, emoji) {
+            _challengeYourFighter = { key: key, name: name, emoji: emoji };
+            document.querySelectorAll('.chall-pick-opt').forEach(function(b) { b.classList.remove('selected'); });
+            var btn = document.querySelector('.chall-pick-opt[data-key="' + key + '"]');
+            if (btn) btn.classList.add('selected');
+            document.getElementById('chall-your-avatar').textContent = emoji;
+            document.getElementById('chall-your-name').textContent = name;
+            document.getElementById('chall-send-btn').disabled = false;
+        }
+
+        function setStake(val) {
+            document.getElementById('chall-stake-input').value = val;
+        }
+
+        function sendChallenge() {
+            if (!_challengeYourFighter || !_challengeTarget) return;
+            var stake = parseInt(document.getElementById('chall-stake-input').value) || 1000;
+            var msg = document.getElementById('chall-message').value.trim();
+            closeChallengeModal();
+            var toast = document.createElement('div');
+            toast.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8B5CF6,#3B82F6);color:#fff;padding:14px 24px;border-radius:14px;font-size:0.85rem;font-weight:600;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.4);pointer-events:none;';
+            toast.textContent = '⚔ Challenge sent! ' + _challengeYourFighter.name + ' vs ' + _challengeTarget.name + ' · ' + stake.toLocaleString() + ' BC stake';
+            document.body.appendChild(toast);
+            setTimeout(function() { toast.remove(); }, 3500);
+        }
         </script>
+
+        <style>
+        /* ── Agents page layout ── */
+        #page-agents .pg-body {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        /* Topbar wrapper */
+        .ag-topbar {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid rgba(139,92,246,0.1);
+            background: rgba(5,5,24,0.6);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(12px);
+        }
+
+        /* Filter bar */
+        .ag-filters {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px 8px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Platform stats row */
+        .ag-platform-stats {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            padding: 7px 16px;
+        }
+        .ag-pstat {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            padding: 0 16px 0 0;
+        }
+        .ag-pstat-val {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+        }
+        .ag-pstat-val em {
+            font-style: normal;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .ag-pstat-lbl {
+            font-size: 0.62rem;
+            color: var(--text-muted);
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+        .ag-pstat-divider {
+            width: 1px;
+            height: 26px;
+            background: rgba(255,255,255,0.1);
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        .ag-filter {
+            padding: 7px 16px;
+            border-radius: 99px;
+            border: 1px solid rgba(139,92,246,0.2);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: .02em;
+        }
+        .ag-filter:hover { border-color: rgba(139,92,246,0.5); color: #fff; background: rgba(139,92,246,0.1); }
+        .ag-filter.active {
+            background: linear-gradient(135deg,rgba(139,92,246,0.9),rgba(59,130,246,0.8));
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(139,92,246,0.35);
+        }
+        .ag-filter-count {
+            background: rgba(255,255,255,0.18);
+            border-radius: 99px;
+            padding: 1px 8px;
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+        .ag-search-wrap { margin-left: auto; position: relative; }
+        .ag-search-wrap::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            pointer-events: none;
+        }
+        .ag-search {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(139,92,246,0.2);
+            border-radius: 99px;
+            color: #fff;
+            font-size: 0.82rem;
+            padding: 7px 16px 7px 34px;
+            width: 210px;
+            outline: none;
+            transition: border-color .15s, background .15s;
+        }
+        .ag-search::placeholder { color: var(--text-muted); }
+        .ag-search:focus { border-color: var(--neon-purple); background: rgba(139,92,246,0.08); }
+
+        /* Fighter grid */
+        .ag-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 16px 20px 32px;
+        }
+        @media (max-width: 700px) {
+            .ag-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 10px 12px 24px; }
+        }
+
+        /* Fighter card */
+        .ag-card {
+            display: flex;
+            flex-direction: column;
+            border-radius: 0;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.09);
+            background: rgba(12,12,28,0.95);
+            transition: border-color .15s;
+            cursor: default;
+        }
+        .ag-card:hover {
+            border-color: rgba(139,92,246,0.45);
+        }
+
+        /* Card image banner */
+        .ag-card-header {
+            position: relative;
+            height: 130px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+            padding-bottom: 4px;
+        }
+        .ag-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 50px;
+            background: linear-gradient(to top, rgba(12,12,28,0.95), transparent);
+            z-index: 2;
+        }
+        @keyframes ag-float {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-8px); }
+        }
+        .ag-card:nth-child(1) .ag-sprite, .ag-card:nth-child(1) .ag-sprite-fallback { animation-delay: 0s; }
+        .ag-card:nth-child(2) .ag-sprite, .ag-card:nth-child(2) .ag-sprite-fallback { animation-delay: -0.5s; }
+        .ag-card:nth-child(3) .ag-sprite, .ag-card:nth-child(3) .ag-sprite-fallback { animation-delay: -1s; }
+        .ag-card:nth-child(4) .ag-sprite, .ag-card:nth-child(4) .ag-sprite-fallback { animation-delay: -1.5s; }
+        .ag-card:nth-child(5) .ag-sprite, .ag-card:nth-child(5) .ag-sprite-fallback { animation-delay: -2s; }
+        .ag-card:nth-child(6) .ag-sprite, .ag-card:nth-child(6) .ag-sprite-fallback { animation-delay: -2.5s; }
+        .ag-card:nth-child(7) .ag-sprite, .ag-card:nth-child(7) .ag-sprite-fallback { animation-delay: -0.8s; }
+        .ag-card:nth-child(8) .ag-sprite, .ag-card:nth-child(8) .ag-sprite-fallback { animation-delay: -1.8s; }
+        .ag-sprite {
+            height: 105px;
+            object-fit: contain;
+            image-rendering: pixelated;
+            position: relative;
+            z-index: 3;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+            animation: ag-float 3s ease-in-out infinite;
+        }
+        .ag-sprite-fallback {
+            font-size: 58px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+            position: relative;
+            animation: ag-float 3s ease-in-out infinite;
+        }
+
+        /* Rank badge — top-left */
+        .ag-rank {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: rgba(255,255,255,0.12);
+            z-index: 4;
+            line-height: 1;
+            letter-spacing: -.04em;
+        }
+        .ag-rank-1 { color: rgba(251,191,36,0.35); }
+        .ag-rank-2 { color: rgba(148,163,184,0.3); }
+        .ag-rank-3 { color: rgba(205,127,50,0.3); }
+        .ag-rank-price {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: .02em;
+            color: rgba(255,255,255,0.75);
+            background: rgba(0,0,0,0.45);
+            padding: 2px 5px;
+            border-radius: 2px;
+            display: block;
+            line-height: 1.2;
+        }
+
+        /* Status pill — top-right */
+        .ag-status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.58rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 2px;
+            letter-spacing: .06em;
+            z-index: 4;
+            text-transform: uppercase;
+        }
+        .ag-badge-king {
+            background: rgba(251,191,36,0.15);
+            color: #FBBF24;
+            border: 1px solid rgba(251,191,36,0.5);
+            box-shadow: 0 0 12px rgba(251,191,36,0.2);
+        }
+        .ag-badge-queue {
+            background: rgba(139,92,246,0.15);
+            color: #c4b5fd;
+            border: 1px solid rgba(139,92,246,0.5);
+        }
+        .ag-badge-idle {
+            background: rgba(71,85,105,0.2);
+            color: #94a3b8;
+            border: 1px solid rgba(71,85,105,0.4);
+        }
+
+        /* Card body */
+        .ag-card-body {
+            padding: 10px 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        /* Title row */
+        .ag-card-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .ag-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -.01em;
+        }
+        .ag-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+        .ag-pwr-chip {
+            background: rgba(139,92,246,0.15);
+            border: 1px solid rgba(139,92,246,0.3);
+            border-radius: 2px;
+            padding: 3px 8px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .ag-pwr-val {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--neon-purple);
+            display: block;
+            line-height: 1;
+        }
+        .ag-pwr-lbl {
+            font-size: 0.58rem;
+            color: var(--text-muted);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        /* Stats — clean 2-col pairs */
+        .ag-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+        .ag-stat {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 0;
+            padding: 6px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .ag-stat-lbl {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .ag-stat-val {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #fff;
+        }
+        .ag-stat-val.green { color: var(--neon-green); }
+        .ag-stat-val.gold { color: var(--neon-gold); }
+
+        /* Win rate bar */
+        .ag-winbar-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .ag-winbar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+        }
+        .ag-winbar-label span:first-child { color: var(--text-muted); }
+        .ag-winbar-label span:last-child { color: var(--neon-gold); font-weight: 700; }
+        .ag-winbar-track {
+            height: 5px;
+            border-radius: 99px;
+            background: rgba(255,255,255,0.07);
+            overflow: hidden;
+        }
+        .ag-winbar-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+            transition: width .4s ease;
+        }
+
+        /* Challenge button */
+        .ag-challenge-btn {
+            width: 100%;
+            padding: 8px;
+            border-radius: 0;
+            border: none;
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            transition: opacity .15s;
+            margin-top: auto;
+        }
+        .ag-challenge-btn:hover { opacity: .82; }
+        .ag-challenge-btn:active { opacity: .65; }
+
+        /* ── Challenge modal ── */
+        .chall-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,10,0.8);
+            backdrop-filter: blur(4px);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .chall-box {
+            background: #0e0e22;
+            border: 1px solid rgba(139,92,246,0.3);
+            border-radius: 0;
+            padding: 18px;
+            width: 100%;
+            max-width: 420px;
+        }
+        .chall-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+        .chall-eyebrow { font-size: 0.62rem; font-weight: 700; letter-spacing: .12em; color: var(--neon-purple); text-transform: uppercase; margin-bottom: 2px; }
+        .chall-title { font-size: 1.05rem; font-weight: 800; color: #fff; }
+        .chall-opponent-status { font-size: 0.68rem; color: var(--text-secondary); margin-top: 2px; }
+        .chall-close { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: #fff; width: 26px; height: 26px; border-radius: 0; cursor: pointer; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .chall-close:hover { background: rgba(255,255,255,0.14); }
+        .chall-vs-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 12px; }
+        .chall-fighter-preview { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        .chall-fighter-avatar { font-size: 28px; line-height: 1; }
+        .chall-fighter-label { font-size: 0.75rem; font-weight: 700; color: #fff; text-align: center; }
+        .chall-fighter-sub { font-size: 0.6rem; color: var(--text-muted); }
+        .chall-vs-badge { font-size: 0.78rem; font-weight: 900; color: var(--neon-purple); background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.3); border-radius: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .chall-section-label { font-size: 0.62rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+        .chall-picker { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+        .chall-pick-opt {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 0;
+            border: 1px solid rgba(139,92,246,0.2);
+            background: rgba(139,92,246,0.06);
+            color: var(--text-secondary);
+            font-size: 0.73rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+        }
+        .chall-pick-opt:hover:not(:disabled) { border-color: var(--neon-purple); color: #fff; background: rgba(139,92,246,0.16); }
+        .chall-pick-opt.selected { border-color: var(--neon-purple); background: rgba(139,92,246,0.22); color: #fff; }
+        .chall-pick-opt:disabled { cursor: not-allowed; opacity: .45; }
+        .chall-pick-icon { font-size: 0.9rem; }
+        .chall-stake-row { display: flex; gap: 5px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+        .chall-stake-preset {
+            padding: 5px 10px;
+            border-radius: 0;
+            border: 1px solid rgba(139,92,246,0.2);
+            background: rgba(139,92,246,0.06);
+            color: var(--text-secondary);
+            font-size: 0.73rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+        }
+        .chall-stake-preset:hover { border-color: var(--neon-purple); color: #fff; }
+        .chall-stake-input {
+            flex: 1;
+            min-width: 80px;
+            padding: 5px 10px;
+            border-radius: 0;
+            border: 1px solid rgba(139,92,246,0.25);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 0.78rem;
+            outline: none;
+        }
+        .chall-stake-input:focus { border-color: var(--neon-purple); }
+        .chall-message-wrap { margin-bottom: 14px; }
+        .chall-message-input {
+            width: 100%;
+            padding: 7px 10px;
+            border-radius: 0;
+            border: 1px solid rgba(139,92,246,0.2);
+            background: rgba(255,255,255,0.04);
+            color: #fff;
+            font-size: 0.78rem;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .chall-message-input::placeholder { color: var(--text-muted); }
+        .chall-message-input:focus { border-color: var(--neon-purple); }
+        .chall-footer { display: flex; gap: 8px; justify-content: flex-end; }
+        .chall-cancel-btn { padding: 7px 16px; border-radius: 0; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+        .chall-cancel-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        .chall-send-btn {
+            padding: 7px 18px;
+            border-radius: 0;
+            border: none;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity .15s;
+        }
+        .chall-send-btn:disabled { opacity: .35; cursor: not-allowed; }
+        .chall-send-btn:not(:disabled):hover { opacity: .82; }
+        </style>
     </body>
 </html>
