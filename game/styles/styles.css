@@ -2824,34 +2824,34 @@ body.page-active .page-overlay { bottom: 0; }
 /* Stats row */
 .prof-stats-row {
     display: flex;
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 8px;
+    margin-bottom: 16px;
     flex-wrap: wrap;
 }
 .prof-stat-card {
     flex: 1;
-    min-width: 100px;
+    min-width: 80px;
     background: rgba(16,16,32,0.8);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 14px 14px;
+    border-radius: 0;
+    padding: 10px 10px 9px;
     text-align: center;
     transition: border-color 0.15s;
 }
 .prof-stat-card:hover { border-color: rgba(139,92,246,0.35); }
 .prof-stat-val {
-    font-size: 22px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text-primary);
     font-family: var(--font-display);
     line-height: 1;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 .prof-stat-val.gold { color: var(--neon-gold); }
 .prof-stat-label {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     color: var(--text-muted);
 }
