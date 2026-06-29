@@ -77,6 +77,157 @@
     --font-ui:      'Inter', sans-serif;
 }
 
+/* ══════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+══════════════════════════════════════════ */
+html.light {
+    /* Backgrounds → warm near-white */
+    --bg-950:    #F0F0F8;
+    --bg-900:    #F5F5FC;
+    --bg-850:    #EBEBF7;
+    --bg-800:    #E2E2F0;
+    --bg-700:    #D8D8EC;
+
+    /* Surfaces */
+    --surf-900:  #EBEBF7;
+    --surf-800:  #E2E2F0;
+    --surf-700:  #D0D0E6;
+    --surf-600:  #C0C0DA;
+
+    /* Neon accents — slightly deeper so they pop on light */
+    --neon-purple: #7C3AED;
+    --neon-violet: #9333EA;
+    --neon-blue:   #2563EB;
+    --neon-cyan:   #0891B2;
+    --neon-green:  #16A34A;
+    --neon-lime:   #65A30D;
+    --neon-orange: #EA580C;
+    --neon-red:    #DC2626;
+    --neon-pink:   #DB2777;
+    --neon-gold:   #D97706;
+
+    /* Text → dark on light */
+    --text-primary:   #111827;
+    --text-secondary: #374151;
+    --text-muted:     #6B7280;
+    --text-disabled:  #9CA3AF;
+
+    /* Glows — subtler on light */
+    --glow-purple: rgba(124,58,237,0.18);
+    --glow-blue:   rgba(37,99,235,0.18);
+    --glow-cyan:   rgba(8,145,178,0.18);
+    --glow-green:  rgba(22,163,74,0.15);
+    --glow-orange: rgba(234,88,12,0.15);
+
+    /* Shadows */
+    --shadow-neon:       0 0 16px rgba(124,58,237,0.3);
+    --shadow-neon-blue:  0 0 16px rgba(37,99,235,0.25);
+    --shadow-neon-green: 0 0 16px rgba(22,163,74,0.25);
+    --shadow-inset-soft: inset 0 0 12px rgba(0,0,0,0.04);
+
+    /* Semantic overrides */
+    --bg:     var(--bg-900);
+    --panel:  rgba(235,235,247,0.98);
+    --panel2: rgba(226,226,240,0.98);
+    --border:  rgba(124,58,237,0.2);
+    --border2: rgba(124,58,237,0.1);
+    --purple:  var(--neon-purple);
+    --purple2: var(--neon-violet);
+    --gold:    var(--neon-gold);
+    --gold2:   #B45309;
+    --green:   var(--neon-green);
+    --green2:  #15803D;
+    --red:     var(--neon-red);
+    --blue:    var(--neon-blue);
+    --text:    var(--text-primary);
+    --text2:   var(--text-secondary);
+    --text3:   var(--text-muted);
+}
+
+/* Light mode — specific element overrides that use hard-coded rgba darks */
+html.light body { background: var(--bg-950); color: var(--text-primary); }
+
+html.light #top-bar {
+    background: rgba(245,245,252,0.99);
+    border-bottom-color: rgba(124,58,237,0.18);
+    box-shadow: 0 1px 16px rgba(0,0,0,0.1);
+}
+
+html.light #left-panel {
+    background: linear-gradient(180deg, var(--bg-850) 0%, var(--bg-900) 100%);
+    border-right-color: rgba(124,58,237,0.14);
+}
+
+html.light .panel-section { border-bottom-color: rgba(124,58,237,0.1); }
+
+html.light .tb-icon-btn {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(124,58,237,0.2);
+    color: var(--text-secondary);
+}
+html.light .tb-icon-btn:hover { background: rgba(124,58,237,0.14); color: var(--neon-violet); }
+
+html.light .tb-pick-btn {
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(147,51,234,0.08));
+    border-color: rgba(124,58,237,0.4);
+    color: var(--neon-violet);
+}
+html.light .tb-pick-btn:hover {
+    background: linear-gradient(135deg, rgba(124,58,237,0.28), rgba(147,51,234,0.16));
+    color: var(--neon-purple);
+}
+
+html.light .tb-nav-item:hover { background: rgba(124,58,237,0.1); color: var(--text-primary); }
+html.light .tb-nav-create { border-color: rgba(124,58,237,0.35); background: rgba(124,58,237,0.07); }
+html.light .tb-nav-create:hover { background: rgba(124,58,237,0.18); border-color: rgba(124,58,237,0.6); }
+
+html.light .page-overlay {
+    background: rgba(245,245,252,0.97);
+}
+
+/* Search modal — light overrides (actual classes: .search-modal-overlay / .search-modal-box) */
+html.light .search-modal-overlay {
+    background: rgba(100,90,150,0.25);
+}
+html.light .search-modal-box {
+    background: #EBEBF7;
+    border-color: rgba(124,58,237,0.3);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(124,58,237,0.12);
+}
+html.light .search-modal-bar {
+    border-bottom-color: rgba(0,0,0,0.08);
+}
+html.light .search-modal-input { color: var(--text-primary); caret-color: var(--neon-purple); }
+html.light .search-modal-input::placeholder { color: rgba(0,0,0,0.3); }
+html.light .search-modal-close { color: rgba(0,0,0,0.35); }
+html.light .search-modal-close:hover { color: var(--text-primary); }
+html.light .search-hint, html.light .search-no-results { color: rgba(0,0,0,0.35); }
+html.light .sr-label { color: var(--text-primary); }
+html.light .sr-type { color: rgba(124,58,237,0.9); background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.2); }
+
+/* Theme toggle button animation */
+.tb-theme-btn {
+    width: 30px; height: 30px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text2);
+    font-size: 15px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s, transform 0.3s;
+    flex-shrink: 0;
+}
+.tb-theme-btn:hover { background: rgba(123,79,245,0.2); color: var(--purple2); }
+.tb-theme-btn.spinning { transform: rotate(360deg); }
+
+html.light .tb-theme-btn {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(124,58,237,0.2);
+    color: var(--text-secondary);
+}
+html.light .tb-theme-btn:hover { background: rgba(124,58,237,0.14); color: var(--neon-violet); }
+
 /* ── Global animations ── */
 @keyframes glow {
     0%   { box-shadow: 0 0 10px rgba(139,92,246,0.3); }

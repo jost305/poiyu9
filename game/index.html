@@ -119,6 +119,14 @@
                     >
                         🔊
                     </button>
+                    <button
+                        class="tb-theme-btn"
+                        id="theme-toggle-btn"
+                        title="Toggle light/dark mode"
+                        onclick="toggleTheme()"
+                    >
+                        🌙
+                    </button>
                     <button class="tb-icon-btn" title="Settings">⚙</button>
                 </div>
             </div>
@@ -1911,6 +1919,32 @@
                     var bgm = $("bgm");
                     if (bgm) bgm.muted = !soundOn;
                 };
+
+                /* ── Theme toggle ── */
+                (function () {
+                    var saved = localStorage.getItem('mk-theme');
+                    var isLight = saved === 'light';
+                    function applyTheme(light) {
+                        document.documentElement.classList.toggle('light', light);
+                        var btn = document.getElementById('theme-toggle-btn');
+                        if (btn) btn.textContent = light ? '☀️' : '🌙';
+                        /* Sync BantahBro overlay dark class */
+                        document.querySelectorAll('.bantahbro-next-ui').forEach(function (el) {
+                            el.classList.toggle('dark', !light);
+                        });
+                    }
+                    applyTheme(isLight);
+                    window.toggleTheme = function () {
+                        isLight = !isLight;
+                        applyTheme(isLight);
+                        localStorage.setItem('mk-theme', isLight ? 'light' : 'dark');
+                        var btn = document.getElementById('theme-toggle-btn');
+                        if (btn) {
+                            btn.classList.add('spinning');
+                            setTimeout(function () { btn.classList.remove('spinning'); }, 350);
+                        }
+                    };
+                })();
 
                 /* ── Loading Screen ── */
                 window.onGameStarted = function () {
