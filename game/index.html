@@ -1579,148 +1579,221 @@
 
         <!-- CREATE SECTION -->
         <div id="page-create" class="page-overlay bantahbro-next-ui dark" style="display:none">
-            <div class="pg-header">
-                <div class="pg-header-inner">
-                    <h1 class="pg-title">🛠 Create Fighter</h1>
-                    <p class="pg-subtitle">Design your fighter and mint it to the arena</p>
-                </div>
-                <button class="pg-close" onclick="closePage()">✕ Back to Arena</button>
+            <!-- Tab bar -->
+            <div class="cf-tabbar">
+                <button class="cf-tab active" id="cf-tab-create" onclick="cfSetTab('create')">Create Fighter</button>
+                <button class="cf-tab" id="cf-tab-import" onclick="cfSetTab('import')">Import Asset</button>
+                <span class="cf-tabbar-hint" id="cf-tabbar-hint">Manual Fighter Creator</span>
             </div>
-            <div class="pg-body">
-                <div class="create-layout">
-                    <!-- Preview -->
-                    <div class="create-preview">
-                        <div class="create-preview-card">
-                            <div class="create-avatar" id="create-avatar">🤖</div>
-                            <div class="create-preview-name" id="create-preview-name">YOUR FIGHTER</div>
-                            <div class="create-preview-stats">
-                                <div class="cps-row"><span>⚡ ATK</span><span id="prev-atk" class="gold">400</span></div>
-                                <div class="cps-row"><span>🛡 DEF</span><span id="prev-def">300</span></div>
-                                <div class="cps-row"><span>💨 SPD</span><span id="prev-spd">130</span></div>
-                                <div class="cps-row"><span>❤ HP</span><span id="prev-hp">8,000</span></div>
+
+            <!-- Body: main + sidebar -->
+            <div class="cf-body">
+
+                <!-- ── MAIN ── -->
+                <div class="cf-main">
+
+                    <!-- CREATE panel -->
+                    <div class="cf-panel" id="cf-create-panel">
+                        <div class="cf-card">
+                            <!-- Name + Loadout row -->
+                            <div class="cf-name-row">
+                                <input class="cf-name-input" id="cf-name"
+                                    placeholder="Fighter name" maxlength="28"
+                                    oninput="cfOnNameInput(this.value)" />
+                                <div class="cf-loadout-box">
+                                    <span class="cf-loadout-label">Loadout</span>
+                                    <button class="cf-loadout-btn active" id="cf-loadout-btn"
+                                        onclick="cfToggleLoadout()">Auto</button>
+                                </div>
                             </div>
-                            <div class="create-preview-pwr">
-                                <span class="cps-label">POWER</span>
-                                <span class="cps-pwr gold" id="prev-pwr">2,000</span>
+
+                            <!-- Style -->
+                            <div class="cf-style-block">
+                                <div class="cf-sub-label">STYLE</div>
+                                <div class="cf-style-pills">
+                                    <button class="cf-style-pill active" data-style="adaptive" onclick="cfSetStyle(this)">Adaptive</button>
+                                    <button class="cf-style-pill" data-style="berserker" onclick="cfSetStyle(this)">Berserker</button>
+                                    <button class="cf-style-pill" data-style="scout" onclick="cfSetStyle(this)">Scout</button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="create-cost-box">
-                            <div class="create-cost-label">Mint Cost</div>
-                            <div class="create-cost-val gold">5,000 BC</div>
-                            <div class="create-cost-sub">+ gas fees</div>
+
+                            <!-- Strategy -->
+                            <div class="cf-style-block">
+                                <div class="cf-sub-label">STRATEGY</div>
+                                <div class="cf-strat-grid">
+                                    <button class="cf-strat-btn active" data-strat="adaptive" onclick="cfSetStrat(this)">
+                                        <span class="cf-strat-icon">⚖</span>
+                                        <span class="cf-strat-name">Adaptive</span>
+                                        <span class="cf-strat-desc">Reads opponent</span>
+                                    </button>
+                                    <button class="cf-strat-btn" data-strat="aggressive" onclick="cfSetStrat(this)">
+                                        <span class="cf-strat-icon">⚔</span>
+                                        <span class="cf-strat-name">Aggressive</span>
+                                        <span class="cf-strat-desc">High risk, high dmg</span>
+                                    </button>
+                                    <button class="cf-strat-btn" data-strat="defensive" onclick="cfSetStrat(this)">
+                                        <span class="cf-strat-icon">🛡</span>
+                                        <span class="cf-strat-name">Defensive</span>
+                                        <span class="cf-strat-desc">Outlast &amp; attrition</span>
+                                    </button>
+                                    <button class="cf-strat-btn" data-strat="trickster" onclick="cfSetStrat(this)">
+                                        <span class="cf-strat-icon">🎭</span>
+                                        <span class="cf-strat-name">Trickster</span>
+                                        <span class="cf-strat-desc">Evasive &amp; unpredictable</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Runes -->
+                            <div class="cf-style-block">
+                                <div class="cf-sub-label">RUNES <span class="cf-sub-badge">Pick 2</span></div>
+                                <div class="cf-rune-grid">
+                                    <label class="cf-rune"><input type="checkbox" class="cf-rune-cb" onchange="cfCheckRunes(event)" /><span>⚡ Thunder</span><span class="cf-rune-sub">steal BC on hit</span></label>
+                                    <label class="cf-rune"><input type="checkbox" class="cf-rune-cb" onchange="cfCheckRunes(event)" /><span>🛡 Iron Shield</span><span class="cf-rune-sub">absorb 1 hit</span></label>
+                                    <label class="cf-rune"><input type="checkbox" class="cf-rune-cb" onchange="cfCheckRunes(event)" /><span>🧪 Potion</span><span class="cf-rune-sub">heal when low HP</span></label>
+                                    <label class="cf-rune"><input type="checkbox" class="cf-rune-cb" onchange="cfCheckRunes(event)" /><span>🌀 Phase Shift</span><span class="cf-rune-sub">dodge next hit</span></label>
+                                    <label class="cf-rune"><input type="checkbox" class="cf-rune-cb" onchange="cfCheckRunes(event)" /><span>💥 Overcharge</span><span class="cf-rune-sub">burst dmg ×2</span></label>
+                                    <label class="cf-rune"><input type="checkbox" class="cf-rune-cb" onchange="cfCheckRunes(event)" /><span>🩸 Lifesteal</span><span class="cf-rune-sub">heal 15% of dmg</span></label>
+                                </div>
+                            </div>
+
+                            <!-- Deploy -->
+                            <button class="cf-deploy-btn" id="cf-deploy-btn" onclick="cfDeploy()">Deploy Fighter</button>
                         </div>
                     </div>
 
-                    <!-- Builder Form -->
-                    <div class="create-form">
-                        <div class="create-section-title">① Identity</div>
-                        <div class="create-row">
-                            <label class="create-label">Fighter Name</label>
-                            <input type="text" class="create-input" id="fighter-name" placeholder="e.g. ShadowBot X" maxlength="24"
-                                oninput="document.getElementById('create-preview-name').textContent=this.value||'YOUR FIGHTER'" />
-                        </div>
-                        <div class="create-row">
-                            <label class="create-label">Avatar</label>
-                            <div class="create-avatar-picker">
-                                <button class="av-btn active" onclick="pickAvatar(this,'🤖')">🤖</button>
-                                <button class="av-btn" onclick="pickAvatar(this,'🦾')">🦾</button>
-                                <button class="av-btn" onclick="pickAvatar(this,'🐸')">🐸</button>
-                                <button class="av-btn" onclick="pickAvatar(this,'🦀')">🦀</button>
-                                <button class="av-btn" onclick="pickAvatar(this,'👹')">👹</button>
-                                <button class="av-btn" onclick="pickAvatar(this,'🐲')">🐲</button>
-                                <button class="av-btn" onclick="pickAvatar(this,'💀')">💀</button>
-                                <button class="av-btn" onclick="pickAvatar(this,'⚡')">⚡</button>
-                                <button class="av-btn" onclick="pickAvatar(this,'🔥')">🔥</button>
-                                <button class="av-btn" onclick="pickAvatar(this,'🌪')">🌪</button>
+                    <!-- IMPORT panel -->
+                    <div class="cf-panel" id="cf-import-panel" style="display:none">
+                        <div class="cf-card">
+                            <!-- Wallet scanner -->
+                            <div class="cf-sub-label">WALLET SCANNER</div>
+                            <div class="cf-wallet-row">
+                                <div class="cf-wallet-input-wrap">
+                                    <svg class="cf-wallet-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                    <input class="cf-wallet-input" id="cf-wallet-addr" placeholder="Connect wallet to scan" readonly />
+                                </div>
+                                <button class="cf-scan-btn" onclick="cfScanWallet()">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                    Scan Assets
+                                </button>
+                            </div>
+
+                            <!-- Filters -->
+                            <div class="cf-filters">
+                                <button class="cf-filter active" data-filter="all" onclick="cfSetFilter(this)">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                    All <span class="cf-filter-count" id="cf-count-all">0</span>
+                                </button>
+                                <button class="cf-filter" data-filter="ai-agent" onclick="cfSetFilter(this)">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/></svg>
+                                    Agents <span class="cf-filter-count" id="cf-count-agent">0</span>
+                                </button>
+                                <button class="cf-filter" data-filter="nft" onclick="cfSetFilter(this)">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                    NFTs <span class="cf-filter-count" id="cf-count-nft">0</span>
+                                </button>
+                                <button class="cf-filter" data-filter="ens" onclick="cfSetFilter(this)">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                    ENS <span class="cf-filter-count" id="cf-count-ens">0</span>
+                                </button>
+                                <button class="cf-filter" data-filter="token" onclick="cfSetFilter(this)">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                    Tokens <span class="cf-filter-count" id="cf-count-token">0</span>
+                                </button>
+                            </div>
+
+                            <!-- ENS lookup -->
+                            <div class="cf-ens-row">
+                                <div class="cf-ens-input-wrap">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                    <input class="cf-ens-input" id="cf-ens-input" placeholder="Lookup ENS name — vitalik.eth" />
+                                </div>
+                                <button class="cf-ens-btn" onclick="cfEnsPreview()">Preview</button>
+                            </div>
+
+                            <!-- Asset grid -->
+                            <div class="cf-asset-grid" id="cf-asset-grid">
+                                <div class="cf-empty-state">
+                                    <div class="cf-empty-title">Connect wallet to scan</div>
+                                    <div class="cf-empty-sub">Sign in and connect your wallet to find importable fighters.</div>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="create-section-title">② Allocate Stats <span class="create-points-badge"><span id="pts-remaining">20</span> pts left</span></div>
-                        <div class="create-stat-row">
-                            <span class="create-stat-icon">⚡</span>
-                            <span class="create-stat-name">Attack</span>
-                            <div class="create-stat-bar-wrap">
-                                <input type="range" class="create-slider" id="sl-atk" min="0" max="20" value="5"
-                                    oninput="updateStats()" />
-                                <div class="create-stat-fill" id="fill-atk"></div>
+                <!-- ── SIDEBAR ── -->
+                <div class="cf-sidebar">
+                    <!-- Preview card -->
+                    <div class="cf-preview-section">
+                        <!-- Avatar hero -->
+                        <div class="cf-preview-hero">
+                            <div class="cf-preview-glow"></div>
+                            <img class="cf-preview-img" id="cf-preview-img"
+                                src="images/fighters/char04/portrait.png" alt="fighter" />
+                            <span class="cf-preview-badge-icon" id="cf-preview-badge-icon">⚔</span>
+                        </div>
+                        <!-- Name / sub -->
+                        <div class="cf-preview-namewrap">
+                            <div class="cf-preview-name" id="cf-preview-name">New Fighter</div>
+                            <div class="cf-preview-sub" id="cf-preview-sub">Adaptive · Gen 1</div>
+                        </div>
+                    </div>
+
+                    <!-- Template picker (create mode) -->
+                    <div class="cf-template-block" id="cf-template-block">
+                        <div class="cf-sub-label">PICK TEMPLATE</div>
+                        <div class="cf-template-grid" id="cf-template-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Import detail (import mode) -->
+                    <div class="cf-import-detail" id="cf-import-detail" style="display:none">
+                        <div class="cf-detail-grid">
+                            <div class="cf-detail-cell"><div class="cf-detail-lbl">Source</div><div class="cf-detail-val" id="cfid-source">—</div></div>
+                            <div class="cf-detail-cell"><div class="cf-detail-lbl">Class</div><div class="cf-detail-val" id="cfid-class">—</div></div>
+                            <div class="cf-detail-cell"><div class="cf-detail-lbl">Archetype</div><div class="cf-detail-val" id="cfid-arch">—</div></div>
+                            <div class="cf-detail-cell"><div class="cf-detail-lbl">League</div><div class="cf-detail-val" id="cfid-league">Open</div></div>
+                        </div>
+                        <button class="cf-import-action-btn" id="cf-import-action-btn" onclick="cfImportAsset()">
+                            Import as Fighter
+                        </button>
+                        <!-- Success -->
+                        <div class="cf-import-success" id="cf-import-success" style="display:none">
+                            <div class="cf-success-head">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Imported
                             </div>
-                            <span class="create-stat-val" id="val-atk">400+</span>
+                            <div class="cf-success-name" id="cf-success-name"></div>
+                            <div class="cf-success-sub">Queued for next Arena round.</div>
+                            <button class="cf-success-arena-btn" onclick="closePage()">Enter Arena →</button>
                         </div>
-                        <div class="create-stat-row">
-                            <span class="create-stat-icon">🛡</span>
-                            <span class="create-stat-name">Defense</span>
-                            <div class="create-stat-bar-wrap">
-                                <input type="range" class="create-slider" id="sl-def" min="0" max="20" value="5"
-                                    oninput="updateStats()" />
-                                <div class="create-stat-fill" id="fill-def"></div>
-                            </div>
-                            <span class="create-stat-val" id="val-def">300+</span>
-                        </div>
-                        <div class="create-stat-row">
-                            <span class="create-stat-icon">💨</span>
-                            <span class="create-stat-name">Speed</span>
-                            <div class="create-stat-bar-wrap">
-                                <input type="range" class="create-slider" id="sl-spd" min="0" max="20" value="5"
-                                    oninput="updateStats()" />
-                                <div class="create-stat-fill" id="fill-spd"></div>
-                            </div>
-                            <span class="create-stat-val" id="val-spd">130+</span>
-                        </div>
+                    </div>
 
-                        <div class="create-section-title">③ Choose Runes <span class="create-points-badge">Pick 2</span></div>
-                        <div class="create-rune-grid">
-                            <label class="create-rune-opt">
-                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> ⚡ Thunder — steal BC on hit
-                            </label>
-                            <label class="create-rune-opt">
-                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🛡 Iron Shield — absorb 1 hit
-                            </label>
-                            <label class="create-rune-opt">
-                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🧪 Bantah Potion — heal when low HP
-                            </label>
-                            <label class="create-rune-opt">
-                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🌀 Phase Shift — dodge next attack
-                            </label>
-                            <label class="create-rune-opt">
-                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 💥 Overcharge — burst damage ×2
-                            </label>
-                            <label class="create-rune-opt">
-                                <input type="checkbox" class="create-rune-cb" onchange="checkRunes()" /> 🩸 Lifesteal — heal 15% of damage dealt
-                            </label>
+                    <!-- Queue strip (both modes) -->
+                    <div class="cf-queue-strip">
+                        <div class="cf-sub-label">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
+                            QUEUE
                         </div>
+                        <div class="cf-queue-empty">No matches queued yet.</div>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="create-section-title">④ Strategy</div>
-                        <div class="create-strategy-grid">
-                            <label class="create-strategy-opt" id="strat-aggressive">
-                                <input type="radio" name="strategy" value="aggressive" onchange="updateStrategy(this)" />
-                                <span class="strat-icon">⚔</span>
-                                <span class="strat-name">Aggressive</span>
-                                <span class="strat-desc">All-in offense, high risk</span>
-                            </label>
-                            <label class="create-strategy-opt" id="strat-defensive">
-                                <input type="radio" name="strategy" value="defensive" onchange="updateStrategy(this)" />
-                                <span class="strat-icon">🛡</span>
-                                <span class="strat-name">Defensive</span>
-                                <span class="strat-desc">Outlast through attrition</span>
-                            </label>
-                            <label class="create-strategy-opt" id="strat-balanced">
-                                <input type="radio" name="strategy" value="balanced" checked onchange="updateStrategy(this)" />
-                                <span class="strat-icon">⚖</span>
-                                <span class="strat-name">Balanced</span>
-                                <span class="strat-desc">Adaptive mixed tactics</span>
-                            </label>
-                            <label class="create-strategy-opt" id="strat-trickster">
-                                <input type="radio" name="strategy" value="trickster" onchange="updateStrategy(this)" />
-                                <span class="strat-icon">🎭</span>
-                                <span class="strat-name">Trickster</span>
-                                <span class="strat-desc">Unpredictable, evasive</span>
-                            </label>
-                        </div>
-
-                        <div class="create-actions">
-                            <button class="create-btn-secondary" onclick="resetCreate()">Reset</button>
-                            <button class="create-btn-primary" onclick="mintFighter()">⚡ Mint Fighter — 5,000 BC</button>
-                        </div>
+            <!-- Deploy dialog -->
+            <div class="cf-dialog-backdrop" id="cf-dialog-backdrop" style="display:none" onclick="cfCloseDialog(event)">
+                <div class="cf-dialog" id="cf-dialog">
+                    <div class="cf-dialog-header" id="cf-dialog-header">
+                        <span class="cf-dialog-icon" id="cf-dialog-icon">⚔</span>
+                        <span id="cf-dialog-title">Create Fighter</span>
+                    </div>
+                    <div class="cf-dialog-desc" id="cf-dialog-desc">Review your fighter deployment status.</div>
+                    <div class="cf-dialog-body" id="cf-dialog-body"></div>
+                    <div class="cf-dialog-footer" id="cf-dialog-footer">
+                        <button class="cf-dialog-close-btn" onclick="cfCloseDialog()">Close</button>
+                        <button class="cf-dialog-arena-btn" onclick="closePage()">Enter Arena</button>
                     </div>
                 </div>
             </div>
@@ -3033,6 +3106,10 @@
                 el.classList.toggle('active', el.dataset.mobPage === name);
             });
             document.body.classList.add('page-active');
+            if (name === 'create') {
+                cfInitTemplateGrid();
+                cfUpdatePreviewSub();
+            }
         }
 
         function closePage() {
@@ -3439,80 +3516,264 @@
             document.querySelector('.mkt-filters').style.display = 'flex';
         }
 
-        /* ── Create fighter ── */
-        var _totalPoints = 20;
+        /* ══════════════════════════════════════
+           CREATE FIGHTER PAGE  (cf-* functions)
+        ══════════════════════════════════════ */
+        var _cfTab = 'create';
+        var _cfStyle = 'adaptive';
+        var _cfStrat = 'adaptive';
+        var _cfLoadoutAuto = true;
+        var _cfSelectedTemplate = null;
+        var _cfImportFilter = 'all';
+        var _cfDeployStatus = 'idle'; // idle | pending | success
 
-        function updateStats() {
-            var atk = parseInt(document.getElementById('sl-atk').value) || 0;
-            var def = parseInt(document.getElementById('sl-def').value) || 0;
-            var spd = parseInt(document.getElementById('sl-spd').value) || 0;
-            var used = atk + def + spd;
-            var remaining = _totalPoints - used;
+        /* Template data — fighter portrait images */
+        var CF_TEMPLATES = [
+            { key: 'char04',       label: 'Robot V1',      img: 'images/fighters/char04/portrait.png',       badge: '⚔' },
+            { key: 'floatrobo',    label: 'Floatrobo',     img: 'images/fighters/floatrobo/portrait.png',    badge: '🛡' },
+            { key: 'robopepe',     label: 'Robo Pepe',     img: 'images/fighters/robopepe/portrait.png',     badge: '🐸' },
+            { key: 'crimsonbot',   label: 'Crimsonbot',    img: 'images/fighters/crimsonbot/portrait.png',   badge: '🦀' },
+            { key: 'toxicbot',     label: 'Toxicbot',      img: 'images/fighters/toxicbot/portrait.png',     badge: '💀' },
+            { key: 'voidbot',      label: 'Voidbot',       img: 'images/fighters/voidbot/portrait.png',      badge: '👁' },
+            { key: 'furyman',      label: 'Furyman',       img: 'images/fighters/furyman/portrait.png',      badge: '⚡' },
+            { key: 'silverwarrior',label: 'Silverwarrior', img: 'images/fighters/silverwarrior/portrait.png',badge: '🌪' },
+            { key: 'pepe',         label: 'Pepe',          img: 'images/fighters/pepe/portrait.png',         badge: '🐸' },
+            { key: 'flokiwarrior', label: 'Floki',         img: 'images/fighters/flokiwarrior/portrait.png', badge: '🔥' },
+            { key: 'kano',         label: 'Kano',          img: 'images/fighters/kano/portrait.png',         badge: '🎭' },
+            { key: 'subzero',      label: 'Subzero',       img: 'images/fighters/subzero/portrait.png',      badge: '❄' },
+        ];
 
-            if (remaining < 0) {
-                /* Clamp — prevent over-allocation */
-                var last = event && event.target;
-                if (last) last.value = parseInt(last.value) + remaining;
-                remaining = 0;
-            }
-            document.getElementById('pts-remaining').textContent = Math.max(0, _totalPoints - (
-                parseInt(document.getElementById('sl-atk').value) +
-                parseInt(document.getElementById('sl-def').value) +
-                parseInt(document.getElementById('sl-spd').value)
-            ));
-
-            var a = parseInt(document.getElementById('sl-atk').value);
-            var d = parseInt(document.getElementById('sl-def').value);
-            var s = parseInt(document.getElementById('sl-spd').value);
-
-            document.getElementById('val-atk').textContent = (300 + a * 15) + '';
-            document.getElementById('val-def').textContent = (200 + d * 10) + '';
-            document.getElementById('val-spd').textContent = (100 + s * 6)  + '';
-            document.getElementById('prev-atk').textContent = (300 + a * 15) + '';
-            document.getElementById('prev-def').textContent = (200 + d * 10) + '';
-            document.getElementById('prev-spd').textContent = (100 + s * 6)  + '';
-            document.getElementById('prev-pwr').textContent = (1500 + a * 20 + d * 15 + s * 12).toLocaleString();
-
-            ['atk','def','spd'].forEach(function(stat) {
-                var fill = document.getElementById('fill-' + stat);
-                var sl = document.getElementById('sl-' + stat);
-                if (fill && sl) fill.style.width = (parseInt(sl.value) / 20 * 100) + '%';
+        /* Build template grid on page open */
+        function cfInitTemplateGrid() {
+            var grid = document.getElementById('cf-template-grid');
+            if (!grid || grid.children.length > 0) return;
+            CF_TEMPLATES.forEach(function(t, i) {
+                var btn = document.createElement('button');
+                btn.className = 'cf-tmpl-btn' + (i === 0 ? ' active' : '');
+                btn.dataset.key = t.key;
+                btn.title = t.label;
+                btn.innerHTML = '<img src="' + t.img + '" alt="' + t.label + '" />';
+                btn.addEventListener('click', function() { cfPickTemplate(btn, t); });
+                grid.appendChild(btn);
             });
+            /* Select first by default */
+            if (!_cfSelectedTemplate) cfPickTemplate(grid.querySelector('.cf-tmpl-btn'), CF_TEMPLATES[0]);
         }
 
-        function checkRunes() {
-            var cbs = document.querySelectorAll('.create-rune-cb');
-            var checked = Array.from(cbs).filter(function(c){ return c.checked; });
-            if (checked.length > 2) { event.target.checked = false; }
-        }
-
-        function pickAvatar(btn, emoji) {
-            document.querySelectorAll('.av-btn').forEach(function(b){ b.classList.remove('active'); });
+        function cfPickTemplate(btn, tmpl) {
+            _cfSelectedTemplate = tmpl;
+            document.querySelectorAll('.cf-tmpl-btn').forEach(function(b){ b.classList.remove('active'); });
             btn.classList.add('active');
-            document.getElementById('create-avatar').textContent = emoji;
+            var img = document.getElementById('cf-preview-img');
+            var badge = document.getElementById('cf-preview-badge-icon');
+            if (img) { img.src = tmpl.img; img.alt = tmpl.label; }
+            if (badge) badge.textContent = tmpl.badge;
+            /* Update name if still default */
+            var nameEl = document.getElementById('cf-preview-name');
+            if (nameEl && (!document.getElementById('cf-name').value.trim())) {
+                nameEl.textContent = tmpl.label;
+            }
         }
 
-        function updateStrategy(radio) {
-            document.querySelectorAll('.create-strategy-opt').forEach(function(l){ l.classList.remove('active'); });
-            radio.closest('.create-strategy-opt').classList.add('active');
+        /* Tab switching */
+        function cfSetTab(tab) {
+            _cfTab = tab;
+            document.getElementById('cf-tab-create').classList.toggle('active', tab === 'create');
+            document.getElementById('cf-tab-import').classList.toggle('active', tab === 'import');
+            document.getElementById('cf-create-panel').style.display = tab === 'create' ? '' : 'none';
+            document.getElementById('cf-import-panel').style.display = tab === 'import' ? '' : 'none';
+            document.getElementById('cf-template-block').style.display = tab === 'create' ? '' : 'none';
+            document.getElementById('cf-import-detail').style.display = tab === 'import' ? '' : 'none';
+            var hint = document.getElementById('cf-tabbar-hint');
+            if (hint) hint.textContent = tab === 'create' ? 'Manual Fighter Creator' : 'Wallet Assets To Fighters';
         }
-        /* Pre-select balanced strategy */
+
+        /* Name input */
+        function cfOnNameInput(val) {
+            var nameEl = document.getElementById('cf-preview-name');
+            if (nameEl) nameEl.textContent = val.trim() || (_cfSelectedTemplate ? _cfSelectedTemplate.label : 'New Fighter');
+        }
+
+        /* Loadout toggle */
+        function cfToggleLoadout() {
+            _cfLoadoutAuto = !_cfLoadoutAuto;
+            var btn = document.getElementById('cf-loadout-btn');
+            if (btn) {
+                btn.textContent = _cfLoadoutAuto ? 'Auto' : 'Manual';
+                btn.classList.toggle('active', _cfLoadoutAuto);
+            }
+        }
+
+        /* Style pills */
+        function cfSetStyle(btn) {
+            _cfStyle = btn.dataset.style;
+            document.querySelectorAll('.cf-style-pill').forEach(function(b){ b.classList.remove('active'); });
+            btn.classList.add('active');
+            cfUpdatePreviewSub();
+        }
+
+        /* Strategy buttons */
+        function cfSetStrat(btn) {
+            _cfStrat = btn.dataset.strat;
+            document.querySelectorAll('.cf-strat-btn').forEach(function(b){ b.classList.remove('active'); });
+            btn.classList.add('active');
+        }
+
+        /* Preview subtitle */
+        function cfUpdatePreviewSub() {
+            var el = document.getElementById('cf-preview-sub');
+            if (!el) return;
+            var styleLabel = { adaptive:'Adaptive', berserker:'Berserker', scout:'Scout' }[_cfStyle] || _cfStyle;
+            el.textContent = styleLabel + ' · Gen 1';
+        }
+
+        /* Rune selection — max 2 */
+        function cfCheckRunes(evt) {
+            var cbs = document.querySelectorAll('.cf-rune-cb');
+            var checked = Array.from(cbs).filter(function(c){ return c.checked; });
+            if (checked.length > 2) evt.target.checked = false;
+        }
+
+        /* Import: filter chips */
+        function cfSetFilter(btn) {
+            _cfImportFilter = btn.dataset.filter;
+            document.querySelectorAll('.cf-filter').forEach(function(b){ b.classList.remove('active'); });
+            btn.classList.add('active');
+        }
+
+        /* Import: scan wallet (demo) */
+        function cfScanWallet() {
+            var grid = document.getElementById('cf-asset-grid');
+            if (!grid) return;
+            grid.innerHTML = '<div class="cf-empty-state"><div class="cf-empty-title">No real assets detected</div><div class="cf-empty-sub">Only live wallet/indexer results appear here. Connect your wallet to find importable fighters.</div></div>';
+        }
+
+        /* Import: ENS preview (demo) */
+        function cfEnsPreview() {
+            var val = (document.getElementById('cf-ens-input') || {}).value || '';
+            if (!val.trim()) return;
+            var grid = document.getElementById('cf-asset-grid');
+            if (!grid) return;
+            grid.innerHTML = '<div class="cf-asset-card active" onclick="cfSelectAsset(this)">'
+                + '<div class="cf-asset-top"><img class="cf-asset-thumb" src="images/fighters/char04/portrait.png" alt="ENS" />'
+                + '<div class="cf-asset-info"><div class="cf-asset-name">' + val.trim() + '</div>'
+                + '<div class="cf-asset-sub">ENS Name</div>'
+                + '<div class="cf-asset-tags"><span class="cf-asset-tag">ENS</span></div></div></div>'
+                + '<div class="cf-asset-foot"><span class="cf-asset-addr">' + val.trim() + '</span><span class="cf-asset-src">ENS</span></div></div>';
+            /* Update sidebar detail */
+            document.getElementById('cfid-source').textContent = 'ENS';
+            document.getElementById('cfid-class').textContent = 'Oracle';
+            document.getElementById('cfid-arch').textContent = 'oracle_duelist';
+            document.getElementById('cfid-league').textContent = 'Open';
+            document.getElementById('cf-import-success').style.display = 'none';
+            document.getElementById('cf-import-action-btn').style.display = '';
+            /* Preview sidebar */
+            var nameEl = document.getElementById('cf-preview-name');
+            var subEl = document.getElementById('cf-preview-sub');
+            if (nameEl) nameEl.textContent = val.trim();
+            if (subEl) subEl.textContent = 'ENS · Open League';
+        }
+
+        /* Import: select asset card */
+        function cfSelectAsset(card) {
+            document.querySelectorAll('.cf-asset-card').forEach(function(c){ c.classList.remove('active'); });
+            card.classList.add('active');
+        }
+
+        /* Import: import action */
+        function cfImportAsset() {
+            var btn = document.getElementById('cf-import-action-btn');
+            if (btn) btn.disabled = true;
+            var nameEl = document.getElementById('cf-preview-name');
+            var name = nameEl ? nameEl.textContent : 'Fighter';
+            /* Show success */
+            var succ = document.getElementById('cf-import-success');
+            var succName = document.getElementById('cf-success-name');
+            if (succ && succName) {
+                succName.textContent = name;
+                succ.style.display = '';
+            }
+            if (btn) { btn.style.display = 'none'; }
+        }
+
+        /* Deploy (create mode) */
+        var _cfDeploySteps = ['Initializing…', 'Generating persona…', 'Compiling loadout…', 'Registering identity…'];
+        var _cfDeployStep = 0;
+        var _cfDeployInterval = null;
+
+        function cfDeploy() {
+            var name = (document.getElementById('cf-name') || {}).value || '';
+            if (!name.trim()) {
+                var inp = document.getElementById('cf-name');
+                if (inp) { inp.focus(); inp.style.borderColor = 'red'; setTimeout(function(){ inp.style.borderColor=''; }, 1500); }
+                return;
+            }
+            /* Show dialog in pending state */
+            _cfDeployStatus = 'pending';
+            _cfDeployStep = 0;
+            cfRenderDialog('pending', name);
+            document.getElementById('cf-dialog-backdrop').style.display = 'flex';
+
+            /* Advance deploy steps */
+            _cfDeployInterval = setInterval(function() {
+                _cfDeployStep = Math.min(_cfDeployStep + 1, _cfDeploySteps.length - 1);
+                var lbl = document.getElementById('cf-deploy-step-label');
+                if (lbl) lbl.textContent = _cfDeploySteps[_cfDeployStep];
+            }, 900);
+
+            /* Simulate completion after ~3.5s */
+            setTimeout(function() {
+                clearInterval(_cfDeployInterval);
+                _cfDeployStatus = 'success';
+                cfRenderDialog('success', name);
+            }, 3600);
+        }
+
+        function cfRenderDialog(status, name) {
+            var header = document.getElementById('cf-dialog-header');
+            var desc = document.getElementById('cf-dialog-desc');
+            var body = document.getElementById('cf-dialog-body');
+            var footer = document.getElementById('cf-dialog-footer');
+            var tmpl = _cfSelectedTemplate || CF_TEMPLATES[0];
+
+            if (status === 'pending') {
+                header.innerHTML = '<span class="cf-dialog-icon">⚡</span><span>Deploying Fighter…</span>';
+                desc.textContent = 'Generating persona, compiling loadout, and registering identity for the Arena…';
+                body.innerHTML = '<div class="cf-spin-wrap"><div class="cf-spin-ring"></div><div class="cf-spin-ring-active"></div></div>'
+                    + '<div class="cf-spin-label" id="cf-deploy-step-label">' + _cfDeploySteps[0] + '</div>';
+                footer.innerHTML = '';
+            } else {
+                header.innerHTML = '<span class="cf-dialog-icon">✓</span><span>Deployment Success</span>';
+                desc.textContent = 'Your fighter has been registered and is queued for the next Arena round.';
+                body.innerHTML = '<div class="cf-deploy-success">'
+                    + '<img class="cf-deploy-success-avatar" src="' + tmpl.img + '" alt="avatar" />'
+                    + '<div><div class="cf-deploy-success-name">' + name + '</div>'
+                    + '<div class="cf-deploy-success-sub"><span class="cf-deploy-success-dot"></span>Queued for Arena</div></div></div>';
+                footer.innerHTML = '<button class="cf-dialog-close-btn" onclick="cfCloseDialog()">View Queue</button>'
+                    + '<button class="cf-dialog-arena-btn" onclick="closePage()">Enter Arena ⚔</button>';
+            }
+        }
+
+        function cfCloseDialog(evt) {
+            if (evt && evt.target !== document.getElementById('cf-dialog-backdrop')) return;
+            clearInterval(_cfDeployInterval);
+            document.getElementById('cf-dialog-backdrop').style.display = 'none';
+            _cfDeployStatus = 'idle';
+        }
+
+        /* Init when create page opens */
         document.addEventListener('DOMContentLoaded', function() {
-            var bal = document.querySelector('[value="balanced"]');
-            if (bal) bal.closest('.create-strategy-opt').classList.add('active');
+            cfInitTemplateGrid();
+            cfUpdatePreviewSub();
         });
 
-        function resetCreate() {
-            ['sl-atk','sl-def','sl-spd'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=5; });
-            document.querySelectorAll('.create-rune-cb').forEach(function(c){ c.checked=false; });
-            document.getElementById('fighter-name').value = '';
-            document.getElementById('create-preview-name').textContent = 'YOUR FIGHTER';
-            updateStats();
-        }
-
-        function mintFighter() {
-            alert('Minting coming soon — connect your wallet to proceed.');
-        }
+        /* Legacy stubs so old inline handlers don't throw */
+        function updateStats(){}
+        function checkRunes(){}
+        function pickAvatar(){}
+        function updateStrategy(){}
+        function resetCreate(){}
+        function mintFighter(){}
 
         /* ── Agents page filter ── */
         function agFilter(btn, type) {
