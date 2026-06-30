@@ -2910,7 +2910,19 @@ html.light .mkt-d-effect-box { background: rgba(22,163,74,0.06); border-color: r
     opacity: 0.38; cursor: not-allowed; pointer-events: none;
 }
 .cf-rune-cb { display: none; }
-.cf-rune-card-icon { font-size: 18px; line-height: 1; }
+.cf-rune-card-icon {
+    font-size: 18px; line-height: 1;
+    animation: cfRuneFloat 2.8s ease-in-out infinite;
+}
+.cf-rune-card:nth-child(2) .cf-rune-card-icon { animation-delay: 0.4s; }
+.cf-rune-card:nth-child(3) .cf-rune-card-icon { animation-delay: 0.8s; }
+.cf-rune-card:nth-child(4) .cf-rune-card-icon { animation-delay: 1.2s; }
+.cf-rune-card:nth-child(5) .cf-rune-card-icon { animation-delay: 1.6s; }
+.cf-rune-card:nth-child(6) .cf-rune-card-icon { animation-delay: 2.0s; }
+@keyframes cfRuneFloat {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-4px); }
+}
 .cf-rune-card-name {
     font-size: 9px; font-weight: 800; color: var(--bb-foreground);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
