@@ -1671,7 +1671,7 @@ html.light .trollbox-input-row { background: rgba(0,0,0,0.03); }
     .pg-header-inner { gap: 1px; }
     .pg-title { font-size: 15px; }
     .pg-subtitle { display: none; }
-    .pg-close { font-size: 11px; padding: 5px 10px; }
+    .pg-close { width: 28px; height: 28px; font-size: 13px; }
 
     /* ─── Docs: collapse sidebar ─── */
     .docs-sidebar { display: none; }
@@ -1835,19 +1835,19 @@ body.page-active .page-overlay { bottom: 0; }
 .pg-subtitle { font-size: 12px; color: var(--bb-muted-foreground); }
 
 .pg-close {
-    background: rgb(var(--bb-primary-rgb) / 0.1);
-    border: 1px solid var(--bb-border);
-    border-radius: 7px;
-    color: var(--bb-muted-foreground);
-    font-size: 12px; font-weight: 600;
-    padding: 7px 16px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
+    background: rgb(var(--bb-primary-rgb) / 0.08);
+    border: 1px solid var(--bb-border);
+    border-radius: 6px;
+    color: var(--bb-muted-foreground);
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.15s;
 }
 .pg-close:hover {
-    background: rgb(var(--bb-primary-rgb) / 0.22);
+    background: rgb(var(--bb-primary-rgb) / 0.2);
     color: var(--bb-foreground);
     border-color: hsl(var(--bb-primary));
 }
