@@ -2893,8 +2893,8 @@ html.light .mkt-d-effect-box { background: rgba(22,163,74,0.06); border-color: r
     display: flex; flex-wrap: wrap; gap: 5px;
 }
 .cf-rune-card {
-    display: flex; flex-direction: column; align-items: center; gap: 2px;
-    width: 54px; padding: 6px 4px 5px;
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+    width: 42px; padding: 5px 3px 4px;
     background: var(--bb-background);
     border: 1px solid var(--bb-border);
     border-radius: 5px;
@@ -2911,7 +2911,7 @@ html.light .mkt-d-effect-box { background: rgba(22,163,74,0.06); border-color: r
 }
 .cf-rune-cb { display: none; }
 .cf-rune-card-icon {
-    font-size: 18px; line-height: 1;
+    font-size: 14px; line-height: 1;
     animation: cfRuneFloat 2.8s ease-in-out infinite;
 }
 .cf-rune-card:nth-child(2) .cf-rune-card-icon { animation-delay: 0.4s; }
