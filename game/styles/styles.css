@@ -1818,14 +1818,13 @@ body.page-active .page-overlay { bottom: 0; }
 .pg-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 10px 18px;
     background: var(--bb-card);
     border-bottom: 1px solid var(--bb-border);
     flex-shrink: 0;
-    gap: 12px;
+    gap: 8px;
 }
-.pg-header-inner { display: flex; flex-direction: column; gap: 4px; }
+.pg-header-inner { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .pg-title {
     font-size: 20px; font-weight: 800;
     color: var(--bb-foreground);
