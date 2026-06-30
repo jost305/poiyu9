@@ -3087,9 +3087,12 @@ html.light .mkt-d-effect-box { background: rgba(22,163,74,0.06); border-color: r
     border: 2px solid rgb(var(--bb-primary-rgb)/0.35);
     background: var(--bb-background);
     object-fit: cover; object-position: center;
-    transition: transform 0.25s;
+    animation: cfFighterFloat 3.2s ease-in-out infinite;
 }
-.cf-preview-img:hover { transform: scale(1.04); }
+@keyframes cfFighterFloat {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+}
 .cf-preview-badge-icon {
     position: absolute; z-index: 2;
     bottom: -4px; right: -4px;
