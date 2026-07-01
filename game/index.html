@@ -148,77 +148,52 @@
                     <!-- LIVE PREDICTIONS -->
                     <div class="panel-section">
                         <div class="panel-hdr">
-                            <span class="panel-hdr-icon pred-icon">â–²</span>
+                            <span class="panel-hdr-icon pred-icon">&#x25B2;</span>
                             <div>
-                                <div class="panel-hdr-title">
-                                    LIVE PREDICTIONS
-                                </div>
-                                <div class="panel-hdr-sub">
-                                    WHO WILL BE THE NEXT KING?
-                                </div>
+                                <div class="panel-hdr-title">LIVE PREDICTIONS</div>
+                                <div class="panel-hdr-sub">WHO WINS THIS ROUND?</div>
                             </div>
                             <div class="pred-timer" id="pred-timer">00:45</div>
                         </div>
-                        <div class="pred-list">
-                            <div class="pred-row">
-                                <div class="pred-avatar pred-av-p1">P1</div>
-                                <div class="pred-name" id="pred-name-p1">
-                                    Robot V1
+
+                        <!-- Fighter VS Fighter -->
+                        <div class="pred-matchup">
+                            <div class="pred-fighter pred-fighter-p1">
+                                <div class="pred-fighter-portrait p1-portrait">
+                                    <img id="pred-portrait-p1" src="images/fighters/char04/portrait.png" alt="P1" onerror="this.style.display='none'" />
                                 </div>
-                                <div class="pred-bar-wrap">
-                                    <div
-                                        class="pred-bar pred-bar-p1"
-                                        id="pred-bar-p1"
-                                        style="width: 52%"
-                                    ></div>
-                                </div>
-                                <div class="pred-pct" id="pred-pct-p1">52%</div>
-                                <div class="pred-mult">6.2x</div>
+                                <div class="pred-fighter-name" id="pred-name-p1">ROBOT V1</div>
+                                <div class="pred-fighter-pct pred-pct-blue" id="pred-pct-p1">52%</div>
                             </div>
-                            <div class="pred-row">
-                                <div class="pred-avatar pred-av-p2">P2</div>
-                                <div class="pred-name" id="pred-name-p2">
-                                    Floatrobo
-                                </div>
-                                <div class="pred-bar-wrap">
-                                    <div
-                                        class="pred-bar pred-bar-p2"
-                                        id="pred-bar-p2"
-                                        style="width: 48%"
-                                    ></div>
-                                </div>
-                                <div class="pred-pct" id="pred-pct-p2">48%</div>
-                                <div class="pred-mult">3.1x</div>
+
+                            <div class="pred-vs-col">
+                                <div class="pred-vs-badge">VS</div>
                             </div>
-                            <div class="pred-row pred-row-sm">
-                                <div class="pred-avatar pred-av-neut">A3</div>
-                                <div class="pred-name">Robo Pepe</div>
-                                <div class="pred-bar-wrap">
-                                    <div
-                                        class="pred-bar pred-bar-neut"
-                                        style="width: 15%"
-                                    ></div>
+
+                            <div class="pred-fighter pred-fighter-p2">
+                                <div class="pred-fighter-portrait p2-portrait">
+                                    <img id="pred-portrait-p2" src="images/fighters/floatrobo/portrait.png" alt="P2" onerror="this.style.display='none'" />
                                 </div>
-                                <div class="pred-pct">15%</div>
-                                <div class="pred-mult">4.8x</div>
-                            </div>
-                            <div class="pred-row pred-row-sm">
-                                <div class="pred-avatar pred-av-neut">A4</div>
-                                <div class="pred-name">Crimsonbot</div>
-                                <div class="pred-bar-wrap">
-                                    <div
-                                        class="pred-bar pred-bar-neut"
-                                        style="width: 10%"
-                                    ></div>
-                                </div>
-                                <div class="pred-pct">10%</div>
-                                <div class="pred-mult">7.2x</div>
+                                <div class="pred-fighter-name" id="pred-name-p2">FLOATROBO</div>
+                                <div class="pred-fighter-pct pred-pct-red" id="pred-pct-p2">48%</div>
                             </div>
                         </div>
+
+                        <!-- Shared HP bar -->
+                        <div class="pred-split-bar-wrap">
+                            <div class="pred-split-bar-p1" id="pred-bar-p1" style="width:52%"></div>
+                            <div class="pred-split-bar-p2" id="pred-bar-p2" style="width:48%"></div>
+                        </div>
+
                         <div class="total-pool">
-                            TOTAL POOL: <span class="gold">128,450 BC</span>
+                            POOL: <span class="gold">128,450 BC</span>
                         </div>
-                        <button class="place-bet-btn">PLACE BET</button>
+
+                        <!-- Bet buttons -->
+                        <div class="pred-bet-row">
+                            <button class="pred-bet-btn pred-bet-p1">&#x2694; BACK P1</button>
+                            <button class="pred-bet-btn pred-bet-p2">BACK P2 &#x2694;</button>
+                        </div>
                     </div>
                 </div>
                 <!-- /left-panel -->
@@ -3009,6 +2984,24 @@
                     var loadingEl = $("loading");
                     if (loadingEl) loadingEl.style.display = "flex";
                     _origStartPhaserMatch(p1Key, p2Key);
+                    // Update prediction panel portraits & names
+                    var p1Img = document.getElementById('pred-portrait-p1');
+                    var p2Img = document.getElementById('pred-portrait-p2');
+                    var p1Name = document.getElementById('pred-name-p1');
+                    var p2Name = document.getElementById('pred-name-p2');
+                    if (p1Img) p1Img.src = 'images/fighters/' + p1Key + '/portrait.png';
+                    if (p2Img) p2Img.src = 'images/fighters/' + p2Key + '/portrait.png';
+                    if (p1Name) p1Name.textContent = (CHAR_DISPLAY[p1Key] || p1Key).toUpperCase();
+                    if (p2Name) p2Name.textContent = (CHAR_DISPLAY[p2Key] || p2Key).toUpperCase();
+                    // Reset percentages
+                    var p1Pct = document.getElementById('pred-pct-p1');
+                    var p2Pct = document.getElementById('pred-pct-p2');
+                    var bar1 = document.getElementById('pred-bar-p1');
+                    var bar2 = document.getElementById('pred-bar-p2');
+                    if (p1Pct) p1Pct.textContent = '50%';
+                    if (p2Pct) p2Pct.textContent = '50%';
+                    if (bar1) bar1.style.width = '50%';
+                    if (bar2) bar2.style.width = '50%';
                     // Record this battle in the DB so Challenges page stays in sync
                     fetch('/api/bantahbro/battles', {
                         method: 'POST',
