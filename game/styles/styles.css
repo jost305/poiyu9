@@ -1036,7 +1036,7 @@ canvas { display: block; background: transparent; }
     padding: 8px;
 }
 .hud-p1 { left: 0; flex-direction: row; }
-.hud-p2 { right: 0; flex-direction: row-reverse; }
+.hud-p2 { right: 0; flex-direction: row; }
 
 .hud-avatar {
     width: 60px; height: 60px;
@@ -1049,7 +1049,11 @@ canvas { display: block; background: transparent; }
 }
 .hud-avatar img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
 
-.hud-info { display: flex; flex-direction: column; gap: 4px; padding-top: 4px; }
+.hud-info {
+    display: flex; flex-direction: column; gap: 4px; padding: 6px 8px;
+    background: rgba(0,0,0,0.45);
+    border-radius: 6px;
+}
 .hud-info-right { align-items: flex-end; }
 .hud-name {
     font-family: var(--font-display);
