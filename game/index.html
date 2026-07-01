@@ -4284,43 +4284,98 @@
         .chall-send-btn:not(:disabled):hover { opacity: .82; }
         </style>
     <!-- CHALLENGES PAGE -->
-                <div id="page-challenges" class="page-overlay bantahbro-next-ui dark" style="display: none;">
-                    <div class="pg-header">
-                    <button class="pg-close" onclick="closePage()">✖</button>
-                    <div class="pg-header-inner">
-                        <h1 class="pg-title">Challenges & Battles</h1>
-                        <p class="pg-subtitle">View live fights, the challenger queue, and battle history.</p>
-                    </div>
-                </div>
-                    
-                    <div class="pg-body ch-body" style="padding: 20px;">
-                    <div class="ch-grid" style="display: grid; grid-template-columns: 1fr; gap: 20px;">
-                        <!-- Live Battles -->
-                        <div class="ch-section" style="background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px;">
-                            <h2 style="color: var(--p1); font-family: 'Cinzel', serif; margin-bottom: 15px;">Live Battles ðŸ”´</h2>
-                            <div id="ch-live-list" style="display: flex; flex-direction: column; gap: 10px;">
-                                <div style="color: #888;">No live battles currently.</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Challenger Queue -->
-                        <div class="ch-section" style="background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px;">
-                            <h2 style="color: var(--text-light); font-family: 'Cinzel', serif; margin-bottom: 15px;">Challenger Queue â³</h2>
-                            <div id="ch-queue-list" style="display: flex; flex-direction: column; gap: 10px;">
-                                <div style="color: #888;">Queue is empty.</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Battle History -->
-                        <div class="ch-section" style="background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px;">
-                            <h2 style="color: #aaa; font-family: 'Cinzel', serif; margin-bottom: 15px;">Ended Battles ðŸ</h2>
-                            <div id="ch-history-list" style="display: flex; flex-direction: column; gap: 10px;">
-                                <div style="color: #888;">No recent battles.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div id="page-challenges" class="page-overlay bantahbro-next-ui dark" style="display: none;">
+        <div class="pg-header">
+            <button class="pg-close" onclick="closePage()">&#x2716;</button>
+            <div class="pg-header-inner">
+                <h1 class="pg-title">&#x2694;&#xFE0F; Challenges &amp; Battles</h1>
+                <p class="pg-subtitle">Live fights, the challenger queue, and battle history</p>
+            </div>
+        </div>
 
-                
+        <!-- Stats Bar -->
+        <div class="ch-stats-bar">
+            <div class="ch-stat-pill ch-stat-live">
+                <span class="ch-pulse-dot"></span>
+                <span id="ch-stat-live-count">0</span>
+                <span class="ch-stat-label">LIVE</span>
+            </div>
+            <div class="ch-stat-divider"></div>
+            <div class="ch-stat-pill ch-stat-queue">
+                <span class="ch-stat-icon">&#x23F3;</span>
+                <span id="ch-stat-queue-count">0</span>
+                <span class="ch-stat-label">IN QUEUE</span>
+            </div>
+            <div class="ch-stat-divider"></div>
+            <div class="ch-stat-pill ch-stat-history">
+                <span class="ch-stat-icon">&#x1F3C6;</span>
+                <span id="ch-stat-history-count">0</span>
+                <span class="ch-stat-label">ENDED</span>
+            </div>
+        </div>
+
+        <!-- Tab Bar -->
+        <div class="ch-tabs">
+            <button class="ch-tab active" onclick="chSwitchTab('live', this)">
+                <span class="ch-tab-dot ch-dot-live"></span> Live Battles
+            </button>
+            <button class="ch-tab" onclick="chSwitchTab('queue', this)">
+                Challenger Queue
+            </button>
+            <button class="ch-tab" onclick="chSwitchTab('history', this)">
+                Battle History
+            </button>
+        </div>
+
+        <!-- Tab Panels -->
+        <div class="pg-body ch-body">
+
+            <!-- LIVE PANEL -->
+            <div class="ch-panel" id="ch-panel-live">
+                <div id="ch-live-list" class="ch-list">
+                    <div class="ch-empty">
+                        <div class="ch-empty-icon">&#x1F534;</div>
+                        <div class="ch-empty-title">No live battles</div>
+                        <div class="ch-empty-sub">The arena is quiet &mdash; for now.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUEUE PANEL -->
+            <div class="ch-panel" id="ch-panel-queue" style="display:none">
+                <div id="ch-queue-list" class="ch-list">
+                    <div class="ch-empty">
+                        <div class="ch-empty-icon">&#x23F3;</div>
+                        <div class="ch-empty-title">Queue is empty</div>
+                        <div class="ch-empty-sub">No challengers waiting &mdash; be the first!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTORY PANEL -->
+            <div class="ch-panel" id="ch-panel-history" style="display:none">
+                <div id="ch-history-list" class="ch-list">
+                    <div class="ch-empty">
+                        <div class="ch-empty-icon">&#x1F4DC;</div>
+                        <div class="ch-empty-title">No battle history</div>
+                        <div class="ch-empty-sub">Completed fights will appear here.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+    function chSwitchTab(tab, btn) {
+        document.querySelectorAll('#page-challenges .ch-tab').forEach(t => t.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        document.querySelectorAll('#page-challenges .ch-panel').forEach(p => p.style.display = 'none');
+        var panel = document.getElementById('ch-panel-' + tab);
+        if (panel) panel.style.display = 'flex';
+    }
+    </script>
+
             </body>
+</html>
 </html>

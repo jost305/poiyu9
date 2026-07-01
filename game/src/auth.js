@@ -495,41 +495,87 @@ async function loadChallengesPage() {
         const res = await fetch('/api/bantahbro/battles');
         if (!res.ok) throw new Error('Failed to fetch all battles');
         const data = await res.json();
-        
-        const liveList = document.getElementById('ch-live-list');
-        const queueList = document.getElementById('ch-queue-list');
+
+        const liveList    = document.getElementById('ch-live-list');
+        const queueList   = document.getElementById('ch-queue-list');
         const historyList = document.getElementById('ch-history-list');
-        
+
         if (!liveList || !queueList || !historyList) return;
-        
-        const live = data.battles.filter(b => b.status === 'live');
+
+        const live   = data.battles.filter(b => b.status === 'live');
         const queued = data.battles.filter(b => b.status === 'queued');
-        const ended = data.battles.filter(b => b.status === 'ended');
-        
+        const ended  = data.battles.filter(b => b.status === 'ended');
+
+        // Update stat counts
+        const liveCount    = document.getElementById('ch-stat-live-count');
+        const queueCount   = document.getElementById('ch-stat-queue-count');
+        const historyCount = document.getElementById('ch-stat-history-count');
+        if (liveCount)    liveCount.textContent    = live.length;
+        if (queueCount)   queueCount.textContent   = queued.length;
+        if (historyCount) historyCount.textContent = ended.length;
+
+        function shortAddr(addr) {
+            if (!addr) return '0x???';
+            return addr.substring(0, 6) + '…' + addr.slice(-4);
+        }
+
         // Render Live
         liveList.innerHTML = live.length ? live.map(b => `
-            <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; border-left: 4px solid var(--p1);">
-                <div><strong>${b.p1_wallet.substring(0,8)}</strong> (${b.p1_agent}) vs <strong>${b.p2_wallet ? b.p2_wallet.substring(0,8) : '???'}</strong> (${b.p2_agent || '???'})</div>
-                <div style="color: var(--p1);">FIGHTING NOW ⚔️</div>
+            <div class="ch-card ch-card-live">
+                <div class="ch-card-fighters">
+                    <div class="ch-fighter-block">
+                        <div class="ch-fighter-name">${b.p1_agent || 'Fighter'}</div>
+                        <div class="ch-fighter-wallet">${shortAddr(b.p1_wallet)}</div>
+                    </div>
+                    <div class="ch-vs-badge">VS</div>
+                    <div class="ch-fighter-block">
+                        <div class="ch-fighter-name">${b.p2_agent || '???'}</div>
+                        <div class="ch-fighter-wallet">${shortAddr(b.p2_wallet)}</div>
+                    </div>
+                </div>
+                <div class="ch-card-status">
+                    <span class="ch-status-badge ch-badge-live"><span class="ch-pulse-dot" style="width:5px;height:5px;"></span> LIVE</span>
+                </div>
             </div>
-        `).join('') : '<div style="color: #888;">No live battles currently.</div>';
-        
+        `).join('') : `<div class="ch-empty"><div class="ch-empty-icon">&#x1F534;</div><div class="ch-empty-title">No live battles</div><div class="ch-empty-sub">The arena is quiet &mdash; for now.</div></div>`;
+
         // Render Queued
-        queueList.innerHTML = queued.length ? queued.map((b,i) => `
-            <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; border-left: 4px solid var(--text-light);">
-                <div>#${i+1} - <strong>${b.p1_wallet.substring(0,8)}</strong> (${b.p1_agent})</div>
-                <div style="color: #aaa;">WAITING ⏳</div>
+        queueList.innerHTML = queued.length ? queued.map((b, i) => `
+            <div class="ch-card ch-card-queue">
+                <div class="ch-queue-num">${i + 1}</div>
+                <div class="ch-card-fighters">
+                    <div class="ch-fighter-block">
+                        <div class="ch-fighter-name">${b.p1_agent || 'Fighter'}</div>
+                        <div class="ch-fighter-wallet">${shortAddr(b.p1_wallet)}</div>
+                    </div>
+                </div>
+                <div class="ch-card-status">
+                    <span class="ch-status-badge ch-badge-queue">&#x23F3; WAITING</span>
+                </div>
             </div>
-        `).join('') : '<div style="color: #888;">Queue is empty.</div>';
-        
+        `).join('') : `<div class="ch-empty"><div class="ch-empty-icon">&#x23F3;</div><div class="ch-empty-title">Queue is empty</div><div class="ch-empty-sub">No challengers waiting &mdash; be the first!</div></div>`;
+
         // Render Ended
         historyList.innerHTML = ended.length ? ended.map(b => `
-            <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; border-left: 4px solid #444;">
-                <div><strong>${b.p1_wallet.substring(0,8)}</strong> vs <strong>${b.p2_wallet.substring(0,8)}</strong></div>
-                <div style="color: gold;">WINNER: ${b.winner || 'Unknown'} 🏆</div>
+            <div class="ch-card ch-card-ended">
+                <div class="ch-card-fighters">
+                    <div class="ch-fighter-block">
+                        <div class="ch-fighter-name">${b.p1_agent || 'Fighter'}</div>
+                        <div class="ch-fighter-wallet">${shortAddr(b.p1_wallet)}</div>
+                    </div>
+                    <div class="ch-vs-badge">VS</div>
+                    <div class="ch-fighter-block">
+                        <div class="ch-fighter-name">${b.p2_agent || '???'}</div>
+                        <div class="ch-fighter-wallet">${shortAddr(b.p2_wallet)}</div>
+                    </div>
+                </div>
+                <div class="ch-card-status">
+                    <span class="ch-status-badge ch-badge-ended">&#x1F3C6; ENDED</span>
+                    ${b.winner ? `<div class="ch-winner-label">WINNER: ${b.winner}</div>` : ''}
+                </div>
             </div>
-        `).join('') : '<div style="color: #888;">No recent battles.</div>';
-        
+        `).join('') : `<div class="ch-empty"><div class="ch-empty-icon">&#x1F4DC;</div><div class="ch-empty-title">No battle history</div><div class="ch-empty-sub">Completed fights will appear here.</div></div>`;
+
     } catch (e) {
         console.error(e);
     }
