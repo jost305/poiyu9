@@ -558,15 +558,17 @@ async function loadChallengerQueue() {
         if (liveData.battles.length > 0) {
             const lb = liveData.battles[0];
             qList.insertAdjacentHTML('beforeend', `
-                <div class="queue-item queue-active" style="border-left:2px solid #f87171;">
-                    <div class="qi-num" style="color:#f87171;">⚔</div>
-                    <div class="qi-portrait qi-p1">
+                <div class="queue-item queue-active" style="border-left:2px solid #f87171; gap:6px;">
+                    <div class="qi-portrait qi-p1" style="width:38px;height:38px;flex-shrink:0;">
                         <img src="images/fighters/${lb.p1_agent || 'char04'}/left/stand/0.png" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;" onerror="this.src='images/fighters/char04/left/stand/0.png'">
                     </div>
+                    <div style="font-size:11px;font-weight:700;color:#f87171;flex-shrink:0;">⚔</div>
+                    <div class="qi-portrait qi-p2" style="width:38px;height:38px;flex-shrink:0;">
+                        <img src="images/fighters/${lb.p2_agent || 'floatrobo'}/left/stand/0.png" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;" onerror="this.src='images/fighters/floatrobo/left/stand/0.png'">
+                    </div>
                     <div class="qi-info">
-                        <div class="qi-addr" style="color:#f87171;font-size:9px;letter-spacing:1px;">🔴 LIVE NOW</div>
                         <div class="qi-name">${lb.p1_agent || 'Fighter'} vs ${lb.p2_agent || '???'}</div>
-                        <div class="qi-power">Fighting</div>
+                        <div class="qi-power" style="color:#f87171;">Fighting</div>
                     </div>
                 </div>
             `);
