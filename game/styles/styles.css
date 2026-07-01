@@ -1039,32 +1039,33 @@ canvas { display: block; background: transparent; }
 .hud-p2 { right: 0; flex-direction: row-reverse; }
 
 .hud-avatar {
-    width: 44px; height: 44px;
-    border-radius: 6px;
-    border: 2px solid rgba(139,92,246,0.6);
+    width: 60px; height: 60px;
+    border-radius: 8px;
+    border: 2px solid rgba(139,92,246,0.7);
     overflow: hidden;
     flex-shrink: 0;
-    background: rgba(0,0,16,0.5);
-    box-shadow: 0 0 14px rgba(139,92,246,0.4), var(--shadow-inset-soft);
+    background: rgba(0,0,16,0.6);
+    box-shadow: 0 0 18px rgba(139,92,246,0.5), var(--shadow-inset-soft);
 }
 .hud-avatar img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
 
-.hud-info { display: flex; flex-direction: column; gap: 3px; padding-top: 2px; }
+.hud-info { display: flex; flex-direction: column; gap: 4px; padding-top: 4px; }
 .hud-info-right { align-items: flex-end; }
 .hud-name {
     font-family: var(--font-display);
-    font-size: 11px; font-weight: 700;
+    font-size: 15px; font-weight: 800;
     color: #fff;
     letter-spacing: 1px;
     line-height: 1;
-    text-shadow: 0 0 8px rgba(139,92,246,0.8);
+    text-shadow: 0 0 10px rgba(139,92,246,1), 0 1px 2px rgba(0,0,0,0.9);
 }
 .hud-bc {
     font-family: var(--font-display);
-    font-size: 9px; font-weight: 600;
+    font-size: 12px; font-weight: 700;
     color: #facc15;
     letter-spacing: 0.5px;
     line-height: 1;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
 }
 
 .rune-row { display: flex; gap: 3px; }
