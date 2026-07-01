@@ -1031,38 +1031,150 @@ canvas { display: block; background: transparent; }
     z-index: 10;
 }
 .hud-block {
-    position: absolute; top: 0;
-    display: flex; align-items: flex-start; gap: 8px;
-    padding: 8px;
+    position: absolute; top: 11%;
+    display: flex; align-items: stretch; gap: 0;
+    background: rgba(5,0,20,0.72);
+    border: 1.5px solid rgba(139,92,246,0.45);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.6), 0 0 16px rgba(139,92,246,0.2);
 }
 .hud-p1 { left: 0; flex-direction: row; }
-.hud-p2 { right: 0; flex-direction: row-reverse; }
+.hud-p2 { right: 0; flex-direction: row; }
 
 .hud-avatar {
-    width: 44px; height: 44px;
-    border-radius: 6px;
-    border: 2px solid rgba(139,92,246,0.6);
-    overflow: hidden;
+    width: 68px;
     flex-shrink: 0;
     background: rgba(0,0,16,0.5);
-    box-shadow: 0 0 14px rgba(139,92,246,0.4), var(--shadow-inset-soft);
+    border-right: 1.5px solid rgba(139,92,246,0.35);
+    overflow: hidden;
+}
+.hud-p2 .hud-avatar {
+    border-right: none;
+    border-left: 1.5px solid rgba(139,92,246,0.35);
 }
 .hud-avatar img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
 
-.hud-info { display: flex; flex-direction: column; gap: 3px; padding-top: 2px; }
+.hud-info {
+    display: flex; flex-direction: column; justify-content: center; gap: 5px;
+    padding: 8px 10px;
+}
 .hud-info-right { align-items: flex-end; }
+.hud-name {
+    font-family: var(--font-display);
+    font-size: 13px; font-weight: 800;
+    color: #fff;
+    letter-spacing: 1px;
+    line-height: 1;
+    white-space: nowrap;
+}
+.hud-bc {
+    font-family: var(--font-display);
+    font-size: 11px; font-weight: 700;
+    color: #facc15;
+    letter-spacing: 0.5px;
+    line-height: 1;
+}
 
-.rune-row { display: flex; gap: 3px; }
+.rune-row { display: flex; gap: 5px; }
 .rune-row-right { flex-direction: row-reverse; }
 .rune {
-    width: 22px; height: 22px;
-    border-radius: 4px;
-    background: rgba(0,0,0,0.55);
-    border: 1px solid rgba(255,255,255,0.12);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: rgba(30,10,60,0.85);
+    border: 1.5px solid rgba(139,92,246,0.6);
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
+    font-size: 12px;
+    box-shadow: 0 0 6px rgba(139,92,246,0.4);
 }
 .rune::after { content: attr(data-rune); }
+
+/* ── Arena Footer Runes ── */
+.footer-runes {
+    position: absolute;
+    bottom: 14%;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+.footer-runes-p1 { left: 10px; }
+.footer-runes-p2 { right: 10px; }
+.footer-rune-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+.footer-rune {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(5,0,20,0.78);
+    border: 2px solid rgba(139,92,246,0.75);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 0 12px rgba(139,92,246,0.5), 0 2px 8px rgba(0,0,0,0.7);
+    flex-shrink: 0;
+}
+/* Rune activation pulse */
+@keyframes rune-activate-pulse {
+    0%   { transform: scale(1);    box-shadow: 0 0 12px rgba(139,92,246,0.5); }
+    25%  { transform: scale(1.4);  box-shadow: 0 0 32px var(--rune-glow, rgba(139,92,246,1)), 0 0 60px var(--rune-glow, rgba(139,92,246,0.6)); }
+    60%  { transform: scale(1.12); box-shadow: 0 0 18px var(--rune-glow, rgba(139,92,246,0.7)); }
+    100% { transform: scale(1);    box-shadow: 0 0 12px rgba(139,92,246,0.5); }
+}
+.footer-rune.rune-activated {
+    animation: rune-activate-pulse 0.9s ease-out forwards;
+}
+
+/* Label flash */
+@keyframes label-flash-anim {
+    0%   { color: rgba(255,255,255,0.75); }
+    30%  { color: #fff; text-shadow: 0 0 8px #fff; }
+    100% { color: rgba(255,255,255,0.75); }
+}
+.footer-rune-label.rune-label-flash {
+    animation: label-flash-anim 0.9s ease-out forwards;
+}
+
+/* Beam from rune down to TCG card */
+@keyframes beam-drop {
+    0%   { opacity: 0;   transform: scaleY(0);   }
+    15%  { opacity: 1;   transform: scaleY(1);   }
+    75%  { opacity: 0.7; transform: scaleY(1);   }
+    100% { opacity: 0;   transform: scaleY(1);   }
+}
+.rune-beam-overlay {
+    position: fixed;
+    width: 4px;
+    height: 140px;
+    background: linear-gradient(to bottom, var(--beam-color, rgba(139,92,246,0.9)), transparent);
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 9999;
+    transform-origin: top;
+    animation: beam-drop 0.85s ease-out forwards;
+}
+
+/* TCG card glow on activation */
+@keyframes card-activate-glow {
+    0%   { box-shadow: none; }
+    30%  { box-shadow: 0 0 24px var(--card-glow, rgba(139,92,246,0.9)), 0 0 8px var(--card-glow, rgba(139,92,246,0.6)); transform: translateY(-4px); }
+    100% { box-shadow: none; transform: translateY(0); }
+}
+.rune-card.card-activated {
+    animation: card-activate-glow 0.9s ease-out forwards;
+}
+
+.footer-rune::after { content: attr(data-rune); }
+.footer-rune-label {
+    font-family: var(--font-display);
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.5px;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+}
 
 /* ── Rune Cards ── */
 #rune-card-hand {
@@ -1469,9 +1581,10 @@ html.light .trollbox-input-row { background: rgba(0,0,0,0.03); }
 
 .bp-fighter {
     display: flex; align-items: center; gap: 0;
-    width: 100%; height: 100%;
+    width: auto; height: 100%;
     padding: 8px 10px;
     gap: 10px;
+    flex-shrink: 0;
 }
 
 .bp-portrait {

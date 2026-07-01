@@ -246,6 +246,8 @@
                                 />
                             </div>
                             <div class="hud-info">
+                                <div class="hud-name" id="hud-name-p1">ROBOT V1</div>
+                                <div class="hud-bc" id="hud-bc-p1">1,240,000 BC</div>
                                 <div class="rune-row" id="runes-p1">
                                     <span
                                         class="rune"
@@ -272,6 +274,8 @@
                         </div>
                         <div class="hud-block hud-p2">
                             <div class="hud-info hud-info-right">
+                                <div class="hud-name" id="hud-name-p2">FLOATROBO</div>
+                                <div class="hud-bc" id="hud-bc-p2">890,000 BC</div>
                                 <div
                                     class="rune-row rune-row-right"
                                     id="runes-p2"
@@ -304,6 +308,45 @@
                                     src="images/fighters/floatrobo/left/stand/0.png"
                                     alt="P2"
                                 />
+                            </div>
+                        </div>
+                        <!-- Footer runes P1 -->
+                        <div class="footer-runes footer-runes-p1" id="footer-runes-p1">
+                            <div class="footer-rune-wrap">
+                                <span class="footer-rune" data-rune="🧪"></span>
+                                <span class="footer-rune-label">POTION</span>
+                            </div>
+                            <div class="footer-rune-wrap">
+                                <span class="footer-rune" data-rune="🛡️"></span>
+                                <span class="footer-rune-label">SHIELD</span>
+                            </div>
+                            <div class="footer-rune-wrap">
+                                <span class="footer-rune" data-rune="🌩️"></span>
+                                <span class="footer-rune-label">THUNDER</span>
+                            </div>
+                            <div class="footer-rune-wrap">
+                                <span class="footer-rune" data-rune="🔒"></span>
+                                <span class="footer-rune-label">LOCKED</span>
+                            </div>
+                        </div>
+
+                        <!-- Footer runes P2 -->
+                        <div class="footer-runes footer-runes-p2" id="footer-runes-p2">
+                            <div class="footer-rune-wrap">
+                                <span class="footer-rune" data-rune="🔒"></span>
+                                <span class="footer-rune-label">LOCKED</span>
+                            </div>
+                            <div class="footer-rune-wrap">
+                                <span class="footer-rune" data-rune="🌩️"></span>
+                                <span class="footer-rune-label">THUNDER</span>
+                            </div>
+                            <div class="footer-rune-wrap">
+                                <span class="footer-rune" data-rune="🛡️"></span>
+                                <span class="footer-rune-label">SHIELD</span>
+                            </div>
+                            <div class="footer-rune-wrap">
+                                <span class="footer-rune" data-rune="🧪"></span>
+                                <span class="footer-rune-label">POTION</span>
                             </div>
                         </div>
                     </div>
@@ -450,90 +493,91 @@
                         </div>
                     </div>
 
-                    <!-- RUNE CARD HAND (desktop bottom bar) -->
-                    <div id="rune-card-hand" aria-label="Rune cards">
-                        <div
-                            class="rune-card"
-                            id="rune-card-potion"
-                            data-rune="potion"
-                            data-status="READY"
-                            role="button"
-                            tabindex="0"
-                        >
-                            <div class="rune-card-cost">1</div>
-                            <div class="rune-card-icon potion-icon">🧪</div>
-                            <div class="rune-card-body">
-                                <div class="rune-card-name">BANTAH POTION</div>
-                                <div class="rune-card-type">Restoration</div>
-                                <div class="rune-card-desc">
-                                    Instantly restores <strong>+30 HP</strong>.
-                                    Auto-triggers when HP falls below 35%. One
-                                    use per battle.
-                                </div>
+                </div>
+
+                <!-- RUNE CARD HAND (centered in bottom panel) -->
+                <div id="rune-card-hand" aria-label="Rune cards">
+                    <div
+                        class="rune-card"
+                        id="rune-card-potion"
+                        data-rune="potion"
+                        data-status="READY"
+                        role="button"
+                        tabindex="0"
+                    >
+                        <div class="rune-card-cost">1</div>
+                        <div class="rune-card-icon potion-icon">🧪</div>
+                        <div class="rune-card-body">
+                            <div class="rune-card-name">BANTAH POTION</div>
+                            <div class="rune-card-type">Restoration</div>
+                            <div class="rune-card-desc">
+                                Instantly restores <strong>+30 HP</strong>.
+                                Auto-triggers when HP falls below 35%. One
+                                use per battle.
                             </div>
-                            <div class="rune-card-meter"><span></span></div>
                         </div>
-                        <div
-                            class="rune-card"
-                            id="rune-card-shield"
-                            data-rune="shield"
-                            data-status="READY"
-                            role="button"
-                            tabindex="0"
-                        >
-                            <div class="rune-card-cost">2</div>
-                            <div class="rune-card-icon shield-icon">🛡️</div>
-                            <div class="rune-card-body">
-                                <div class="rune-card-name">SHIELD</div>
-                                <div class="rune-card-type">Defense</div>
-                                <div class="rune-card-desc">
-                                    Creates a <strong>gold barrier</strong> that
-                                    absorbs the next incoming hit. Lasts 5
-                                    seconds.
-                                </div>
+                        <div class="rune-card-meter"><span></span></div>
+                    </div>
+                    <div
+                        class="rune-card"
+                        id="rune-card-shield"
+                        data-rune="shield"
+                        data-status="READY"
+                        role="button"
+                        tabindex="0"
+                    >
+                        <div class="rune-card-cost">2</div>
+                        <div class="rune-card-icon shield-icon">🛡️</div>
+                        <div class="rune-card-body">
+                            <div class="rune-card-name">SHIELD</div>
+                            <div class="rune-card-type">Defense</div>
+                            <div class="rune-card-desc">
+                                Creates a <strong>gold barrier</strong> that
+                                absorbs the next incoming hit. Lasts 5
+                                seconds.
                             </div>
-                            <div class="rune-card-meter"><span></span></div>
                         </div>
-                        <div
-                            class="rune-card"
-                            id="rune-card-thunder"
-                            data-rune="thunder"
-                            data-status="READY"
-                            role="button"
-                            tabindex="0"
-                        >
-                            <div class="rune-card-cost">3</div>
-                            <div class="rune-card-icon thunder-icon">🌩️</div>
-                            <div class="rune-card-body">
-                                <div class="rune-card-name">THUNDER</div>
-                                <div class="rune-card-type">
-                                    Offense · BC Steal
-                                </div>
-                                <div class="rune-card-desc">
-                                    Summons <strong>massive lightning</strong>.
-                                    Steals 10–35 BC from opponent on hit.
-                                </div>
+                        <div class="rune-card-meter"><span></span></div>
+                    </div>
+                    <div
+                        class="rune-card"
+                        id="rune-card-thunder"
+                        data-rune="thunder"
+                        data-status="READY"
+                        role="button"
+                        tabindex="0"
+                    >
+                        <div class="rune-card-cost">3</div>
+                        <div class="rune-card-icon thunder-icon">🌩️</div>
+                        <div class="rune-card-body">
+                            <div class="rune-card-name">THUNDER</div>
+                            <div class="rune-card-type">
+                                Offense · BC Steal
                             </div>
-                            <div class="rune-card-meter"><span></span></div>
-                        </div>
-                        <div
-                            class="rune-card rune-card-locked"
-                            id="rune-card-empty"
-                            data-rune="empty"
-                            data-status="LOCKED"
-                        >
-                            <div class="rune-card-cost locked-cost">?</div>
-                            <div class="rune-card-icon locked-icon">🔒</div>
-                            <div class="rune-card-body">
-                                <div class="rune-card-name">LOCKED</div>
-                                <div class="rune-card-type">Earn to Unlock</div>
-                                <div class="rune-card-desc">
-                                    Reach <strong>20 Wins</strong> and collect
-                                    500 BC to unlock.
-                                </div>
+                            <div class="rune-card-desc">
+                                Summons <strong>massive lightning</strong>.
+                                Steals 10–35 BC from opponent on hit.
                             </div>
-                            <div class="rune-card-meter"><span></span></div>
                         </div>
+                        <div class="rune-card-meter"><span></span></div>
+                    </div>
+                    <div
+                        class="rune-card rune-card-locked"
+                        id="rune-card-empty"
+                        data-rune="empty"
+                        data-status="LOCKED"
+                    >
+                        <div class="rune-card-cost locked-cost">?</div>
+                        <div class="rune-card-icon locked-icon">🔒</div>
+                        <div class="rune-card-body">
+                            <div class="rune-card-name">LOCKED</div>
+                            <div class="rune-card-type">Earn to Unlock</div>
+                            <div class="rune-card-desc">
+                                Reach <strong>20 Wins</strong> and collect
+                                500 BC to unlock.
+                            </div>
+                        </div>
+                        <div class="rune-card-meter"><span></span></div>
                     </div>
                 </div>
             </div>
@@ -2085,12 +2129,10 @@
                             <tr>
                                 <th class="lb-th lb-th-rank">#</th>
                                 <th class="lb-th">Fighter</th>
-                                <th class="lb-th">Owner</th>
                                 <th class="lb-th lb-th-num">Wins</th>
                                 <th class="lb-th lb-th-num">Losses</th>
-                                <th class="lb-th lb-th-num">Win %</th>
+                                <th class="lb-th lb-th-num">Earned $</th>
                                 <th class="lb-th lb-th-num">BC Earned</th>
-                                <th class="lb-th lb-th-num">Power</th>
                                 <th class="lb-th lb-th-status">Status</th>
                             </tr>
                         </thead>
@@ -2098,89 +2140,73 @@
                             <tr class="lb-row lb-row-gold">
                                 <td class="lb-rank">🥇</td>
                                 <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#1a0a2e,#3d1b7e)">🤖</span><div><div class="lb-name">Robot V1</div><div class="lb-sub">Lv 82</div></div></td>
-                                <td class="lb-owner">0xA12F…B7C9</td>
                                 <td class="lb-num gold">247</td>
                                 <td class="lb-num">38</td>
-                                <td class="lb-num"><span class="lb-pct lb-pct-high">86.7%</span></td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-high">$86.7</span></td>
                                 <td class="lb-num gold">1,240,000 BC</td>
-                                <td class="lb-num">2,450</td>
                                 <td><span class="lb-status lb-status-king">👑 KING</span></td>
                             </tr>
                             <tr class="lb-row lb-row-silver">
                                 <td class="lb-rank">🥈</td>
                                 <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#0a1a2e,#1b3d7e)">🦾</span><div><div class="lb-name">Floatrobo</div><div class="lb-sub">Lv 68</div></div></td>
-                                <td class="lb-owner">0xB34E…C8D1</td>
                                 <td class="lb-num gold">198</td>
                                 <td class="lb-num">52</td>
-                                <td class="lb-num"><span class="lb-pct lb-pct-high">79.2%</span></td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-high">$79.2</span></td>
                                 <td class="lb-num gold">890,000 BC</td>
-                                <td class="lb-num">2,310</td>
                                 <td><span class="lb-status lb-status-queue">⏳ QUEUE</span></td>
                             </tr>
                             <tr class="lb-row lb-row-bronze">
                                 <td class="lb-rank">🥉</td>
                                 <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#1a2e0a,#2e7e1b)">🐸</span><div><div class="lb-name">Robo Pepe</div><div class="lb-sub">Lv 55</div></div></td>
-                                <td class="lb-owner">0xC56D…D2E4</td>
                                 <td class="lb-num gold">162</td>
                                 <td class="lb-num">71</td>
-                                <td class="lb-num"><span class="lb-pct lb-pct-med">69.5%</span></td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-med">$69.5</span></td>
                                 <td class="lb-num gold">605,000 BC</td>
-                                <td class="lb-num">2,180</td>
                                 <td><span class="lb-status lb-status-idle">💤 IDLE</span></td>
                             </tr>
                             <tr class="lb-row">
                                 <td class="lb-rank lb-rank-n">4</td>
                                 <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#2e0a0a,#7e1b1b)">🦀</span><div><div class="lb-name">Crimsonbot</div><div class="lb-sub">Lv 49</div></div></td>
-                                <td class="lb-owner">0xD78F…E3F5</td>
                                 <td class="lb-num gold">131</td>
                                 <td class="lb-num">88</td>
-                                <td class="lb-num"><span class="lb-pct lb-pct-med">59.8%</span></td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-med">$59.8</span></td>
                                 <td class="lb-num gold">412,000 BC</td>
-                                <td class="lb-num">2,050</td>
                                 <td><span class="lb-status lb-status-queue">⏳ QUEUE</span></td>
                             </tr>
                             <tr class="lb-row">
                                 <td class="lb-rank lb-rank-n">5</td>
                                 <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#0a2e1a,#1b7e4a)">💀</span><div><div class="lb-name">Toxicbot</div><div class="lb-sub">Lv 44</div></div></td>
-                                <td class="lb-owner">0xE91A…F4G6</td>
                                 <td class="lb-num gold">109</td>
                                 <td class="lb-num">102</td>
-                                <td class="lb-num"><span class="lb-pct lb-pct-low">51.7%</span></td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-low">$51.7</span></td>
                                 <td class="lb-num gold">298,000 BC</td>
-                                <td class="lb-num">1,980</td>
                                 <td><span class="lb-status lb-status-idle">💤 IDLE</span></td>
                             </tr>
                             <tr class="lb-row">
                                 <td class="lb-rank lb-rank-n">6</td>
                                 <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#1a0a2e,#4a1b7e)">👹</span><div><div class="lb-name">Voidbot</div><div class="lb-sub">Lv 38</div></div></td>
-                                <td class="lb-owner">0xF02B…G5H7</td>
                                 <td class="lb-num gold">87</td>
                                 <td class="lb-num">93</td>
-                                <td class="lb-num"><span class="lb-pct lb-pct-low">48.3%</span></td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-low">$48.3</span></td>
                                 <td class="lb-num gold">201,000 BC</td>
-                                <td class="lb-num">1,820</td>
                                 <td><span class="lb-status lb-status-idle">💤 IDLE</span></td>
                             </tr>
                             <tr class="lb-row">
                                 <td class="lb-rank lb-rank-n">7</td>
                                 <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#2e2a0a,#7e6e1b)">⚡</span><div><div class="lb-name">Fury Man</div><div class="lb-sub">Lv 31</div></div></td>
-                                <td class="lb-owner">0xA88C…I9J2</td>
                                 <td class="lb-num gold">64</td>
                                 <td class="lb-num">71</td>
-                                <td class="lb-num"><span class="lb-pct lb-pct-low">47.4%</span></td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-low">$47.4</span></td>
                                 <td class="lb-num gold">138,000 BC</td>
-                                <td class="lb-num">1,650</td>
                                 <td><span class="lb-status lb-status-queue">⏳ QUEUE</span></td>
                             </tr>
                             <tr class="lb-row">
                                 <td class="lb-rank lb-rank-n">8</td>
                                 <td class="lb-fighter"><span class="lb-avatar" style="background:linear-gradient(135deg,#0a2e2e,#1b7e7e)">🌪</span><div><div class="lb-name">StormBot</div><div class="lb-sub">Lv 22</div></div></td>
-                                <td class="lb-owner">0xB11D…K3L5</td>
                                 <td class="lb-num gold">41</td>
                                 <td class="lb-num">59</td>
-                                <td class="lb-num"><span class="lb-pct lb-pct-low">41.0%</span></td>
+                                <td class="lb-num"><span class="lb-pct lb-pct-low">$41.0</span></td>
                                 <td class="lb-num gold">72,000 BC</td>
-                                <td class="lb-num">1,430</td>
                                 <td><span class="lb-status lb-status-idle">💤 IDLE</span></td>
                             </tr>
                         </tbody>
@@ -2497,7 +2523,18 @@
                     crimsonbot: "CRIMSONBOT",
                     toxicbot: "TOXICBOT",
                     voidbot: "VOIDBOT",
-                    furyman: "FURY",
+                    furyman: "FURY MAN",
+                    silverwarrior: "STORMBOT",
+                };
+                var CHAR_BC = {
+                    char04: "1,240,000 BC",
+                    floatrobo: "890,000 BC",
+                    robopepe: "605,000 BC",
+                    crimsonbot: "412,000 BC",
+                    toxicbot: "298,000 BC",
+                    voidbot: "201,000 BC",
+                    furyman: "138,000 BC",
+                    silverwarrior: "72,000 BC",
                 };
 
                 window.openCpModal = function () {
@@ -2954,6 +2991,79 @@
                     };
                 })();
 
+                /* ── Rune Activation Animations ── */
+                var RUNE_LABEL_MAP = { potion: 'POTION', shield: 'SHIELD', thunder: 'THUNDER' };
+                var RUNE_COLORS = {
+                    thunder: 'rgba(250,204,21,0.95)',
+                    shield:  'rgba(96,165,250,0.95)',
+                    potion:  'rgba(167,139,250,0.95)'
+                };
+
+                function fireRuneBeam(runeEl, runeType) {
+                    var rect = runeEl.getBoundingClientRect();
+                    var beam = document.createElement('div');
+                    beam.className = 'rune-beam-overlay';
+                    beam.style.left = (rect.left + rect.width / 2 - 2) + 'px';
+                    beam.style.top  = rect.bottom + 'px';
+                    beam.style.setProperty('--beam-color', RUNE_COLORS[runeType] || 'rgba(139,92,246,0.95)');
+                    document.body.appendChild(beam);
+                    setTimeout(function () { beam.remove(); }, 900);
+                }
+
+                window.onRuneUsed = function (playerIndex, runeType) {
+                    var containerId = playerIndex === 0 ? 'footer-runes-p1' : 'footer-runes-p2';
+                    var container = document.getElementById(containerId);
+                    if (!container) return;
+
+                    var label = RUNE_LABEL_MAP[runeType];
+                    if (!label) return;
+
+                    // Find matching footer rune wrap
+                    var wraps = container.querySelectorAll('.footer-rune-wrap');
+                    var targetWrap = null;
+                    wraps.forEach(function (wrap) {
+                        var lbl = wrap.querySelector('.footer-rune-label');
+                        if (lbl && lbl.textContent === label) targetWrap = wrap;
+                    });
+                    if (!targetWrap) return;
+
+                    // Pulse the rune icon
+                    var runeEl = targetWrap.querySelector('.footer-rune');
+                    if (runeEl) {
+                        runeEl.classList.remove('rune-activated');
+                        void runeEl.offsetWidth;
+                        runeEl.style.setProperty('--rune-glow', RUNE_COLORS[runeType] || 'rgba(139,92,246,0.9)');
+                        runeEl.classList.add('rune-activated');
+                        setTimeout(function () { runeEl.classList.remove('rune-activated'); }, 950);
+
+                        // Shoot beam downward toward TCG card area
+                        fireRuneBeam(runeEl, runeType);
+                    }
+
+                    // Flash the label
+                    var lblEl = targetWrap.querySelector('.footer-rune-label');
+                    if (lblEl) {
+                        lblEl.classList.remove('rune-label-flash');
+                        void lblEl.offsetWidth;
+                        lblEl.classList.add('rune-label-flash');
+                        setTimeout(function () { lblEl.classList.remove('rune-label-flash'); }, 950);
+                    }
+
+                    // Pulse a random active TCG card
+                    var cardHand = document.getElementById('rune-card-hand');
+                    if (cardHand) {
+                        var activeCards = Array.from(cardHand.querySelectorAll('.rune-card:not(.locked)'));
+                        if (activeCards.length > 0) {
+                            var card = activeCards[Math.floor(Math.random() * activeCards.length)];
+                            card.classList.remove('card-activated');
+                            void card.offsetWidth;
+                            card.style.setProperty('--card-glow', RUNE_COLORS[runeType] || 'rgba(139,92,246,0.9)');
+                            card.classList.add('card-activated');
+                            setTimeout(function () { card.classList.remove('card-activated'); }, 950);
+                        }
+                    }
+                };
+
                 /* ── Loading Screen ── */
                 window.onGameStarted = function () {
                     var loadingEl = $("loading");
@@ -2985,7 +3095,19 @@
                     if (p2Pct) p2Pct.textContent = '50%';
                     if (bar1) bar1.style.width = '50%';
                     if (bar2) bar2.style.width = '50%';
-                    // (Removed POST fetch - queue handles it)
+                    // Update arena HUD avatars, names, BC
+                    var hudImg1 = document.getElementById('hud-img-p1');
+                    var hudImg2 = document.getElementById('hud-img-p2');
+                    var hudName1 = document.getElementById('hud-name-p1');
+                    var hudName2 = document.getElementById('hud-name-p2');
+                    var hudBc1 = document.getElementById('hud-bc-p1');
+                    var hudBc2 = document.getElementById('hud-bc-p2');
+                    if (hudImg1) hudImg1.src = 'images/fighters/' + p1Key + '/left/stand/0.png';
+                    if (hudImg2) hudImg2.src = 'images/fighters/' + p2Key + '/left/stand/0.png';
+                    if (hudName1) hudName1.textContent = (CHAR_DISPLAY[p1Key] || p1Key).toUpperCase();
+                    if (hudName2) hudName2.textContent = (CHAR_DISPLAY[p2Key] || p2Key).toUpperCase();
+                    if (hudBc1) hudBc1.textContent = CHAR_BC[p1Key] || '—';
+                    if (hudBc2) hudBc2.textContent = CHAR_BC[p2Key] || '—';
                 };
 
                 /* ── Init ── */
@@ -4439,10 +4561,15 @@
         
         /* Center TCG cards in bottom panel */
         #bottom-panel {
-            justify-content: center !important;
+            justify-content: flex-start !important;
         }
         #rune-card-hand {
-            border-left: none !important;
+            border-left: 1px solid var(--border2) !important;
+            display: flex !important;
+            align-items: center !important;
+            padding-bottom: 6px !important;
+            flex: 1;
+            justify-content: center;
         }
 
 </style>

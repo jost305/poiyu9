@@ -501,23 +501,26 @@ class BattleScene extends Phaser.Scene {
             };
 
             const rand = Math.random();
-            
+            const playerIdx = attacker.isPlayer1 ? 0 : 1;
+
             // 🛡️ Shield Rune (10% chance to activate if equipped and not already active)
             if (rand < 0.10 && attacker.runes.includes('shield') && !attacker.shieldActive) {
+                if (window.onRuneUsed) window.onRuneUsed(playerIdx, 'shield');
                 attacker.activateShield();
             }
             // ⚡ Massive Thunder Attacks (15% chance total)
             else if (rand < 0.175 && attacker.runes.includes('thunder')) {
-                // Trigger Thunder Top
+                if (window.onRuneUsed) window.onRuneUsed(playerIdx, 'thunder');
                 attacker.attackThunderTop(defender, baseDamage * 2, onHit);
             } else if (rand < 0.25 && attacker.runes.includes('thunder')) {
-                // Trigger Thunder Straight
+                if (window.onRuneUsed) window.onRuneUsed(playerIdx, 'thunder');
                 attacker.attackThunderStraight(defender, baseDamage * 2, onHit);
             } else if (rand > 0.60) {
-                // Dash attack
+                // Dash attack — no rune
                 attacker.attack(defender, onHit);
             } else {
-                // Fireball magic
+                // Fireball magic = potion rune
+                if (window.onRuneUsed) window.onRuneUsed(playerIdx, 'potion');
                 attacker.shootFireball(defender, baseDamage, onHit);
             }
         }
