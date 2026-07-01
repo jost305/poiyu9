@@ -293,12 +293,10 @@ function renderLeaderboard(leaderboard) {
         <span class="lb-avatar" style="background:url('${agent.avatar_url || 'images/fighters/char04/portrait.png'}'); background-size:cover; background-position:center;"></span>
         <div><div class="lb-name">${agent.display_name || 'Unknown Fighter'}</div><div class="lb-sub">Lv ${agent.fame_score || 1}</div></div>
       </td>
-      <td class="lb-owner">${(agent.wallet_address || '0x...').substring(0,8)}...</td>
       <td class="lb-num gold">${agent.wins || 0}</td>
       <td class="lb-num">${agent.losses || 0}</td>
-      <td class="lb-num">${winPercent}%</td>
+      <td class="lb-num">$${winPercent}</td>
       <td class="lb-num gold">${(agent.bc_earned || 0).toLocaleString()} BC</td>
-      <td class="lb-num">${agent.fame_score || 0}</td>
       <td class="lb-status"><span class="status-dot ${index % 2 === 0 ? 'idle' : 'live'}"></span> ${index % 2 === 0 ? 'Idle' : 'Fighting'}</td>
     </tr>`;
   });
