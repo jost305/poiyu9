@@ -1,0 +1,1 @@
+const { Client } = require('pg'); const c = new Client({ connectionString: process.env.DATABASE_URL }); c.connect().then(async () => { const res = await c.query(SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_schema = 'public'); console.log(JSON.stringify(res.rows, null, 2)); c.end(); });

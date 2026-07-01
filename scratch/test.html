@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>Test Privy</h1>
+  <script type="module">
+    try {
+      const module = await import('https://esm.sh/@privy-io/js-sdk-core');
+      console.log('Module loaded:', Object.keys(module));
+      const privy = new module.PrivyClient({ appId: 'cm4winhli04jg1tvq07cb8942' });
+      console.log('PrivyClient created:', privy);
+      document.body.innerHTML += '<p>Success!</p>';
+    } catch(e) {
+      console.error(e);
+      document.body.innerHTML += '<p>Error: ' + e.message + '</p>';
+    }
+  </script>
+</body>
+</html>
