@@ -257,6 +257,43 @@ app.post('/api/bantahbro/chat', async (req, res) => {
   }
 });
 
+// Battles API - POST (create a new battle)
+app.post('/api/bantahbro/battles', async (req, res) => {
+  try {
+    const { p1_agent, p2_agent, p1_wallet, p2_wallet } = req.body;
+    if (!p1_agent) return res.status(400).json({ error: 'p1_agent required' });
+
+    // Mark any previously live battles as ended
+    await dbClient.query(`UPDATE bota_arena_battles SET status = 'ended', updated_at = NOW() WHERE status = 'live'`);
+
+    const result = await dbClient.query(
+      `INSERT INTO bota_arena_battles (p1_wallet, p1_agent, p2_wallet, p2_agent, status)
+       VALUES ($1, $2, $3, $4, 'live') RETURNING id`,
+      [p1_wallet || 'arena.sim', p1_agent, p2_wallet || 'arena.sim', p2_agent || '???']
+    );
+    res.json({ success: true, id: result.rows[0].id });
+  } catch (error) {
+    console.error('Battles POST Error:', error);
+    res.status(500).json({ error: 'Failed to create battle' });
+  }
+});
+
+// Battles API - PATCH (update status/winner)
+app.patch('/api/bantahbro/battles/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, winner } = req.body;
+    await dbClient.query(
+      `UPDATE bota_arena_battles SET status = $1, winner = $2, updated_at = NOW() WHERE id = $3`,
+      [status || 'ended', winner || null, id]
+    );
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Battles PATCH Error:', error);
+    res.status(500).json({ error: 'Failed to update battle' });
+  }
+});
+
 // Battles API - GET
 app.get('/api/bantahbro/battles', async (req, res) => {
   try {

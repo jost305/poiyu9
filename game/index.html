@@ -2871,6 +2871,15 @@
                     var loserName = cpPicks[1 - winnerIdx];
                     var winnerDisplay = CHAR_DISPLAY[winnerName] || winnerName;
                     var loserDisplay = CHAR_DISPLAY[loserName] || loserName;
+                    // Mark this battle ended in the DB
+                    if (_currentBattleId) {
+                        fetch('/api/bantahbro/battles/' + _currentBattleId, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ status: 'ended', winner: winnerDisplay })
+                        }).catch(function() {});
+                        _currentBattleId = null;
+                    }
                     kingStreak++;
                     kingDefended++;
                     var earned =
@@ -2995,10 +3004,24 @@
                 };
 
                 var _origStartPhaserMatch = window.startPhaserMatch;
+                var _currentBattleId = null;
                 window.startPhaserMatch = function (p1Key, p2Key) {
                     var loadingEl = $("loading");
                     if (loadingEl) loadingEl.style.display = "flex";
                     _origStartPhaserMatch(p1Key, p2Key);
+                    // Record this battle in the DB so Challenges page stays in sync
+                    fetch('/api/bantahbro/battles', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            p1_agent: CHAR_DISPLAY[p1Key] || p1Key,
+                            p2_agent: CHAR_DISPLAY[p2Key] || p2Key,
+                            p1_wallet: 'arena.sim',
+                            p2_wallet: 'arena.sim'
+                        })
+                    }).then(function(r) { return r.json(); })
+                      .then(function(d) { if (d.id) _currentBattleId = d.id; })
+                      .catch(function() {});
                 };
 
                 /* â”€â”€ Init â”€â”€ */
