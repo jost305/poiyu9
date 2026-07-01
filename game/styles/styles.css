@@ -1115,6 +1115,56 @@ canvas { display: block; background: transparent; }
     box-shadow: 0 0 12px rgba(139,92,246,0.5), 0 2px 8px rgba(0,0,0,0.7);
     flex-shrink: 0;
 }
+/* Rune activation pulse */
+@keyframes rune-activate-pulse {
+    0%   { transform: scale(1);    box-shadow: 0 0 12px rgba(139,92,246,0.5); }
+    25%  { transform: scale(1.4);  box-shadow: 0 0 32px var(--rune-glow, rgba(139,92,246,1)), 0 0 60px var(--rune-glow, rgba(139,92,246,0.6)); }
+    60%  { transform: scale(1.12); box-shadow: 0 0 18px var(--rune-glow, rgba(139,92,246,0.7)); }
+    100% { transform: scale(1);    box-shadow: 0 0 12px rgba(139,92,246,0.5); }
+}
+.footer-rune.rune-activated {
+    animation: rune-activate-pulse 0.9s ease-out forwards;
+}
+
+/* Label flash */
+@keyframes label-flash-anim {
+    0%   { color: rgba(255,255,255,0.75); }
+    30%  { color: #fff; text-shadow: 0 0 8px #fff; }
+    100% { color: rgba(255,255,255,0.75); }
+}
+.footer-rune-label.rune-label-flash {
+    animation: label-flash-anim 0.9s ease-out forwards;
+}
+
+/* Beam from rune down to TCG card */
+@keyframes beam-drop {
+    0%   { opacity: 0;   transform: scaleY(0);   }
+    15%  { opacity: 1;   transform: scaleY(1);   }
+    75%  { opacity: 0.7; transform: scaleY(1);   }
+    100% { opacity: 0;   transform: scaleY(1);   }
+}
+.rune-beam-overlay {
+    position: fixed;
+    width: 4px;
+    height: 140px;
+    background: linear-gradient(to bottom, var(--beam-color, rgba(139,92,246,0.9)), transparent);
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 9999;
+    transform-origin: top;
+    animation: beam-drop 0.85s ease-out forwards;
+}
+
+/* TCG card glow on activation */
+@keyframes card-activate-glow {
+    0%   { box-shadow: none; }
+    30%  { box-shadow: 0 0 24px var(--card-glow, rgba(139,92,246,0.9)), 0 0 8px var(--card-glow, rgba(139,92,246,0.6)); transform: translateY(-4px); }
+    100% { box-shadow: none; transform: translateY(0); }
+}
+.rune-card.card-activated {
+    animation: card-activate-glow 0.9s ease-out forwards;
+}
+
 .footer-rune::after { content: attr(data-rune); }
 .footer-rune-label {
     font-family: var(--font-display);

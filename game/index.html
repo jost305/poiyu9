@@ -2991,6 +2991,79 @@
                     };
                 })();
 
+                /* ── Rune Activation Animations ── */
+                var RUNE_LABEL_MAP = { potion: 'POTION', shield: 'SHIELD', thunder: 'THUNDER' };
+                var RUNE_COLORS = {
+                    thunder: 'rgba(250,204,21,0.95)',
+                    shield:  'rgba(96,165,250,0.95)',
+                    potion:  'rgba(167,139,250,0.95)'
+                };
+
+                function fireRuneBeam(runeEl, runeType) {
+                    var rect = runeEl.getBoundingClientRect();
+                    var beam = document.createElement('div');
+                    beam.className = 'rune-beam-overlay';
+                    beam.style.left = (rect.left + rect.width / 2 - 2) + 'px';
+                    beam.style.top  = rect.bottom + 'px';
+                    beam.style.setProperty('--beam-color', RUNE_COLORS[runeType] || 'rgba(139,92,246,0.95)');
+                    document.body.appendChild(beam);
+                    setTimeout(function () { beam.remove(); }, 900);
+                }
+
+                window.onRuneUsed = function (playerIndex, runeType) {
+                    var containerId = playerIndex === 0 ? 'footer-runes-p1' : 'footer-runes-p2';
+                    var container = document.getElementById(containerId);
+                    if (!container) return;
+
+                    var label = RUNE_LABEL_MAP[runeType];
+                    if (!label) return;
+
+                    // Find matching footer rune wrap
+                    var wraps = container.querySelectorAll('.footer-rune-wrap');
+                    var targetWrap = null;
+                    wraps.forEach(function (wrap) {
+                        var lbl = wrap.querySelector('.footer-rune-label');
+                        if (lbl && lbl.textContent === label) targetWrap = wrap;
+                    });
+                    if (!targetWrap) return;
+
+                    // Pulse the rune icon
+                    var runeEl = targetWrap.querySelector('.footer-rune');
+                    if (runeEl) {
+                        runeEl.classList.remove('rune-activated');
+                        void runeEl.offsetWidth;
+                        runeEl.style.setProperty('--rune-glow', RUNE_COLORS[runeType] || 'rgba(139,92,246,0.9)');
+                        runeEl.classList.add('rune-activated');
+                        setTimeout(function () { runeEl.classList.remove('rune-activated'); }, 950);
+
+                        // Shoot beam downward toward TCG card area
+                        fireRuneBeam(runeEl, runeType);
+                    }
+
+                    // Flash the label
+                    var lblEl = targetWrap.querySelector('.footer-rune-label');
+                    if (lblEl) {
+                        lblEl.classList.remove('rune-label-flash');
+                        void lblEl.offsetWidth;
+                        lblEl.classList.add('rune-label-flash');
+                        setTimeout(function () { lblEl.classList.remove('rune-label-flash'); }, 950);
+                    }
+
+                    // Pulse a random active TCG card
+                    var cardHand = document.getElementById('rune-card-hand');
+                    if (cardHand) {
+                        var activeCards = Array.from(cardHand.querySelectorAll('.rune-card:not(.locked)'));
+                        if (activeCards.length > 0) {
+                            var card = activeCards[Math.floor(Math.random() * activeCards.length)];
+                            card.classList.remove('card-activated');
+                            void card.offsetWidth;
+                            card.style.setProperty('--card-glow', RUNE_COLORS[runeType] || 'rgba(139,92,246,0.9)');
+                            card.classList.add('card-activated');
+                            setTimeout(function () { card.classList.remove('card-activated'); }, 950);
+                        }
+                    }
+                };
+
                 /* ── Loading Screen ── */
                 window.onGameStarted = function () {
                     var loadingEl = $("loading");
