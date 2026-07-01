@@ -246,6 +246,8 @@
                                 />
                             </div>
                             <div class="hud-info">
+                                <div class="hud-name" id="hud-name-p1">ROBOT V1</div>
+                                <div class="hud-bc" id="hud-bc-p1">1,240,000 BC</div>
                                 <div class="rune-row" id="runes-p1">
                                     <span
                                         class="rune"
@@ -272,6 +274,8 @@
                         </div>
                         <div class="hud-block hud-p2">
                             <div class="hud-info hud-info-right">
+                                <div class="hud-name" id="hud-name-p2">FLOATROBO</div>
+                                <div class="hud-bc" id="hud-bc-p2">890,000 BC</div>
                                 <div
                                     class="rune-row rune-row-right"
                                     id="runes-p2"
@@ -2480,7 +2484,18 @@
                     crimsonbot: "CRIMSONBOT",
                     toxicbot: "TOXICBOT",
                     voidbot: "VOIDBOT",
-                    furyman: "FURY",
+                    furyman: "FURY MAN",
+                    silverwarrior: "STORMBOT",
+                };
+                var CHAR_BC = {
+                    char04: "1,240,000 BC",
+                    floatrobo: "890,000 BC",
+                    robopepe: "605,000 BC",
+                    crimsonbot: "412,000 BC",
+                    toxicbot: "298,000 BC",
+                    voidbot: "201,000 BC",
+                    furyman: "138,000 BC",
+                    silverwarrior: "72,000 BC",
                 };
 
                 window.openCpModal = function () {
@@ -2968,7 +2983,19 @@
                     if (p2Pct) p2Pct.textContent = '50%';
                     if (bar1) bar1.style.width = '50%';
                     if (bar2) bar2.style.width = '50%';
-                    // (Removed POST fetch - queue handles it)
+                    // Update arena HUD avatars, names, BC
+                    var hudImg1 = document.getElementById('hud-img-p1');
+                    var hudImg2 = document.getElementById('hud-img-p2');
+                    var hudName1 = document.getElementById('hud-name-p1');
+                    var hudName2 = document.getElementById('hud-name-p2');
+                    var hudBc1 = document.getElementById('hud-bc-p1');
+                    var hudBc2 = document.getElementById('hud-bc-p2');
+                    if (hudImg1) hudImg1.src = 'images/fighters/' + p1Key + '/left/stand/0.png';
+                    if (hudImg2) hudImg2.src = 'images/fighters/' + p2Key + '/left/stand/0.png';
+                    if (hudName1) hudName1.textContent = (CHAR_DISPLAY[p1Key] || p1Key).toUpperCase();
+                    if (hudName2) hudName2.textContent = (CHAR_DISPLAY[p2Key] || p2Key).toUpperCase();
+                    if (hudBc1) hudBc1.textContent = CHAR_BC[p1Key] || '—';
+                    if (hudBc2) hudBc2.textContent = CHAR_BC[p2Key] || '—';
                 };
 
                 /* ── Init ── */
