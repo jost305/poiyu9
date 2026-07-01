@@ -1031,7 +1031,7 @@ canvas { display: block; background: transparent; }
     z-index: 10;
 }
 .hud-block {
-    position: absolute; top: 18%;
+    position: absolute; top: 5%;
     display: flex; align-items: flex-start; gap: 8px;
     padding: 8px;
 }
