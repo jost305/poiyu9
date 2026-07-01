@@ -1032,55 +1032,60 @@ canvas { display: block; background: transparent; }
 }
 .hud-block {
     position: absolute; top: 11%;
-    display: flex; align-items: flex-start; gap: 8px;
-    padding: 8px;
+    display: flex; align-items: stretch; gap: 0;
+    background: rgba(5,0,20,0.72);
+    border: 1.5px solid rgba(139,92,246,0.45);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.6), 0 0 16px rgba(139,92,246,0.2);
 }
 .hud-p1 { left: 0; flex-direction: row; }
 .hud-p2 { right: 0; flex-direction: row; }
 
 .hud-avatar {
-    width: 60px; height: 60px;
-    border-radius: 8px;
-    border: 2px solid rgba(139,92,246,0.7);
-    overflow: hidden;
+    width: 68px;
     flex-shrink: 0;
-    background: rgba(0,0,16,0.6);
-    box-shadow: 0 0 18px rgba(139,92,246,0.5), var(--shadow-inset-soft);
+    background: rgba(0,0,16,0.5);
+    border-right: 1.5px solid rgba(139,92,246,0.35);
+    overflow: hidden;
+}
+.hud-p2 .hud-avatar {
+    border-right: none;
+    border-left: 1.5px solid rgba(139,92,246,0.35);
 }
 .hud-avatar img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
 
 .hud-info {
-    display: flex; flex-direction: column; gap: 4px; padding: 6px 8px;
-    background: rgba(0,0,0,0.45);
-    border-radius: 6px;
+    display: flex; flex-direction: column; justify-content: center; gap: 5px;
+    padding: 8px 10px;
 }
 .hud-info-right { align-items: flex-end; }
 .hud-name {
     font-family: var(--font-display);
-    font-size: 15px; font-weight: 800;
+    font-size: 13px; font-weight: 800;
     color: #fff;
     letter-spacing: 1px;
     line-height: 1;
-    text-shadow: 0 0 10px rgba(139,92,246,1), 0 1px 2px rgba(0,0,0,0.9);
+    white-space: nowrap;
 }
 .hud-bc {
     font-family: var(--font-display);
-    font-size: 12px; font-weight: 700;
+    font-size: 11px; font-weight: 700;
     color: #facc15;
     letter-spacing: 0.5px;
     line-height: 1;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
 }
 
-.rune-row { display: flex; gap: 3px; }
+.rune-row { display: flex; gap: 5px; }
 .rune-row-right { flex-direction: row-reverse; }
 .rune {
-    width: 22px; height: 22px;
-    border-radius: 4px;
-    background: rgba(0,0,0,0.55);
-    border: 1px solid rgba(255,255,255,0.12);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: rgba(30,10,60,0.85);
+    border: 1.5px solid rgba(139,92,246,0.6);
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
+    font-size: 12px;
+    box-shadow: 0 0 6px rgba(139,92,246,0.4);
 }
 .rune::after { content: attr(data-rune); }
 
