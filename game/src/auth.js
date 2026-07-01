@@ -451,6 +451,97 @@ document.addEventListener('DOMContentLoaded', () => {
 // DYNAMIC CHALLENGES AND QUEUE
 // ==========================================
 
+
+
+async function loadNotifications() {
+    try {
+        const res = await fetch('/api/bantahbro/notifications');
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        const container = document.getElementById('notif-list-container');
+        if (!container) return;
+        
+        if (!data.notifications || data.notifications.length === 0) {
+            container.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:12px;">No recent notifications.</div>';
+            return;
+        }
+        
+        container.innerHTML = data.notifications.map(n => {
+            const timeStr = n.created_at ? new Date(n.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now';
+            return `
+            <div class="notif-item">
+                <div class="notif-icon">${n.icon || '??'}</div>
+                <div class="notif-content">
+                    <div class="notif-title">${n.title || 'System Notification'}</div>
+                    <div class="notif-desc">${n.message || ''}</div>
+                    <div class="notif-time">${timeStr}</div>
+                </div>
+            </div>
+            `;
+        }).join('');
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function loadLivePredictions() {
+    try {
+        const res = await fetch('/api/bantahbro/battles?status=live');
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        const container = document.getElementById('pred-matchups-container');
+        if (!container) return;
+        
+        if (!data.battles || data.battles.length === 0) {
+            container.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:12px;">No live predictions available.</div>';
+            return;
+        }
+        
+        container.innerHTML = data.battles.map(b => {
+            const p1Avatar = getFighterAvatar(b.p1_agent, 'right') || 'images/fighters/char04/portrait.png';
+            const p2Avatar = getFighterAvatar(b.p2_agent, 'left') || 'images/fighters/char04/portrait.png';
+            const pool = b.prize_pool ? b.prize_pool : '128,450';
+            
+            return `
+            <div class="pred-matchup" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <div class="pred-fighter pred-fighter-p1">
+                        <div class="pred-fighter-portrait p1-portrait" style="background:rgba(255,255,255,0.05); overflow:hidden;">
+                            <img src="${p1Avatar}" alt="P1" style="width:100%; height:100%; object-fit:contain; image-rendering:pixelated;" onerror="this.src='images/fighters/char04/portrait.png'" />
+                        </div>
+                        <div class="pred-fighter-name">${b.p1_agent || 'ROBOT V1'}</div>
+                        <div class="pred-fighter-pct pred-pct-blue">50%</div>
+                    </div>
+
+                    <div class="pred-vs-col">
+                        <div class="pred-vs-badge">VS</div>
+                    </div>
+
+                    <div class="pred-fighter pred-fighter-p2">
+                        <div class="pred-fighter-portrait p2-portrait" style="background:rgba(255,255,255,0.05); overflow:hidden;">
+                            <img src="${p2Avatar}" alt="P2" style="width:100%; height:100%; object-fit:contain; image-rendering:pixelated;" onerror="this.src='images/fighters/char04/portrait.png'" />
+                        </div>
+                        <div class="pred-fighter-name">${b.p2_agent || 'FLOATROBO'}</div>
+                        <div class="pred-fighter-pct pred-pct-red">50%</div>
+                    </div>
+                </div>
+
+                <div class="pred-pool">POOL: ${pool} BC</div>
+                
+                <div class="pred-actions">
+                    <button class="pred-btn pred-btn-p1">&#x2694; BACK P1</button>
+                    <button class="pred-btn pred-btn-p2">BACK P2 &#x2694;</button>
+                </div>
+            </div>
+            `;
+        }).join('');
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 async function loadChallengerQueue() {
     try {
         const res = await fetch('/api/bantahbro/battles?status=queued');
@@ -516,24 +607,41 @@ async function loadChallengesPage() {
 
         function shortAddr(addr) {
             if (!addr) return '0x???';
-            return addr.substring(0, 6) + '…' + addr.slice(-4);
+            return addr.substring(0, 6) + '...' + addr.slice(-4);
+        }
+        
+        function getFighterAvatar(agentName, facing) {
+            if (!agentName) return `images/fighters/char04/${facing}/idle/0.png`;
+            const normalized = agentName.toLowerCase().replace(/\s+/g, '');
+            let folder = normalized;
+            if (normalized === 'robotv1') folder = 'char04';
+            if (normalized === 'robopepe') folder = 'char03';
+            return `images/fighters/${folder}/${facing}/idle/0.png`;
         }
 
+        
         // Render Live
         liveList.innerHTML = live.length ? live.map(b => `
             <div class="ch-card ch-card-live">
                 <div class="ch-card-fighters">
-                    <div class="ch-fighter-block">
-                        <div class="ch-fighter-name">${b.p1_agent || 'Fighter'}</div>
-                        <div class="ch-fighter-wallet">${shortAddr(b.p1_wallet)}</div>
+                    <div class="ch-fighter-block" style="display:flex; align-items:center; gap:10px;">
+                        <img src="${getFighterAvatar(b.p1_agent, 'right')}" style="width:40px; height:40px; object-fit:contain; image-rendering:pixelated; background:rgba(255,255,255,0.05); border-radius:8px;" onerror="this.src='images/fighters/char04/right/idle/0.png'">
+                        <div>
+                            <div class="ch-fighter-name">${b.p1_agent || 'Fighter'}</div>
+                            <div class="ch-fighter-wallet">${shortAddr(b.p1_wallet)}</div>
+                        </div>
                     </div>
                     <div class="ch-vs-badge">VS</div>
-                    <div class="ch-fighter-block">
-                        <div class="ch-fighter-name">${b.p2_agent || '???'}</div>
-                        <div class="ch-fighter-wallet">${shortAddr(b.p2_wallet)}</div>
+                    <div class="ch-fighter-block" style="display:flex; align-items:center; gap:10px; flex-direction:row-reverse; text-align:right;">
+                        <img src="${getFighterAvatar(b.p2_agent, 'left')}" style="width:40px; height:40px; object-fit:contain; image-rendering:pixelated; background:rgba(255,255,255,0.05); border-radius:8px;" onerror="this.src='images/fighters/char04/left/idle/0.png'">
+                        <div>
+                            <div class="ch-fighter-name">${b.p2_agent || '???'}</div>
+                            <div class="ch-fighter-wallet">${shortAddr(b.p2_wallet)}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="ch-card-status">
+                <div class="ch-card-status" style="display:flex; flex-direction:column; align-items:flex-end; gap:5px;">
+                    <div style="font-weight:bold; color:#aaffaa; font-family:monospace; font-size:14px;">${b.prize_pool ? `${b.prize_pool} BC` : '2,000 BC'}</div>
                     <span class="ch-status-badge ch-badge-live"><span class="ch-pulse-dot" style="width:5px;height:5px;"></span> LIVE</span>
                 </div>
             </div>
@@ -544,37 +652,56 @@ async function loadChallengesPage() {
             <div class="ch-card ch-card-queue">
                 <div class="ch-queue-num">${i + 1}</div>
                 <div class="ch-card-fighters">
-                    <div class="ch-fighter-block">
-                        <div class="ch-fighter-name">${b.p1_agent || 'Fighter'}</div>
-                        <div class="ch-fighter-wallet">${shortAddr(b.p1_wallet)}</div>
+                    <div class="ch-fighter-block" style="display:flex; align-items:center; gap:10px;">
+                        <img src="${getFighterAvatar(b.p1_agent, 'right')}" style="width:40px; height:40px; object-fit:contain; image-rendering:pixelated; background:rgba(255,255,255,0.05); border-radius:8px;" onerror="this.src='images/fighters/char04/right/idle/0.png'">
+                        <div>
+                            <div class="ch-fighter-name">${b.p1_agent || 'Fighter'}</div>
+                            <div class="ch-fighter-wallet">${shortAddr(b.p1_wallet)}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="ch-card-status">
+                <div class="ch-card-status" style="display:flex; flex-direction:column; align-items:flex-end; gap:5px;">
+                    <div style="font-weight:bold; color:#aaffaa; font-family:monospace; font-size:14px;">${b.prize_pool ? `${b.prize_pool} BC` : '2,000 BC'}</div>
                     <span class="ch-status-badge ch-badge-queue">&#x23F3; WAITING</span>
                 </div>
             </div>
         `).join('') : `<div class="ch-empty"><div class="ch-empty-icon">&#x23F3;</div><div class="ch-empty-title">Queue is empty</div><div class="ch-empty-sub">No challengers waiting &mdash; be the first!</div></div>`;
 
         // Render Ended
-        historyList.innerHTML = ended.length ? ended.map(b => `
-            <div class="ch-card ch-card-ended">
-                <div class="ch-card-fighters">
-                    <div class="ch-fighter-block">
-                        <div class="ch-fighter-name">${b.p1_agent || 'Fighter'}</div>
-                        <div class="ch-fighter-wallet">${shortAddr(b.p1_wallet)}</div>
-                    </div>
-                    <div class="ch-vs-badge">VS</div>
-                    <div class="ch-fighter-block">
-                        <div class="ch-fighter-name">${b.p2_agent || '???'}</div>
-                        <div class="ch-fighter-wallet">${shortAddr(b.p2_wallet)}</div>
-                    </div>
+        historyList.innerHTML = ended.length ? `
+            <div class="ch-history-table">
+                <div class="ch-htable-header">
+                    <div>Fighter 1</div>
+                    <div></div>
+                    <div>Fighter 2</div>
+                    <div>Winner</div>
+                    <div>Prize Pool</div>
                 </div>
-                <div class="ch-card-status">
-                    <span class="ch-status-badge ch-badge-ended">&#x1F3C6; ENDED</span>
-                    ${b.winner ? `<div class="ch-winner-label">WINNER: ${b.winner}</div>` : ''}
-                </div>
+                ${ended.map(b => `
+                    <div class="ch-htable-row">
+                        <div class="ch-fighter-block" style="display:flex; align-items:center; gap:10px;">
+                            <img src="${getFighterAvatar(b.p1_agent, 'right')}" style="width:36px; height:36px; object-fit:contain; image-rendering:pixelated; background:rgba(255,255,255,0.05); border-radius:6px;" onerror="this.src='images/fighters/char04/right/idle/0.png'">
+                            <div>
+                                <div class="ch-fighter-name" style="font-size:14px;">${b.p1_agent || 'Fighter'}</div>
+                            </div>
+                        </div>
+                        <div class="ch-vs-badge" style="font-size:10px; padding:2px 4px; opacity:0.5; margin:auto;">VS</div>
+                        <div class="ch-fighter-block" style="display:flex; align-items:center; gap:10px; flex-direction:row-reverse; text-align:right;">
+                            <img src="${getFighterAvatar(b.p2_agent, 'left')}" style="width:36px; height:36px; object-fit:contain; image-rendering:pixelated; background:rgba(255,255,255,0.05); border-radius:6px;" onerror="this.src='images/fighters/char04/left/idle/0.png'">
+                            <div>
+                                <div class="ch-fighter-name" style="font-size:14px;">${b.p2_agent || '???'}</div>
+                            </div>
+                        </div>
+                        <div class="ch-winner-col" style="display:flex; align-items:center; justify-content:flex-end;">
+                            ${b.winner ? `<div class="ch-winner-label" style="display:inline-block; padding:4px 8px; background:rgba(255,215,0,0.15); color:#ffd700; border-radius:4px; font-weight:bold; font-size:12px;">${b.winner}</div>` : '<span style="color:#666;">Draw</span>'}
+                        </div>
+                        <div class="ch-prize-col" style="font-weight:bold; color:#aaffaa; display:flex; align-items:center; justify-content:flex-end;">
+                            ${b.prize_pool ? `${b.prize_pool} BC` : '2,000 BC'}
+                        </div>
+                    </div>
+                `).join('')}
             </div>
-        `).join('') : `<div class="ch-empty"><div class="ch-empty-icon">&#x1F4DC;</div><div class="ch-empty-title">No battle history</div><div class="ch-empty-sub">Completed fights will appear here.</div></div>`;
+        ` : `<div class="ch-empty"><div class="ch-empty-icon">&#x1F4DC;</div><div class="ch-empty-title">No battle history</div><div class="ch-empty-sub">Completed fights will appear here.</div></div>`;
 
     } catch (e) {
         console.error(e);
@@ -602,6 +729,80 @@ window.openPage = function(pageId) {
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         loadChallengerQueue();
-        setInterval(loadChallengerQueue, 5000); // Poll every 5s
+        loadLivePredictions();
+        loadNotifications();
+        setInterval(loadChallengerQueue, 5000);
+        loadLivePredictions();
+        setInterval(loadLivePredictions, 5000);
+        setInterval(loadNotifications, 5000); // Poll every 5s
+        
+        // Kick off the auto-battle loop
+        window.startAutoBattle();
     }, 1200);
 });
+
+// ==========================================
+// AUTOMATED BATTLE SEQUENCER
+// ==========================================
+
+window.startAutoBattle = async function() {
+    console.log("Checking queue for next battle...");
+    try {
+        const res = await fetch('/api/bantahbro/battles/next', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await res.json();
+        
+        if (data.success && data.battle) {
+            console.log("Starting auto-battle:", data.battle.p1_agent, "vs", data.battle.p2_agent);
+            window._currentBattleId = data.battle.id;
+            
+            // Wait a brief moment before firing the visual engine
+            setTimeout(() => {
+                if (typeof window.startPhaserMatch === 'function') {
+                    window.startPhaserMatch(data.battle.p1_agent, data.battle.p2_agent);
+                }
+            }, 1000);
+        } else {
+            console.log("Queue is empty. Waiting for challengers...");
+            // Poll again in 5 seconds
+            setTimeout(window.startAutoBattle, 5000);
+        }
+    } catch (err) {
+        console.error("Failed to fetch next battle:", err);
+        setTimeout(window.startAutoBattle, 5000);
+    }
+};
+
+window.onGameEnd = async function(winnerIndex) {
+    console.log("Game Ended. Winner index:", winnerIndex);
+    if (window._currentBattleId) {
+        try {
+            // Get the battle info to know who won
+            const res = await fetch('/api/bantahbro/battles');
+            const data = await res.json();
+            const currentBattle = data.battles.find(b => b.id === window._currentBattleId);
+            
+            if (currentBattle) {
+                const winnerKey = winnerIndex === 0 ? currentBattle.p1_agent : currentBattle.p2_agent;
+                
+                await fetch('/api/bantahbro/battles/' + window._currentBattleId, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        status: 'ended',
+                        winner: winnerKey
+                    })
+                });
+                console.log("Battle marked as ended. Winner:", winnerKey);
+            }
+        } catch (err) {
+            console.error("Error patching battle end:", err);
+        }
+    }
+    
+    // Wait 3 seconds, then start the next fight from the queue automatically
+    console.log("Starting next battle in 3 seconds...");
+    setTimeout(window.startAutoBattle, 3000);
+};

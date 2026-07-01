@@ -1,4 +1,4 @@
-﻿var express = require('express'),
+var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
     io = require('socket.io')(server),
@@ -51,10 +51,19 @@ dbClient.connect().then(async () => {
         wallet_address VARCHAR(100),
         message TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-    await dbClient.query(`
-      CREATE TABLE IF NOT EXISTS bota_arena_battles (
+      )`);
+      await dbClient.query(`
+        CREATE TABLE IF NOT EXISTS bota_notifications (
+          id SERIAL PRIMARY KEY,
+          user_id VARCHAR(100),
+          title VARCHAR(100),
+          message TEXT,
+          type VARCHAR(50),
+          icon VARCHAR(10),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`);
+      await dbClient.query(`
+        CREATE TABLE IF NOT EXISTS bota_arena_battles (
         id SERIAL PRIMARY KEY,
         p1_wallet VARCHAR(100),
         p1_agent VARCHAR(100),
@@ -258,6 +267,76 @@ app.post('/api/bantahbro/chat', async (req, res) => {
 });
 
 // Battles API - POST (create a new battle)
+
+// POST /api/bantahbro/battles/next
+// Auto-start the next queued battle
+app.post('/api/bantahbro/battles/next', async (req, res) => {
+    try {
+        const { rows: queueRows } = await dbClient.query(
+            "SELECT * FROM bota_arena_battles WHERE status = 'queued' ORDER BY created_at ASC LIMIT 1"
+        );
+
+        if (queueRows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Queue is empty' });
+        }
+
+        const nextBattle = queueRows[0];
+
+        // Mark all existing live battles as ended to clean up state
+        await dbClient.query(
+            "UPDATE bota_arena_battles SET status = 'ended' WHERE status = 'live'"
+        );
+
+        // Ensure p2_agent exists
+        if (!nextBattle.p2_agent) {
+            const availableFighters = ['char04', 'robopepe', 'floatrobo', 'crimsonbot', 'toxicbot', 'voidbot', 'furyman'];
+            const randomOpponent = availableFighters[Math.floor(Math.random() * availableFighters.length)];
+            nextBattle.p2_agent = randomOpponent;
+            
+            // Map p1_agent to key if it's a display name (e.g., "Robot V1" -> "char04")
+            const displayToKey = {
+                'Robot V1': 'char04',
+                'Robo Pepe': 'robopepe',
+                'Floatrobo': 'floatrobo',
+                'Crimsonbot': 'crimsonbot',
+                'Toxicbot': 'toxicbot',
+                'Voidbot': 'voidbot',
+                'Fury Man': 'furyman'
+            };
+            if (displayToKey[nextBattle.p1_agent]) {
+                nextBattle.p1_agent = displayToKey[nextBattle.p1_agent];
+            } else {
+                 nextBattle.p1_agent = nextBattle.p1_agent.toLowerCase().replace(/\s+/g, '');
+            }
+            
+            // Save the defaulted p2_agent to the db
+            await dbClient.query("UPDATE bota_arena_battles SET p1_agent = $1, p2_agent = $2 WHERE id = $3", [nextBattle.p1_agent, nextBattle.p2_agent, nextBattle.id]);
+        }
+
+        // Mark all existing live battles as ended to clean up state
+        await dbClient.query(
+            "UPDATE bota_arena_battles SET status = 'ended' WHERE status = 'live'"
+        );
+
+        // Mark the selected one as live
+        await dbClient.query(
+            "UPDATE bota_arena_battles SET status = 'live' WHERE id = $1",
+            [nextBattle.id]
+        );
+
+        // Emit notification
+        await dbClient.query(
+            "INSERT INTO bota_notifications (title, message, type, icon) VALUES ($1, $2, $3, $4)",
+            ['Battle Started', `${nextBattle.p1_agent} vs ${nextBattle.p2_agent}`, 'battle', '⚔️']
+        );
+
+        res.json({ success: true, battle: nextBattle });
+    } catch (error) {
+        console.error("Error auto-starting battle:", error);
+        res.status(500).json({ success: false, error: 'Failed to start next battle' });
+    }
+});
+
 app.post('/api/bantahbro/battles', async (req, res) => {
   try {
     const { p1_agent, p2_agent, p1_wallet, p2_wallet } = req.body;
@@ -271,6 +350,12 @@ app.post('/api/bantahbro/battles', async (req, res) => {
        VALUES ($1, $2, $3, $4, 'live') RETURNING id`,
       [p1_wallet || 'arena.sim', p1_agent, p2_wallet || 'arena.sim', p2_agent || '???']
     );
+    
+    await dbClient.query(
+      `INSERT INTO bota_notifications (title, message, type, icon) VALUES ($1, $2, $3, $4)`,
+      ['Battle Started', `${p1_agent} vs ${p2_agent || '???'}`, 'battle', '??']
+    );
+
     res.json({ success: true, id: result.rows[0].id });
   } catch (error) {
     console.error('Battles POST Error:', error);
@@ -287,6 +372,14 @@ app.patch('/api/bantahbro/battles/:id', async (req, res) => {
       `UPDATE bota_arena_battles SET status = $1, winner = $2, updated_at = NOW() WHERE id = $3`,
       [status || 'ended', winner || null, id]
     );
+    
+    if (status === 'ended' && winner) {
+      await dbClient.query(
+        `INSERT INTO bota_notifications (title, message, type, icon) VALUES ($1, $2, $3, $4)`,
+        ['Match Ended', `${winner} wins`, 'battle', '??']
+      );
+    }
+
     res.json({ success: true });
   } catch (error) {
     console.error('Battles PATCH Error:', error);
@@ -318,20 +411,33 @@ app.get('/api/bantahbro/battles', async (req, res) => {
 
 app.get('/api/bantahbro/notifications', async (req, res) => {
   try {
+    let userId = null;
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) return res.status(401).json({ error: 'Unauthorized' });
-    const token = authHeader.split(' ')[1];
-    const verifiedClaims = await privy.verifyAuthToken(token);
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.split(' ')[1];
+        const verifiedClaims = await privy.verifyAuthToken(token);
+        userId = verifiedClaims.userId;
+      } catch (e) { console.error('Privy verify error:', e); }
+    }
     
-    // We try to fetch from 'bota_notifications' first, if it exists
     let notifs = { rows: [] };
     try {
-      notifs = await dbClient.query(`
-        SELECT * FROM bota_notifications 
-        WHERE user_id = $1 
-        ORDER BY created_at DESC 
-        LIMIT 20
-      `, [verifiedClaims.userId]);
+      if (userId) {
+        notifs = await dbClient.query(`
+          SELECT * FROM bota_notifications 
+          WHERE user_id = $1 OR user_id IS NULL 
+          ORDER BY created_at DESC 
+          LIMIT 20
+        `, [userId]);
+      } else {
+        notifs = await dbClient.query(`
+          SELECT * FROM bota_notifications 
+          WHERE user_id IS NULL 
+          ORDER BY created_at DESC 
+          LIMIT 20
+        `);
+      }
     } catch (e) {
       console.warn("Notifications table might not exist yet.");
     }
@@ -380,3 +486,4 @@ io.sockets.on('connection', function (socket) {
     }
   });
 });
+

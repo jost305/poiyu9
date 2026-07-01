@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html>
     <head>
         <meta
@@ -73,22 +73,22 @@
                     <div class="tb-stat-block">
                         <div class="tb-stat-label">BC Earned</div>
                         <div class="tb-stat-val gold" id="tb-treasury">
-                            450,000 BC <span class="tb-chest">🗃</span>
+                            0 BC <span class="tb-chest">🗃</span>
                         </div>
                     </div>
                     <div class="tb-vdivider"></div>
                     <div class="tb-stat-block">
                         <div class="tb-stat-label">FIGHTERS</div>
-                        <div class="tb-stat-val">
-                            12,842 <span class="live-badge">LIVE</span>
+                        <div class="tb-stat-val" id="tb-fighters">
+                            0 <span class="live-badge">LIVE</span>
                         </div>
                     </div>
                     <div class="tb-vdivider"></div>
                     <nav class="tb-nav" id="tb-nav">
+                        <a href="#" class="tb-nav-item" data-page="agents" onclick="openPage('agents');return false">Agents</a>
+                        <a href="#" class="tb-nav-item tb-nav-create" data-page="create" onclick="openPage('create');return false">⚔️ Create</a>
                         <a href="#" class="tb-nav-item" data-page="marketplace" onclick="openPage('marketplace');return false">Marketplace</a>
                         <a href="#" class="tb-nav-item" data-page="leaderboard" onclick="openPage('leaderboard');return false">Leaderboard</a>
-                        <a href="#" class="tb-nav-item" data-page="agents" onclick="openPage('agents');return false">Agents</a>
-                        <a href="#" class="tb-nav-item tb-nav-create" data-page="create" onclick="openPage('create');return false">Create</a>
                     </nav>
                 </div>
                 <div class="tb-right">
@@ -103,12 +103,10 @@
                         LOGIN
                     </button>
                     <button class="tb-profile-btn" onclick="openPage('profile');return false" title="My Profile" data-page="profile" style="display:none;">
-                        <span class="tb-profile-avatar">👤</span>
+                        <span class="tb-profile-avatar" style="padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center;"><img src="images/bota-logo.jpg" alt="Profile" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;"></span>
                         <span class="tb-profile-dot"></span>
                     </button>
-                    <button class="tb-pick-btn" onclick="openCpModal()">
-                        ⚔ PICK FIGHTERS
-                    </button>
+                    
                     <button
                         class="tb-theme-btn"
                         id="theme-toggle-btn"
@@ -191,8 +189,8 @@
 
                         <!-- Bet buttons -->
                         <div class="pred-bet-row">
-                            <button class="pred-bet-btn pred-bet-p1">&#x2694; BACK P1</button>
-                            <button class="pred-bet-btn pred-bet-p2">BACK P2 &#x2694;</button>
+                            <button class="pred-bet-btn pred-bet-p1">&#x2694; YES</button>
+                            <button class="pred-bet-btn pred-bet-p2">NO &#x2694;</button>
                         </div>
                     </div>
                 </div>
@@ -213,7 +211,7 @@
                                     <div class="loading-bar-fill"></div>
                                 </div>
                                 <div class="loading-label">
-                                    LOADING FIGHTERS...
+                                    LOADING BOTA...
                                 </div>
                             </div>
                         </div>
@@ -329,7 +327,7 @@
                                 <div class="top3-meta">
                                     <span class="top3-wins">247 W</span>
                                     <span class="top3-dot">·</span>
-                                    <span class="top3-pwr">2,450 PWR</span>
+                                    <span class="top3-pwr">2,450 BC</span>
                                 </div>
                                 <div class="top3-bar-wrap">
                                     <div class="top3-bar-fill" style="width:100%;background:linear-gradient(90deg,#facc15,#f59e0b)"></div>
@@ -347,7 +345,7 @@
                                 <div class="top3-meta">
                                     <span class="top3-wins">198 W</span>
                                     <span class="top3-dot">·</span>
-                                    <span class="top3-pwr">2,310 PWR</span>
+                                    <span class="top3-pwr">2,310 BC</span>
                                 </div>
                                 <div class="top3-bar-wrap">
                                     <div class="top3-bar-fill" style="width:80%;background:linear-gradient(90deg,#60a5fa,#3b82f6)"></div>
@@ -365,7 +363,7 @@
                                 <div class="top3-meta">
                                     <span class="top3-wins">162 W</span>
                                     <span class="top3-dot">·</span>
-                                    <span class="top3-pwr">2,180 PWR</span>
+                                    <span class="top3-pwr">2,180 BC</span>
                                 </div>
                                 <div class="top3-bar-wrap">
                                     <div class="top3-bar-fill" style="width:66%;background:linear-gradient(90deg,#4ade80,#22c55e)"></div>
@@ -1732,22 +1730,7 @@
                             <input type="text" class="ag-search" placeholder="Search fighters…" oninput="agSearch(this.value)" />
                         </div>
                     </div>
-                    <div class="ag-platform-stats">
-                        <div class="ag-pstat">
-                            <span class="ag-pstat-val">8,656</span>
-                            <span class="ag-pstat-lbl">Total Sales</span>
-                        </div>
-                        <div class="ag-pstat-divider"></div>
-                        <div class="ag-pstat">
-                            <span class="ag-pstat-val">15.016 <em>/ 0.15629</em></span>
-                            <span class="ag-pstat-lbl">Total Volume</span>
-                        </div>
-                        <div class="ag-pstat-divider"></div>
-                        <div class="ag-pstat">
-                            <span class="ag-pstat-val">4,257</span>
-                            <span class="ag-pstat-lbl">BOTA Sold</span>
-                        </div>
-                    </div>
+                    
                 </div>
 
                 <!-- Fighter grid -->
@@ -2569,7 +2552,7 @@
                             "Ready! Starting next match.";
                     window.closeCpModalDirect();
                     setTimeout(function () {
-                        window.startPhaserMatch(cpPicks[0], cpPicks[1]);
+                        // (Removed manual startPhaserMatch - auto battle handles it)
                     }, 400);
                 };
 
@@ -3002,19 +2985,7 @@
                     if (p2Pct) p2Pct.textContent = '50%';
                     if (bar1) bar1.style.width = '50%';
                     if (bar2) bar2.style.width = '50%';
-                    // Record this battle in the DB so Challenges page stays in sync
-                    fetch('/api/bantahbro/battles', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            p1_agent: CHAR_DISPLAY[p1Key] || p1Key,
-                            p2_agent: CHAR_DISPLAY[p2Key] || p2Key,
-                            p1_wallet: 'arena.sim',
-                            p2_wallet: 'arena.sim'
-                        })
-                    }).then(function(r) { return r.json(); })
-                      .then(function(d) { if (d.id) _currentBattleId = d.id; })
-                      .catch(function() {});
+                    // (Removed POST fetch - queue handles it)
                 };
 
                 /* ── Init ── */
@@ -3934,12 +3905,12 @@
         /* Fighter grid */
         .ag-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 12px;
             padding: 16px 20px 32px;
         }
         @media (max-width: 700px) {
-            .ag-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 10px 12px 24px; }
+            .ag-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; padding: 10px 12px 24px; }
         }
 
         /* Fighter card */
@@ -3960,7 +3931,7 @@
         /* Card image banner */
         .ag-card-header {
             position: relative;
-            height: 130px;
+            height: 100px;
             display: flex;
             align-items: flex-end;
             justify-content: center;
@@ -3988,7 +3959,7 @@
         .ag-card:nth-child(7) .ag-sprite, .ag-card:nth-child(7) .ag-sprite-fallback { animation-delay: -0.8s; }
         .ag-card:nth-child(8) .ag-sprite, .ag-card:nth-child(8) .ag-sprite-fallback { animation-delay: -1.8s; }
         .ag-sprite {
-            height: 105px;
+            height: 80px;
             object-fit: contain;
             image-rendering: pixelated;
             position: relative;
@@ -4137,7 +4108,7 @@
             font-weight: 500;
         }
         .ag-stat-val {
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             font-weight: 800;
             color: #fff;
         }
@@ -4298,7 +4269,184 @@
         }
         .chall-send-btn:disabled { opacity: .35; cursor: not-allowed; }
         .chall-send-btn:not(:disabled):hover { opacity: .82; }
-        </style>
+        
+        /* Light mode overrides for Agents page */
+        html.light .ag-card {
+            background: #ffffff;
+            border-color: rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        html.light .ag-card:hover {
+            border-color: var(--neon-purple);
+        }
+        html.light .ag-card-header::after {
+            background: linear-gradient(to top, #ffffff, transparent);
+        }
+        html.light .ag-name {
+            color: #111827;
+        }
+        html.light .ag-meta {
+            color: #6b7280;
+        }
+        html.light .ag-stat-val {
+            color: #111827;
+        }
+        html.light .ag-stat-lbl {
+            color: #6b7280;
+        }
+        html.light .ag-winbar-label span {
+            color: #374151;
+        }
+        html.light .ag-winbar-bg {
+            background: rgba(0,0,0,0.1);
+        }
+        html.light .ag-pwr-chip {
+            background: rgba(0,0,0,0.05);
+        }
+        html.light .ag-pwr-val {
+            color: #111827;
+        }
+        html.light .ag-search {
+            background: #f3f4f6;
+            border-color: rgba(0,0,0,0.1);
+            color: #111827;
+        }
+        html.light .ag-search::placeholder {
+            color: #9ca3af;
+        }
+        html.light .ag-search:focus {
+            background: #ffffff;
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 0 2px rgba(139,92,246,0.2);
+        }
+        
+        /* Light mode overrides for Arena titles and headers */
+        html.light .panel-hdr-title,
+        html.light .trollbox-title,
+        html.light .rp-section-hdr-title,
+        html.light .win-title,
+        html.light .tb-nav-item,
+        html.light .pg-title,
+        html.light .pg-subtitle {
+            color: #111827 !important;
+        }
+        
+        html.light .panel-hdr-sub,
+        html.light .tb-nav-item {
+            color: #4b5563 !important;
+        }
+
+        html.light .tb-nav-active {
+            color: #7C3AED !important;
+        }
+
+
+        /* Exhaustive Light Mode Overrides for Arena Panels */
+        html.light #left-panel,
+        html.light #right-panel,
+        html.light .queue-empty,
+        html.light .queue-list,
+        html.light .pred-fighter-name,
+        html.light .pred-pct,
+        html.light .pred-timer,
+        html.light .pred-pool,
+        html.light .trollbox-text,
+        html.light .trollbox-user,
+        html.light .top-fighter-name,
+        html.light .leaderboard-name,
+        html.light .leaderboard-stat,
+        html.light .trollbox-msg,
+        html.light .ch-empty-title,
+        html.light .ch-empty-sub,
+        html.light .trollbox-input {
+            color: #111827 !important;
+        }
+
+        html.light .panel-hdr-sub,
+        html.light .queue-item-meta,
+        html.light .queue-item-status,
+        html.light .trollbox-time,
+        html.light .top-fighter-stats {
+            color: #6b7280 !important;
+        }
+
+        html.light .pred-bet-btn {
+            background: #f3f4f6 !important;
+            color: #111827 !important;
+            border-color: #d1d5db !important;
+        }
+
+        html.light .pred-bet-btn:hover {
+            background: #e5e7eb !important;
+        }
+
+
+        /* Additional Light Mode Overrides for Logo and Nav */
+        html.light .logo-main,
+        html.light .pred-fighter-pct,
+        html.light .stat-val,
+        html.light .tb-profile-avatar,
+        html.light .ch-winner-col,
+        html.light .ch-prize-col {
+            color: #111827 !important;
+        }
+        
+        html.light .stat-lbl {
+            color: #6b7280 !important;
+        }
+
+
+        /* Additional Light Mode Overrides for Top 3 Fighters */
+        html.light .rp-section-hdr,
+        html.light .top3-name {
+            color: #111827 !important;
+        }
+        
+        html.light .rp-hdr-sub,
+        html.light .top3-wins,
+        html.light .top3-pwr,
+        html.light .top3-dot {
+            color: #6b7280 !important;
+        }
+
+
+        /* Hide Challenger Section for now */
+        #bp-fighter { display: none !important; }
+
+
+        /* Prediction Button Colors - Green for YES, Red for NO */
+        .pred-bet-p1, html.light .pred-bet-p1 {
+            background: rgba(34, 197, 94, 0.2) !important;
+            color: #22c55e !important;
+            border-color: rgba(34, 197, 94, 0.4) !important;
+        }
+        .pred-bet-p1:hover, html.light .pred-bet-p1:hover {
+            background: rgba(34, 197, 94, 0.3) !important;
+            color: #16a34a !important;
+        }
+
+        .pred-bet-p2, html.light .pred-bet-p2 {
+            background: rgba(239, 68, 68, 0.2) !important;
+            color: #ef4444 !important;
+            border-color: rgba(239, 68, 68, 0.4) !important;
+        }
+        .pred-bet-p2:hover, html.light .pred-bet-p2:hover {
+            background: rgba(239, 68, 68, 0.3) !important;
+            color: #dc2626 !important;
+        }
+
+
+        
+        /* Center TCG cards in bottom panel */
+        #bottom-panel {
+            justify-content: center !important;
+        }
+        #rune-card-hand {
+            border-left: none !important;
+        }
+
+</style>
+
     <!-- CHALLENGES PAGE -->
     <div id="page-challenges" class="page-overlay bantahbro-next-ui dark" style="display: none;">
         <div class="pg-header">
@@ -4392,6 +4540,52 @@
     }
     </script>
 
-            </body>
+            <script>
+        /* Load platform stats — local data first, API upgrade if available */
+        (function loadPlatformStats() {
+            // Immediate: count fighters from CF_TEMPLATES (always available)
+            var fighterCount = (typeof CF_TEMPLATES !== 'undefined') ? CF_TEMPLATES.length : 12;
+            var tbFighters = document.getElementById('tb-fighters');
+            if (tbFighters) {
+                tbFighters.innerHTML = fighterCount.toLocaleString() + ' <span class="live-badge">LIVE</span>';
+            }
+
+            // Immediate: sum BC from the top 3 leaderboard data already in the page
+            var top3Data = document.querySelectorAll('.top3-pwr');
+            var totalBC = 0;
+            top3Data.forEach(function(el) {
+                var num = parseInt(el.textContent.replace(/[^0-9]/g, ''), 10);
+                if (!isNaN(num)) totalBC += num;
+            });
+            // Add estimated BC for remaining fighters (average of top 3 × remaining count)
+            if (top3Data.length > 0 && fighterCount > top3Data.length) {
+                var avgBC = totalBC / top3Data.length;
+                totalBC += Math.round(avgBC * 0.6 * (fighterCount - top3Data.length));
+            }
+            var tbTreasury = document.getElementById('tb-treasury');
+            if (tbTreasury) {
+                tbTreasury.innerHTML = totalBC.toLocaleString() + ' BC <span class="tb-chest">🗃</span>';
+            }
+
+            // Upgrade: try API for real data
+            fetch('/api/leaderboard')
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (!Array.isArray(data) || data.length === 0) return;
+                    if (tbFighters) {
+                        tbFighters.innerHTML = data.length.toLocaleString() + ' <span class="live-badge">LIVE</span>';
+                    }
+                    var apiBC = 0;
+                    data.forEach(function(entry) {
+                        apiBC += (entry.coins || entry.points || 0);
+                    });
+                    if (apiBC > 0 && tbTreasury) {
+                        tbTreasury.innerHTML = apiBC.toLocaleString() + ' BC <span class="tb-chest">🗃</span>';
+                    }
+                })
+                .catch(function() { /* local data already shown */ });
+        })();
+</script>
+</body>
 </html>
 </html>
