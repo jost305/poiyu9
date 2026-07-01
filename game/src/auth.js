@@ -542,34 +542,55 @@ async function loadLivePredictions() {
 
 async function loadChallengerQueue() {
     try {
-        const res = await fetch('/api/bantahbro/battles?status=queued');
-        if (!res.ok) throw new Error('Failed to fetch battles queue');
-        const data = await res.json();
-        
+        const [queuedRes, liveRes] = await Promise.all([
+            fetch('/api/bantahbro/battles?status=queued'),
+            fetch('/api/bantahbro/battles?status=live')
+        ]);
+        const queuedData = queuedRes.ok ? await queuedRes.json() : { battles: [] };
+        const liveData = liveRes.ok ? await liveRes.json() : { battles: [] };
+
         const qList = document.getElementById('sidebar-queue-list');
         if (!qList) return;
-        
+
         qList.innerHTML = '';
-        if (data.battles.length === 0) {
+
+        // Show live battle first if one is active
+        if (liveData.battles.length > 0) {
+            const lb = liveData.battles[0];
+            qList.insertAdjacentHTML('beforeend', `
+                <div class="queue-item queue-active" style="border-left:2px solid #f87171;">
+                    <div class="qi-num" style="color:#f87171;">⚔</div>
+                    <div class="qi-portrait qi-p1">
+                        <img src="images/fighters/${lb.p1_agent || 'char04'}/left/stand/0.png" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;" onerror="this.src='images/fighters/char04/left/stand/0.png'">
+                    </div>
+                    <div class="qi-info">
+                        <div class="qi-addr" style="color:#f87171;font-size:9px;letter-spacing:1px;">🔴 LIVE NOW</div>
+                        <div class="qi-name">${lb.p1_agent || 'Fighter'} vs ${lb.p2_agent || '???'}</div>
+                        <div class="qi-power">Fighting</div>
+                    </div>
+                </div>
+            `);
+        }
+
+        // Show queued battles below
+        if (queuedData.battles.length === 0 && liveData.battles.length === 0) {
             qList.innerHTML = '<div style="padding:15px; color:#888;">Queue is empty.</div>';
             return;
         }
-        
-        data.battles.forEach((b, i) => {
+
+        queuedData.battles.forEach((b, i) => {
             const num = i + 1;
-            const active = num <= 2;
             const html = `
-                <div class="queue-item ${active ? 'queue-active' : 'queue-waiting'}">
-                    <div class="qi-num ${active ? '' : 'dim'}">${num}</div>
-                    <div class="qi-portrait qi-${active ? 'p'+num : 'neutral'}">
-                        ${active ? '<img src="images/fighters/'+b.p1_agent+'/left/stand/0.png" style="width:100%; height:100%; object-fit:contain; image-rendering:pixelated;" onerror="this.src=\'images/fighters/char04/left/stand/0.png\'">' : '??'}
+                <div class="queue-item queue-waiting">
+                    <div class="qi-num dim">${num}</div>
+                    <div class="qi-portrait qi-neutral">
+                        <img src="images/fighters/${b.p1_agent || 'char04'}/left/stand/0.png" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;" onerror="this.src='images/fighters/char04/left/stand/0.png'">
                     </div>
                     <div class="qi-info">
                         <div class="qi-addr">${b.p1_wallet ? b.p1_wallet.substring(0,10)+'...' : 'Unknown'}</div>
                         <div class="qi-name">${b.p1_agent || 'Fighter'}</div>
                         <div class="qi-power">Queued</div>
                     </div>
-                    ${active ? '<div class="qi-hp-pill">100%</div>' : ''}
                 </div>
             `;
             qList.insertAdjacentHTML('beforeend', html);
