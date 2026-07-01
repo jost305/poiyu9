@@ -1469,9 +1469,10 @@ html.light .trollbox-input-row { background: rgba(0,0,0,0.03); }
 
 .bp-fighter {
     display: flex; align-items: center; gap: 0;
-    width: 100%; height: 100%;
+    width: auto; height: 100%;
     padding: 8px 10px;
     gap: 10px;
+    flex-shrink: 0;
 }
 
 .bp-portrait {
