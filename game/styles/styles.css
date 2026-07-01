@@ -966,9 +966,9 @@ canvas { display: block; background: transparent; }
     z-index: 10;
 }
 .loading-inner { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.loading-logo { font-family: var(--font-display); font-size: 44px; font-weight: 900; letter-spacing: 8px; color: var(--neon-gold); text-shadow: 0 0 30px rgba(251,191,36,0.6), 0 0 60px rgba(251,191,36,0.2); }
-.loading-logo span { color: var(--neon-violet); text-shadow: 0 0 20px var(--glow-purple); }
-.loading-bar-wrap { width: 180px; height: 2px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+.loading-logo { display: flex; align-items: center; justify-content: center; }
+.loading-logo-img { width: 180px; height: auto; object-fit: contain; filter: drop-shadow(0 0 18px rgba(251,191,36,0.55)) drop-shadow(0 0 40px rgba(251,191,36,0.2)); }
+.loading-bar-wrap { width: 180px; height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
 .loading-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan)); animation: loadPulse 1.5s ease infinite; box-shadow: 0 0 10px var(--glow-purple); }
 @keyframes loadPulse { 0%{width:5%} 50%{width:85%} 100%{width:5%} }
 .loading-label { font-family: var(--font-display); font-size: 9px; font-weight: 600; letter-spacing: 4px; color: var(--text-muted); text-transform: uppercase; animation: pulseSoft 3s ease-in-out infinite; }
